@@ -7,7 +7,7 @@
     android:layout_margin="8dp">
 
     <TextView
-        android:id="@+id/animal_name"
+        android:id="@+id/category_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="36sp"

@@ -1,19 +1,19 @@
 package com.example.aryoulearning.model;
 
-public class AnimalModel {
-    private String name;
-    private String image;
+
+import android.os.Parcelable;
+
+public class AnimalModel extends Model implements Parcelable {
 
     public String getName() {
-        return name;
+        return super.getName();
     }
 
     public String getImage() {
-        return image;
+        return super.getImage();
     }
 
     public AnimalModel(String name, String image) {
-        this.name = name;
-        this.image = image;
+        super(name,image);
     }
 }

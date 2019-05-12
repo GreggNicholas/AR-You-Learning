@@ -1,39 +1,71 @@
 package com.example.aryoulearning.controller;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
-import com.example.aryoulearning.model.AnimalModel;
 import com.example.aryoulearning.R;
-import com.example.aryoulearning.view.CategoryViewHolder;
+import com.example.aryoulearning.model.ModelList;
 
 import java.util.List;
 
-public class CategoryAdapter extends RecyclerView.Adapter<CategoryViewHolder> {
-    private List<AnimalModel> animalList;
+public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder> {
+    private List<ModelList> categoryList;
+    private NavListener listener;
 
-    public CategoryAdapter(List<AnimalModel> animalList) {
-        this.animalList = animalList;
+
+    public CategoryAdapter(List<ModelList> categoryList) {
+        this.categoryList = categoryList;
     }
 
     @NonNull
     @Override
     public CategoryViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(viewGroup.getContext()).
-                inflate(R.layout.animal_item, viewGroup, false);
+                inflate(R.layout.category_item, viewGroup, false);
+
+        Context context = viewGroup.getContext();
+        if (context instanceof NavListener) {
+            listener = (NavListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + "must implement FragmentInteractionListener");
+        }
         return new CategoryViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull CategoryViewHolder holder, int position) {
-        holder.onBind(animalList.get(position));
+        holder.onBind(categoryList.get(position), listener);
     }
 
     @Override
     public int getItemCount() {
-        return animalList.size();
+        return categoryList.size();
     }
+
+    class CategoryViewHolder extends RecyclerView.ViewHolder {
+        private TextView categoryName;
+
+        public CategoryViewHolder(@NonNull View itemView) {
+            super(itemView);
+            categoryName = itemView.findViewById(R.id.category_name);
+        }
+
+        public void onBind(final ModelList modelList, final NavListener listener) {
+            String category = modelList.getModelList().get(0).getClass().getSimpleName();
+            categoryName.setText(category.substring(0,category.length() - 5));
+            categoryName.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listener.moveToGameFragment(modelList);
+                }
+            });
+        }
+    }
+
 }
