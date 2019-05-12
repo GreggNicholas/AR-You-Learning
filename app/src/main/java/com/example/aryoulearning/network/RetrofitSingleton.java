@@ -1,4 +1,4 @@
-package com.example.aryoulearning.Network;
+package com.example.aryoulearning.network;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -11,7 +11,7 @@ public final class RetrofitSingleton {
         this.instance = instance;
     }
 
-    public static Retrofit getInstance() {
+    private static Retrofit getInstance() {
         if (instance == null) {
             instance = new Retrofit.Builder()
                     .baseUrl(BASEURL)
@@ -19,5 +19,10 @@ public final class RetrofitSingleton {
                     .build();
         }
         return instance;
+    }
+
+    public static AnimalService getService(){
+        AnimalService service;
+        return service = getInstance().create(AnimalService.class);
     }
 }
