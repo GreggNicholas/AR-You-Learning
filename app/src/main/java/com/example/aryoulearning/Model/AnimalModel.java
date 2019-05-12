@@ -1,6 +1,6 @@
 package com.example.aryoulearning.Model;
 
-public class AnimalModel {
+public final class AnimalModel {
     private String name;
     private String image;
 
