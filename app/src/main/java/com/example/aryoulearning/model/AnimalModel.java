@@ -1,4 +1,4 @@
-package com.example.aryoulearning;
+package com.example.aryoulearning.Model;
 
 public class AnimalModel {
     private String name;
