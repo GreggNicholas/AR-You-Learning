@@ -6,7 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.aryoulearning.Model.AnimalModel;
+import com.example.aryoulearning.model.AnimalModel;
 import com.example.aryoulearning.R;
 import com.example.aryoulearning.view.CategoryViewHolder;
 
