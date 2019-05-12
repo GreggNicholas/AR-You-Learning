@@ -5,7 +5,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public final class RetrofitSingleton {
     private static final String BASEURL = "https://gist.githubusercontent.com/";
-    public static Retrofit instance;
+    private static Retrofit instance;
 
     private RetrofitSingleton(Retrofit instance) {
         this.instance = instance;

@@ -5,7 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
-import com.example.aryoulearning.AnimalModel;
+import com.example.aryoulearning.Model.AnimalModel;
 import com.example.aryoulearning.R;
 
 public class CategoryViewHolder extends RecyclerView.ViewHolder {
@@ -16,7 +16,7 @@ public class CategoryViewHolder extends RecyclerView.ViewHolder {
         animalName = itemView.findViewById(R.id.animal_name);
     }
 
-    public void onBind(final AnimalModel animalModel){
+    public void onBind(final AnimalModel animalModel) {
         animalName.setText(animalModel.getName());
     }
 }
