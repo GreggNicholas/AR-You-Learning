@@ -1,8 +1,13 @@
-package com.example.aryoulearning;
+package com.example.aryoulearning.Model;
 
 public class AnimalModel {
     private String name;
     private String image;
+
+    public AnimalModel(String name, String image) {
+        this.name = name;
+        this.image = image;
+    }
 
     public String getAnimalName() {
         return name;
@@ -10,10 +15,5 @@ public class AnimalModel {
 
     public String getAnimalImage() {
         return image;
-    }
-
-    public AnimalModel(String name, String image) {
-        this.name = name;
-        this.image = image;
     }
 }
