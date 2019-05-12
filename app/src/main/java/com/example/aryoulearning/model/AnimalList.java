@@ -1,4 +1,4 @@
-package com.example.aryoulearning.Model;
+package com.example.aryoulearning.model;
 
 import java.util.List;
 

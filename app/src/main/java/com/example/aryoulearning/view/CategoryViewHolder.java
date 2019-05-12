@@ -5,7 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
-import com.example.aryoulearning.Model.AnimalModel;
+import com.example.aryoulearning.model.AnimalModel;
 import com.example.aryoulearning.R;
 
 public class CategoryViewHolder extends RecyclerView.ViewHolder {
