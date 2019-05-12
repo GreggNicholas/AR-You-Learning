@@ -23,7 +23,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryViewHolder> {
     @Override
     public CategoryViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(viewGroup.getContext()).
-                inflate(R.layout.activity_main, viewGroup, false);
+                inflate(R.layout.animal_item, viewGroup, false);
         return new CategoryViewHolder(view);
     }
 
