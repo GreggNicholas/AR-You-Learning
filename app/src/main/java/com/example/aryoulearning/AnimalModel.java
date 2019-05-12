@@ -4,11 +4,11 @@ public class AnimalModel {
     private String name;
     private String image;
 
-    public String getName() {
+    public String getAnimalName() {
         return name;
     }
 
-    public String getImage() {
+    public String getAnimalImage() {
         return image;
     }
 
