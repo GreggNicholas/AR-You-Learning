@@ -7,11 +7,8 @@ public final class RetrofitSingleton {
     private static final String BASEURL = "https://gist.githubusercontent.com/";
     private static Retrofit instance;
 
-    private RetrofitSingleton(Retrofit instance) {
-        this.instance = instance;
-    }
 
-    private static Retrofit getInstance() {
+    public static Retrofit getInstance() {
         if (instance == null) {
             instance = new Retrofit.Builder()
                     .baseUrl(BASEURL)
@@ -22,7 +19,7 @@ public final class RetrofitSingleton {
     }
 
     public static AnimalService getService(){
-        AnimalService service;
-        return service = getInstance().create(AnimalService.class);
+        AnimalService service = getInstance().create(AnimalService.class);
+        return service;
     }
 }
