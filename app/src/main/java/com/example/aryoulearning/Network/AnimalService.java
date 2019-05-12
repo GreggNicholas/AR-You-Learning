@@ -1,6 +1,6 @@
 package com.example.aryoulearning.Network;
 
-import com.example.aryoulearning.AnimalModel;
+import com.example.aryoulearning.Model.AnimalModel;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
