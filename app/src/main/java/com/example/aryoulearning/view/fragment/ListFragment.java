@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 
 import com.example.aryoulearning.R;
 import com.example.aryoulearning.controller.CategoryAdapter;
-import com.example.aryoulearning.model.ModelList;
+import com.example.aryoulearning.model.AnimalModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,14 +21,22 @@ import java.util.List;
 public class ListFragment extends Fragment {
     private RecyclerView rv;
     private CategoryAdapter adapter;
-    private List<ModelList> categoryList;
+    private List<List<AnimalModel>> categoryList = new ArrayList<>();
+    private List<String> categoryName;
+    private int size;
 
     private static final String TAG = "Main";
 
-    public static ListFragment newInstance(List<ModelList> categoryList) {
+    public static ListFragment newInstance(List<List<AnimalModel>> animalList, List<String> categoryName) {
         ListFragment fragment = new ListFragment();
         Bundle args = new Bundle();
-        args.putParcelableArrayList("category-key", (ArrayList<? extends Parcelable>) categoryList);
+        args.putStringArrayList("category-name", (ArrayList<String>) categoryName);
+
+        for(int i = 0; i < animalList.size(); i++){
+            args.putParcelableArrayList("category-key" + i, (ArrayList<? extends Parcelable>) animalList.get(i));
+            args.putInt("SIZE", animalList.size());
+        }
+
         fragment.setArguments(args);
         return fragment;
     }
@@ -37,7 +45,13 @@ public class ListFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            categoryList = getArguments().getParcelableArrayList("category-key");
+            size = getArguments().getInt("SIZE");
+
+            for(int i = 0; i < size; i++){
+                categoryList.add(getArguments().<AnimalModel>getParcelableArrayList("category-key" + i));
+            }
+
+            categoryName = getArguments().getStringArrayList("category-name");
         }
     }
 
@@ -51,7 +65,7 @@ public class ListFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initializeViews(view);
-        adapter = new CategoryAdapter(categoryList);
+        adapter = new CategoryAdapter(categoryList, categoryName);
         rv.setAdapter(adapter);
         rv.setLayoutManager(new LinearLayoutManager(requireContext()));
     }

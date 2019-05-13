@@ -8,7 +8,7 @@ public final class RetrofitSingleton {
     private static Retrofit instance;
 
 
-    public static Retrofit getInstance() {
+    private static Retrofit getInstance() {
         if (instance == null) {
             instance = new Retrofit.Builder()
                     .baseUrl(BASEURL)
@@ -19,7 +19,6 @@ public final class RetrofitSingleton {
     }
 
     public static AnimalService getService(){
-        AnimalService service = getInstance().create(AnimalService.class);
-        return service;
+        return getInstance().create(AnimalService.class);
     }
 }

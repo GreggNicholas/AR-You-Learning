@@ -9,17 +9,19 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.aryoulearning.R;
-import com.example.aryoulearning.model.ModelList;
+import com.example.aryoulearning.model.AnimalModel;
 
 import java.util.List;
 
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder> {
-    private List<ModelList> categoryList;
+    private List<List<AnimalModel>> categoryList;
+    private List<String> categoryName;
     private NavListener listener;
 
 
-    public CategoryAdapter(List<ModelList> categoryList) {
+    public CategoryAdapter(List<List<AnimalModel>> categoryList, List<String> categoryName) {
         this.categoryList = categoryList;
+        this.categoryName = categoryName;
     }
 
     @NonNull
@@ -40,7 +42,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
     @Override
     public void onBindViewHolder(@NonNull CategoryViewHolder holder, int position) {
-        holder.onBind(categoryList.get(position), listener);
+        holder.onBind(categoryList.get(position), categoryName.get(position), listener);
     }
 
     @Override
@@ -56,13 +58,12 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
             categoryName = itemView.findViewById(R.id.category_name);
         }
 
-        public void onBind(final ModelList modelList, final NavListener listener) {
-            String category = modelList.getModelList().get(0).getClass().getSimpleName();
-            categoryName.setText(category.substring(0,category.length() - 5));
+        public void onBind(final List<AnimalModel> categoryList, final String category, final NavListener listener) {
+            categoryName.setText(category);
             categoryName.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    listener.moveToGameFragment(modelList);
+                    listener.moveToGameFragment(categoryList);
                 }
             });
         }

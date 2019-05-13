@@ -15,15 +15,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AbsoluteLayout;
-
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.aryoulearning.controller.NavListener;
 import com.example.aryoulearning.R;
-import com.example.aryoulearning.model.Model;
-import com.example.aryoulearning.model.ModelList;
+import com.example.aryoulearning.controller.NavListener;
+import com.example.aryoulearning.model.AnimalModel;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -33,7 +31,7 @@ import java.util.Random;
 
 public class GameFragment extends Fragment {
     private NavListener listener;
-    private ArrayList<Model> modelList;
+    private List<AnimalModel> modelList;
     private ImageView imageView;
     private TextView checker;
     private String answer;
@@ -70,15 +68,15 @@ public class GameFragment extends Fragment {
         checker = view.findViewById(R.id.checker);
         imageView = view.findViewById(R.id.imageView);
         setMaxWidthAndHeight();
-        answer = modelList.get(0).name;
-        Picasso.get().load(modelList.get(0).image).into(imageView);
+        answer = modelList.get(0).getName();
+        Picasso.get().load(modelList.get(0).getImage()).into(imageView);
         setWordsOnScreen(answer);
     }
 
-    public static GameFragment newInstance(ModelList modelList) {
+    public static GameFragment newInstance(List<AnimalModel> animalModelList) {
         GameFragment fragment = new GameFragment();
         Bundle args = new Bundle();
-        args.putParcelableArrayList("model-list-key", modelList.getModelList());
+        args.putParcelableArrayList("model-list-key", (ArrayList<? extends Parcelable>) animalModelList);
         fragment.setArguments(args);
         return fragment;
     }
