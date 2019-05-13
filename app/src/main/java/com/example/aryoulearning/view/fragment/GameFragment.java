@@ -21,7 +21,7 @@ import android.widget.Toast;
 
 import com.example.aryoulearning.R;
 import com.example.aryoulearning.controller.NavListener;
-import com.example.aryoulearning.model.AnimalModel;
+import com.example.aryoulearning.model.Model;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -31,7 +31,7 @@ import java.util.Random;
 
 public class GameFragment extends Fragment {
     private NavListener listener;
-    private List<AnimalModel> modelList;
+    private List<Model> modelList;
     private ImageView imageView;
     private TextView checker;
     private String answer;
@@ -73,10 +73,10 @@ public class GameFragment extends Fragment {
         setWordsOnScreen(answer);
     }
 
-    public static GameFragment newInstance(List<AnimalModel> animalModelList) {
+    public static GameFragment newInstance(List<Model> modelList) {
         GameFragment fragment = new GameFragment();
         Bundle args = new Bundle();
-        args.putParcelableArrayList("model-list-key", (ArrayList<? extends Parcelable>) animalModelList);
+        args.putParcelableArrayList("model-list-key", (ArrayList<? extends Parcelable>) modelList);
         fragment.setArguments(args);
         return fragment;
     }

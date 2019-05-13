@@ -6,8 +6,8 @@ import android.util.Log;
 
 import com.example.aryoulearning.R;
 import com.example.aryoulearning.controller.NavListener;
-import com.example.aryoulearning.model.AnimalModel;
-import com.example.aryoulearning.model.AnimalResponse;
+import com.example.aryoulearning.model.Model;
+import com.example.aryoulearning.model.ModelResponse;
 import com.example.aryoulearning.network.RetrofitSingleton;
 import com.example.aryoulearning.view.fragment.GameFragment;
 import com.example.aryoulearning.view.fragment.ListFragment;
@@ -22,7 +22,7 @@ import retrofit2.Response;
 public class MainActivity extends AppCompatActivity implements NavListener {
     private static final String TAG = "Main";
     private List<String> categoryList = new ArrayList<>();
-    private List<List<AnimalModel>> animalModelList = new ArrayList<>();
+    private List<List<Model>> animalModelList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,10 +33,10 @@ public class MainActivity extends AppCompatActivity implements NavListener {
 
     public void getRetrofit() {
         RetrofitSingleton.getService()
-                .getAnimals()
-                .enqueue(new Callback<List<AnimalResponse>>() {
+                .getModels()
+                .enqueue(new Callback<List<ModelResponse>>() {
                     @Override
-                    public void onResponse(Call<List<AnimalResponse>> call, Response<List<AnimalResponse>> response) {
+                    public void onResponse(Call<List<ModelResponse>> call, Response<List<ModelResponse>> response) {
                         Log.d(TAG, "onResponse: " + response.body().get(0).getCategory());
                         for(int i = 0; i < response.body().size(); i++){
                             animalModelList.add(response.body().get(i).getList());
@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity implements NavListener {
                     }
 
                     @Override
-                    public void onFailure(Call<List<AnimalResponse>> call, Throwable t) {
+                    public void onFailure(Call<List<ModelResponse>> call, Throwable t) {
                         Log.d(TAG, "onFailure: " + t.getMessage());
                         t.printStackTrace();
                     }
@@ -54,18 +54,18 @@ public class MainActivity extends AppCompatActivity implements NavListener {
     }
 
     @Override
-    public void moveToListFragment(List<List<AnimalModel>> animalResponseList, List<String> categoryName) {
+    public void moveToListFragment(List<List<Model>> modelResponseList, List<String> categoryName) {
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.fragment_container, ListFragment.newInstance(animalResponseList, categoryName))
+                .replace(R.id.fragment_container, ListFragment.newInstance(modelResponseList, categoryName))
                 .commit();
     }
 
     @Override
-    public void moveToGameFragment(List<AnimalModel> animalModelList) {
+    public void moveToGameFragment(List<Model> modelList) {
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.fragment_container, GameFragment.newInstance(animalModelList))
+                .replace(R.id.fragment_container, GameFragment.newInstance(modelList))
                 .addToBackStack(null)
                 .commit();
     }

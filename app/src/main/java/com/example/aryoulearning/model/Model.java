@@ -4,8 +4,8 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class Model implements Parcelable {
-    public String name;
-    public String image;
+    private String name;
+    private String image;
 
     protected Model(Parcel in) {
         name = in.readString();
@@ -24,18 +24,6 @@ public class Model implements Parcelable {
         }
     };
 
-    public Model(String name,String image) {
-        this.name = name;
-        this.image = image;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getImage() {
-        return image;
-    }
 
     @Override
     public int describeContents() {
@@ -46,5 +34,18 @@ public class Model implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(name);
         dest.writeString(image);
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public Model(String name, String image) {
+        this.name = name;
+        this.image = image;
     }
 }

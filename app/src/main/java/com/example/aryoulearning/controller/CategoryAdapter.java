@@ -9,17 +9,17 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.aryoulearning.R;
-import com.example.aryoulearning.model.AnimalModel;
+import com.example.aryoulearning.model.Model;
 
 import java.util.List;
 
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder> {
-    private List<List<AnimalModel>> categoryList;
+    private List<List<Model>> categoryList;
     private List<String> categoryName;
     private NavListener listener;
 
 
-    public CategoryAdapter(List<List<AnimalModel>> categoryList, List<String> categoryName) {
+    public CategoryAdapter(List<List<Model>> categoryList, List<String> categoryName) {
         this.categoryList = categoryList;
         this.categoryName = categoryName;
     }
@@ -58,7 +58,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
             categoryName = itemView.findViewById(R.id.category_name);
         }
 
-        public void onBind(final List<AnimalModel> categoryList, final String category, final NavListener listener) {
+        public void onBind(final List<Model> categoryList, final String category, final NavListener listener) {
             categoryName.setText(category);
             categoryName.setOnClickListener(new View.OnClickListener() {
                 @Override
