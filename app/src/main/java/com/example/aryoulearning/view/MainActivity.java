@@ -4,17 +4,13 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
-import com.example.aryoulearning.controller.NavListener;
 import com.example.aryoulearning.R;
-import com.example.aryoulearning.model.AnimalResponse;
+import com.example.aryoulearning.controller.NavListener;
 import com.example.aryoulearning.model.AnimalModel;
-import com.example.aryoulearning.model.Model;
-import com.example.aryoulearning.model.ModelList;
-import com.example.aryoulearning.network.AnimalService;
+import com.example.aryoulearning.model.AnimalResponse;
 import com.example.aryoulearning.network.RetrofitSingleton;
 import com.example.aryoulearning.view.fragment.GameFragment;
 import com.example.aryoulearning.view.fragment.ListFragment;
-
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,8 +21,8 @@ import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity implements NavListener {
     private static final String TAG = "Main";
-    private List <ModelList> categoryList = new ArrayList<>();
-    private ModelList<AnimalModel> animalModelList = new ModelList<>();
+    private List<String> categoryList = new ArrayList<>();
+    private List<List<AnimalModel>> animalModelList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,39 +31,42 @@ public class MainActivity extends AppCompatActivity implements NavListener {
         getRetrofit();
     }
 
-    @Override
-    public void moveToListFragment(List<ModelList> categoryList) {
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.fragment_container, ListFragment.newInstance(categoryList))
-                .commit();
-    }
-
-    @Override
-    public void moveToGameFragment(ModelList<Model> modelList) {
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.fragment_container, GameFragment.newInstance(modelList))
-                .addToBackStack(null)
-                .commit();
-    }
-
     public void getRetrofit() {
-        RetrofitSingleton.getInstance().create(AnimalService.class)
+        RetrofitSingleton.getService()
                 .getAnimals()
-                .enqueue(new Callback<AnimalResponse>() {
+                .enqueue(new Callback<List<AnimalResponse>>() {
                     @Override
-                    public void onResponse(Call<AnimalResponse> call, Response<AnimalResponse> response) {
-                        Log.d(TAG, "onResponse: " + response.body().getAnimals().get(0).getName());
-                        animalModelList.setModelList(response.body().getAnimals());
-                        categoryList.add(animalModelList);
-                        moveToListFragment(categoryList);
+                    public void onResponse(Call<List<AnimalResponse>> call, Response<List<AnimalResponse>> response) {
+                        Log.d(TAG, "onResponse: " + response.body().get(0).getCategory());
+                        for(int i = 0; i < response.body().size(); i++){
+                            animalModelList.add(response.body().get(i).getList());
+                            categoryList.add(response.body().get(i).getCategory());
+                        }
+                        moveToListFragment(animalModelList, categoryList);
                     }
 
                     @Override
-                    public void onFailure(Call<AnimalResponse> call, Throwable t) {
-                        Log.e(TAG, "onFailure: " + t.getMessage());
+                    public void onFailure(Call<List<AnimalResponse>> call, Throwable t) {
+                        Log.d(TAG, "onFailure: " + t.getMessage());
+                        t.printStackTrace();
                     }
                 });
+    }
+
+    @Override
+    public void moveToListFragment(List<List<AnimalModel>> animalResponseList, List<String> categoryName) {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container, ListFragment.newInstance(animalResponseList, categoryName))
+                .commit();
+    }
+
+    @Override
+    public void moveToGameFragment(List<AnimalModel> animalModelList) {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container, GameFragment.newInstance(animalModelList))
+                .addToBackStack(null)
+                .commit();
     }
 }

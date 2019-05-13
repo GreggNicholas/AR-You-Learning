@@ -1,11 +1,10 @@
 package com.example.aryoulearning.controller;
 
-import com.example.aryoulearning.model.Model;
-import com.example.aryoulearning.model.ModelList;
+import com.example.aryoulearning.model.AnimalModel;
 
 import java.util.List;
 
 public interface NavListener {
-    void moveToListFragment(List<ModelList> categoryList);
-    void moveToGameFragment(ModelList<Model> modelList);
+    void moveToListFragment(List<List<AnimalModel>> animalResponseList, List<String> categoryName);
+    void moveToGameFragment(List<AnimalModel> animalResponseList);
 }

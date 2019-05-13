@@ -1,16 +1,20 @@
 package com.example.aryoulearning.model;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public final class AnimalResponse {
-    private ArrayList<AnimalModel> animals;
+    private String category;
+    private ArrayList<AnimalModel> list;
 
-    public AnimalResponse(ArrayList<AnimalModel> animals) {
-        this.animals = animals;
+    public String getCategory() {
+        return category;
     }
 
-    public ArrayList<AnimalModel> getAnimals() {
-        return animals;
+    public AnimalResponse(ArrayList<AnimalModel> list) {
+        this.list = list;
+    }
+
+    public ArrayList<AnimalModel> getList() {
+        return list;
     }
 }
