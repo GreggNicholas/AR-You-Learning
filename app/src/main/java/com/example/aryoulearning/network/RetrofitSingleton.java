@@ -18,7 +18,7 @@ public final class RetrofitSingleton {
         return instance;
     }
 
-    public static AnimalService getService(){
-        return getInstance().create(AnimalService.class);
+    public static ModelService getService(){
+        return getInstance().create(ModelService.class);
     }
 }

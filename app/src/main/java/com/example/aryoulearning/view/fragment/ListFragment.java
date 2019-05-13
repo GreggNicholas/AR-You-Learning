@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 
 import com.example.aryoulearning.R;
 import com.example.aryoulearning.controller.CategoryAdapter;
-import com.example.aryoulearning.model.AnimalModel;
+import com.example.aryoulearning.model.Model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,20 +21,20 @@ import java.util.List;
 public class ListFragment extends Fragment {
     private RecyclerView rv;
     private CategoryAdapter adapter;
-    private List<List<AnimalModel>> categoryList = new ArrayList<>();
+    private List<List<Model>> categoryList = new ArrayList<>();
     private List<String> categoryName;
     private int size;
 
     private static final String TAG = "Main";
 
-    public static ListFragment newInstance(List<List<AnimalModel>> animalList, List<String> categoryName) {
+    public static ListFragment newInstance(List<List<Model>> categoryList, List<String> categoryName) {
         ListFragment fragment = new ListFragment();
         Bundle args = new Bundle();
         args.putStringArrayList("category-name", (ArrayList<String>) categoryName);
 
-        for(int i = 0; i < animalList.size(); i++){
-            args.putParcelableArrayList("category-key" + i, (ArrayList<? extends Parcelable>) animalList.get(i));
-            args.putInt("SIZE", animalList.size());
+        for(int i = 0; i < categoryList.size(); i++){
+            args.putParcelableArrayList("category-key" + i, (ArrayList<? extends Parcelable>) categoryList.get(i));
+            args.putInt("SIZE", categoryList.size());
         }
 
         fragment.setArguments(args);
@@ -48,7 +48,7 @@ public class ListFragment extends Fragment {
             size = getArguments().getInt("SIZE");
 
             for(int i = 0; i < size; i++){
-                categoryList.add(getArguments().<AnimalModel>getParcelableArrayList("category-key" + i));
+                categoryList.add(getArguments().<Model>getParcelableArrayList("category-key" + i));
             }
 
             categoryName = getArguments().getStringArrayList("category-name");

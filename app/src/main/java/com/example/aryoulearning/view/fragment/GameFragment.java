@@ -21,7 +21,7 @@ import android.widget.Toast;
 
 import com.example.aryoulearning.R;
 import com.example.aryoulearning.controller.NavListener;
-import com.example.aryoulearning.model.AnimalModel;
+import com.example.aryoulearning.model.Model;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -31,10 +31,11 @@ import java.util.Random;
 
 public class GameFragment extends Fragment {
     private NavListener listener;
-    private List<AnimalModel> modelList;
+    private List<Model> modelList;
     private ImageView imageView;
     private TextView checker;
     private String answer;
+    private int counter;
     private int width;
     private int height;
     @Override
@@ -73,10 +74,10 @@ public class GameFragment extends Fragment {
         setWordsOnScreen(answer);
     }
 
-    public static GameFragment newInstance(List<AnimalModel> animalModelList) {
+    public static GameFragment newInstance(List<Model> modelList) {
         GameFragment fragment = new GameFragment();
         Bundle args = new Bundle();
-        args.putParcelableArrayList("model-list-key", (ArrayList<? extends Parcelable>) animalModelList);
+        args.putParcelableArrayList("model-list-key", (ArrayList<? extends Parcelable>) modelList);
         fragment.setArguments(args);
         return fragment;
     }
@@ -87,19 +88,19 @@ public class GameFragment extends Fragment {
         for (int i = 0; i < word.length(); i++) {
             mapList.add(getCoordinates());
 
-            while(checkCollision(mapList,mapList.get(i)) == true){
+            while(checkCollision(mapList, mapList.get(i))){
                 mapList.remove(i);
                 mapList.add(i,getCoordinates());
             }
         }
 
         for (int i = 0; i < word.length(); i++) {
-            drawImageView(Character.toString(word.charAt(i)),mapList.get(i));
+            drawLetters(Character.toString(word.charAt(i)),mapList.get(i));
         }
 
     }
 
-    public void drawImageView(String l,HashMap<String,Integer> map){
+    public void drawLetters(String l, HashMap<String,Integer> map){
         final TextView letter = new TextView(getContext());
         letter.setTextSize(80);
         letter.setText(l);
@@ -129,6 +130,8 @@ public class GameFragment extends Fragment {
                     }else{
                         Toast.makeText(getContext(), "wrong", Toast.LENGTH_SHORT).show();
                     }
+
+                    loadNext();
                 }
             }
         });
@@ -180,5 +183,17 @@ public class GameFragment extends Fragment {
 
         width = dimens.x - 100;
         height = dimens.y - 300;
+    }
+
+    private void loadNext(){
+        counter++;
+        if(counter < modelList.size()){
+            checker.setText("");
+            answer = modelList.get(counter).getName();
+            Picasso.get().load(modelList.get(counter).getImage()).into(imageView);
+            setWordsOnScreen(answer);
+        }else{
+            Toast.makeText(getContext(), "DONE", Toast.LENGTH_SHORT).show();
+        }
     }
 }
