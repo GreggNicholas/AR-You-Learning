@@ -37,7 +37,6 @@ public class MainActivity extends AppCompatActivity implements NavListener {
                 .enqueue(new Callback<List<ModelResponse>>() {
                     @Override
                     public void onResponse(Call<List<ModelResponse>> call, Response<List<ModelResponse>> response) {
-                        Log.d(TAG, "onResponse: " + response.body().get(0).getCategory());
                         for(int i = 0; i < response.body().size(); i++){
                             animalModelList.add(response.body().get(i).getList());
                             categoryList.add(response.body().get(i).getCategory());
@@ -47,7 +46,6 @@ public class MainActivity extends AppCompatActivity implements NavListener {
 
                     @Override
                     public void onFailure(Call<List<ModelResponse>> call, Throwable t) {
-                        Log.d(TAG, "onFailure: " + t.getMessage());
                         t.printStackTrace();
                     }
                 });

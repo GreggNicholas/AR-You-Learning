@@ -1,6 +1,7 @@
 package com.example.aryoulearning.view.fragment;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Parcelable;
