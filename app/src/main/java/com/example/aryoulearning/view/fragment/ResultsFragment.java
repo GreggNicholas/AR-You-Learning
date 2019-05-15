@@ -6,7 +6,6 @@ import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,18 +31,16 @@ public class ResultsFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        extractSharedPrefs();
+    }
+
+    public void extractSharedPrefs(){
         rightAnswer = sharedPreferences.getStringSet(GameFragment.RIGHTANSWERS, null);
         wrongAnswer = sharedPreferences.getStringSet(GameFragment.WRONGANSWER, null);
         correctAnswer = sharedPreferences.getInt(GameFragment.ANSWERSCORRECT, 0);
-        Log.d("TAG", "" + wrongAnswer.toString());
         for(String wrong : wrongAnswer){
             map.put(wrong, sharedPreferences.getString(wrong, null));
-            Log.d("TAG", "map: " + wrong);
-            Log.d("TAG", "prefs: " + sharedPreferences.getString(wrong, null));
         }
-        Log.d("TAG", rightAnswer.toString());
-        Log.d("TAG", wrongAnswer.toString());
-        Log.d("TAG","" + correctAnswer);
     }
 
     public static ResultsFragment newInstance(){
