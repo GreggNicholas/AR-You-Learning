@@ -18,6 +18,9 @@ import java.util.Set;
 
 
 public class ResultsFragment extends Fragment {
+    public static final String WRONGANSWER = "WRONGANSWER";
+    public static final String ANSWERSCORRECT = "ANSWERSCORRECT";
+    public static final String RIGHTANSWERS = "RIGHTANSWERS";
     private SharedPreferences sharedPreferences;
     private Set<String> rightAnswer = new HashSet<>();
     private HashMap<String, String> map = new HashMap<>();
@@ -35,9 +38,9 @@ public class ResultsFragment extends Fragment {
     }
 
     public void extractSharedPrefs(){
-        rightAnswer = sharedPreferences.getStringSet(GameFragment.RIGHTANSWERS, null);
-        wrongAnswer = sharedPreferences.getStringSet(GameFragment.WRONGANSWER, null);
-        correctAnswer = sharedPreferences.getInt(GameFragment.ANSWERSCORRECT, 0);
+        rightAnswer = sharedPreferences.getStringSet(RIGHTANSWERS, null);
+        wrongAnswer = sharedPreferences.getStringSet(WRONGANSWER, null);
+        correctAnswer = sharedPreferences.getInt(ANSWERSCORRECT, 0);
         for(String wrong : wrongAnswer){
             map.put(wrong, sharedPreferences.getString(wrong, null));
         }
