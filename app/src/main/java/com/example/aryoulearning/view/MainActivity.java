@@ -2,7 +2,6 @@ package com.example.aryoulearning.view;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 
 import com.example.aryoulearning.R;
 import com.example.aryoulearning.controller.NavListener;
@@ -11,6 +10,7 @@ import com.example.aryoulearning.model.ModelResponse;
 import com.example.aryoulearning.network.RetrofitSingleton;
 import com.example.aryoulearning.view.fragment.GameFragment;
 import com.example.aryoulearning.view.fragment.ListFragment;
+import com.example.aryoulearning.view.fragment.ResultsFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,6 +64,16 @@ public class MainActivity extends AppCompatActivity implements NavListener {
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.fragment_container, GameFragment.newInstance(modelList))
+                .addToBackStack(null)
+                .commit();
+    }
+
+
+    @Override
+    public void moveToResultsFragment() {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container, ResultsFragment.newInstance())
                 .addToBackStack(null)
                 .commit();
     }

@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -27,10 +28,15 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 public class GameFragment extends Fragment {
+    public static final String WRONGANSWER = "WRONGANSWER";
+    public static final String ANSWERSCORRECT = "ANSWERSCORRECT";
+    public static final String RIGHTANSWERS = "RIGHTANSWERS";
     private NavListener listener;
     private List<Model> modelList;
     private ImageView imageView;
@@ -39,6 +45,11 @@ public class GameFragment extends Fragment {
     private int counter;
     private int width;
     private int height;
+    private int answersCorrect;
+    private Set<String> rightAnswer = new HashSet<>();
+    private Set<String> wrongAnswer = new HashSet<>();
+    private SharedPreferences sharedPreferences;
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -55,6 +66,8 @@ public class GameFragment extends Fragment {
         if(getArguments() != null){
             modelList = getArguments().getParcelableArrayList("model-list-key");
         }
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+
     }
 
     @Nullable
@@ -128,8 +141,13 @@ public class GameFragment extends Fragment {
                 if(checker.getText().length() == answer.length()){
                     if(checker.getText().toString().equals(answer)){
                         Toast.makeText(getContext(), "right", Toast.LENGTH_SHORT).show();
+                        answersCorrect++;
+                        rightAnswer.add(checker.getText().toString());
+
                     }else{
                         Toast.makeText(getContext(), "wrong", Toast.LENGTH_SHORT).show();
+                        wrongAnswer.add(checker.getText().toString());
+                        sharedPreferences.edit().putString(checker.getText().toString(), answer).apply();
                     }
 
                     loadNext();
@@ -195,6 +213,10 @@ public class GameFragment extends Fragment {
             setWordsOnScreen(answer);
         }else{
             Toast.makeText(getContext(), "DONE", Toast.LENGTH_SHORT).show();
+            sharedPreferences.edit().putInt(ANSWERSCORRECT, answersCorrect).apply();
+            sharedPreferences.edit().putStringSet(RIGHTANSWERS, rightAnswer).apply();
+            sharedPreferences.edit().putStringSet(WRONGANSWER, wrongAnswer).apply();
+            listener.moveToResultsFragment();
         }
     }
 }

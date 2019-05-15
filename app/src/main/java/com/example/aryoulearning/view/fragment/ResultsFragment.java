@@ -1,25 +1,54 @@
 package com.example.aryoulearning.view.fragment;
 
-import android.content.Context;
-import android.net.Uri;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.aryoulearning.R;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
+
 
 public class ResultsFragment extends Fragment {
+    private SharedPreferences sharedPreferences;
+    private Set<String> rightAnswer = new HashSet<>();
+    private HashMap<String, String> map = new HashMap<>();
+    private Set<String> wrongAnswer;
+    private int correctAnswer;
 
-    private OnFragmentInteractionListener listener;
 
-    public ResultsFragment() {
+    public ResultsFragment() {}
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        rightAnswer = sharedPreferences.getStringSet(GameFragment.RIGHTANSWERS, null);
+        wrongAnswer = sharedPreferences.getStringSet(GameFragment.WRONGANSWER, null);
+        correctAnswer = sharedPreferences.getInt(GameFragment.ANSWERSCORRECT, 0);
+        Log.d("TAG", "" + wrongAnswer.toString());
+        for(String wrong : wrongAnswer){
+            map.put(wrong, sharedPreferences.getString(wrong, null));
+            Log.d("TAG", "map: " + wrong);
+            Log.d("TAG", "prefs: " + sharedPreferences.getString(wrong, null));
+        }
+        Log.d("TAG", rightAnswer.toString());
+        Log.d("TAG", wrongAnswer.toString());
+        Log.d("TAG","" + correctAnswer);
     }
 
+    public static ResultsFragment newInstance(){
+        return new ResultsFragment();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -33,31 +62,4 @@ public class ResultsFragment extends Fragment {
     }
 
 
-    public void onButtonPressed(Uri uri) {
-        if (listener != null) {
-            listener.onFragmentInteraction(uri);
-        }
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            listener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        listener = null;
-    }
-
-
-    public interface OnFragmentInteractionListener {
-        void onFragmentInteraction(Uri uri);
-    }
 }
