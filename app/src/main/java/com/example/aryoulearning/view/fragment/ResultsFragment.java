@@ -66,7 +66,7 @@ public class ResultsFragment extends Fragment {
         for (String wrongChoice : wrongAnswer) {
             wrongAnswerBuilder.append(wrongChoice + " ");
         }
-        for (String correctWay: correctAnswersStringSet) {
+        for (String correctWay : correctAnswersStringSet) {
             correctAnswerBuilder.append(correctWay + " ");
         }
         userRightAnswersString = " Your Right Answer: " + rightAnswerBuilder.toString();
@@ -98,7 +98,7 @@ public class ResultsFragment extends Fragment {
     }
 
     private void displayCorrectWordAttempts() {
-        rainbowRatingBar.setIsIndicator(true);
         rainbowRatingBar.setRating(correctAnswer);
+        rainbowRatingBar.setIsIndicator(true);
     }
 }
