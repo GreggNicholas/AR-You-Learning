@@ -8,10 +8,10 @@
 
     <TextView
         android:id="@+id/correct_text_ratingbar_title"
+        style="@style/correctword_ratingbar_title"
         android:text="@string/correct_attempts_made"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="@id/rainbow_correctword_ratingbar"
-        style="@style/correctword_ratingbar_title" />
+        app:layout_constraintTop_toTopOf="@id/rainbow_correctword_ratingbar" />
 
     <RatingBar
         android:id="@+id/rainbow_correctword_ratingbar"
@@ -20,6 +20,39 @@
         android:layout_height="wrap_content"
         app:layout_constraintLeft_toRightOf="@id/correct_text_ratingbar_title"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/result_fragment_user_right_answer_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:textColor="@android:color/holo_green_dark"
+        android:textSize="30sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/correct_text_ratingbar_title"
+        tools:text="Your Right Answer: " />
+
+    <TextView
+        android:id="@+id/result_fragment_user_wrong_answer_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:textColor="@android:color/holo_red_light"
+        android:textSize="30sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/result_fragment_user_right_answer_tv"
+        tools:text="Your Wrong Answer: " />
+
+    <TextView
+        android:id="@+id/result_fragment_correct_answer_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:textSize="35sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/result_fragment_user_wrong_answer_tv"
+        tools:text="Correct Answer: " />
 
 
 </android.support.constraint.ConstraintLayout>

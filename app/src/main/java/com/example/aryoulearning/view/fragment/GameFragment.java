@@ -46,13 +46,14 @@ public class GameFragment extends Fragment {
     private int answersCorrect;
     private Set<String> rightAnswer = new HashSet<>();
     private Set<String> wrongAnswer = new HashSet<>();
+    private Set<String> correctAnswerSet = new HashSet<>();
     private SharedPreferences sharedPreferences;
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         super.onAttach(context);
-        if(context instanceof NavListener){
+        if (context instanceof NavListener) {
             listener = (NavListener) context;
         }
         ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
@@ -61,7 +62,7 @@ public class GameFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(getArguments() != null){
+        if (getArguments() != null) {
             modelList = getArguments().getParcelableArrayList("model-list-key");
         }
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
@@ -71,7 +72,7 @@ public class GameFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_game,container,false);
+        View rootView = inflater.inflate(R.layout.fragment_game, container, false);
         return rootView;
     }
 
@@ -94,31 +95,31 @@ public class GameFragment extends Fragment {
         return fragment;
     }
 
-    public void setWordsOnScreen(String word){
-        List<HashMap<String,Integer>> mapList = new ArrayList<>();
+    public void setWordsOnScreen(String word) {
+        List<HashMap<String, Integer>> mapList = new ArrayList<>();
 
         for (int i = 0; i < word.length(); i++) {
             mapList.add(getCoordinates());
 
-            while(checkCollision(mapList, mapList.get(i))){
+            while (checkCollision(mapList, mapList.get(i))) {
                 mapList.remove(i);
-                mapList.add(i,getCoordinates());
+                mapList.add(i, getCoordinates());
             }
         }
 
         for (int i = 0; i < word.length(); i++) {
-            drawLetters(Character.toString(word.charAt(i)),mapList.get(i));
+            drawLetters(Character.toString(word.charAt(i)), mapList.get(i));
         }
 
     }
 
-    public void drawLetters(String l, HashMap<String,Integer> map){
+    public void drawLetters(String l, HashMap<String, Integer> map) {
         final TextView letter = new TextView(getContext());
         letter.setTextSize(80);
         letter.setText(l);
         letter.setTextColor(getResources().getColor(R.color.colorBlack));
 
-        Log.d("pixels",width + " " + height);
+        Log.d("pixels", width + " " + height);
 
         AbsoluteLayout layout = (AbsoluteLayout) getActivity().findViewById(R.id.game_layout);
 
@@ -136,16 +137,17 @@ public class GameFragment extends Fragment {
                 letter.setVisibility(View.INVISIBLE);
                 letter.setClickable(false);
 
-                if(checker.getText().length() == answer.length()){
-                    if(checker.getText().toString().equals(answer)){
+                if (checker.getText().length() == answer.length()) {
+                    if (checker.getText().toString().equals(answer)) {
                         Toast.makeText(getContext(), "right", Toast.LENGTH_SHORT).show();
                         answersCorrect++;
                         rightAnswer.add(checker.getText().toString());
 
-                    }else{
+                    } else {
                         Toast.makeText(getContext(), "wrong", Toast.LENGTH_SHORT).show();
                         wrongAnswer.add(checker.getText().toString());
                         sharedPreferences.edit().putString(checker.getText().toString(), answer).apply();
+                        correctAnswerSet.add(answer);
                     }
 
                     loadNext();
@@ -155,43 +157,43 @@ public class GameFragment extends Fragment {
         layout.addView(letter);
     }
 
-    private HashMap<String,Integer> getCoordinates() {
-        HashMap<String ,Integer> map = new HashMap<>();
+    private HashMap<String, Integer> getCoordinates() {
+        HashMap<String, Integer> map = new HashMap<>();
         Random r = new Random();
 
         int ranX = r.nextInt(width);
         int ranY = r.nextInt(height);
 
-        while((ranX > width/2 - 200 && ranX < width/2 + 200)){
+        while ((ranX > width / 2 - 200 && ranX < width / 2 + 200)) {
             ranX = r.nextInt(width);
         }
-        while ((ranY > height/2 - 240 && ranY < height/2 + 240)){
+        while ((ranY > height / 2 - 240 && ranY < height / 2 + 240)) {
             ranY = r.nextInt(height);
         }
 
-        map.put("x",ranX);
-        map.put("y",ranY);
+        map.put("x", ranX);
+        map.put("y", ranY);
 
         return map;
     }
 
-    private boolean checkCollision(List<HashMap<String,Integer>> mapList,
-                                   HashMap<String,Integer> testMap){
+    private boolean checkCollision(List<HashMap<String, Integer>> mapList,
+                                   HashMap<String, Integer> testMap) {
 
         for (int i = 0; i < mapList.size() - 1; i++) {
-            if(mapList.get(i).get("x") > testMap.get("x") - 80 &&
-                    mapList.get(i).get("x") < testMap.get("x") + 80){
+            if (mapList.get(i).get("x") > testMap.get("x") - 80 &&
+                    mapList.get(i).get("x") < testMap.get("x") + 80) {
                 return true;
             }
-            if(mapList.get(i).get("y") > testMap.get("y") - 100 &&
-                    mapList.get(i).get("y") < testMap.get("y") + 100){
+            if (mapList.get(i).get("y") > testMap.get("y") - 100 &&
+                    mapList.get(i).get("y") < testMap.get("y") + 100) {
                 return true;
             }
         }
         return false;
     }
 
-    private void setMaxWidthAndHeight(){
+    private void setMaxWidthAndHeight() {
         WindowManager wm = (WindowManager) getContext().getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
         DisplayMetrics displaymetrics = new DisplayMetrics();
         Point dimens = new Point();
@@ -202,18 +204,19 @@ public class GameFragment extends Fragment {
         height = dimens.y - 300;
     }
 
-    private void loadNext(){
+    private void loadNext() {
         counter++;
-        if(counter < modelList.size()){
+        if (counter < modelList.size()) {
             checker.setText("");
             answer = modelList.get(counter).getName();
             Picasso.get().load(modelList.get(counter).getImage()).into(imageView);
             setWordsOnScreen(answer);
-        }else{
+        } else {
             Toast.makeText(getContext(), "DONE", Toast.LENGTH_SHORT).show();
             sharedPreferences.edit().putInt(ResultsFragment.ANSWERSCORRECT, answersCorrect).apply();
             sharedPreferences.edit().putStringSet(ResultsFragment.RIGHTANSWERS, rightAnswer).apply();
             sharedPreferences.edit().putStringSet(ResultsFragment.WRONGANSWER, wrongAnswer).apply();
+            sharedPreferences.edit().putStringSet(ResultsFragment.CORRECT_ANSWER_FOR_USER, correctAnswerSet).apply();
             listener.moveToResultsFragment();
         }
     }

@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RatingBar;
+import android.widget.TextView;
 
 import com.example.aryoulearning.R;
 
@@ -22,13 +23,21 @@ public class ResultsFragment extends Fragment {
     public static final String WRONGANSWER = "WRONGANSWER";
     public static final String ANSWERSCORRECT = "ANSWERSCORRECT";
     public static final String RIGHTANSWERS = "RIGHTANSWERS";
+    public static final String CORRECT_ANSWER_FOR_USER = "correct answer for user";
     private SharedPreferences sharedPreferences;
     private Set<String> rightAnswer = new HashSet<>();
     private HashMap<String, String> map = new HashMap<>();
-    private Set<String> wrongAnswer;
+    private Set<String> wrongAnswer, correctAnswersStringSet;
     private int correctAnswer;
     private RatingBar rainbowRatingBar;
+    private String userRightAnswersString, userWrongAnswersString, correctAnswerForUserString;
+    public static final String TAG = "ResultsFragment";
+    private TextView userRightAnswerTextView, userWrongAnswerTextView, correctAnswerTextView;
 
+
+    public static ResultsFragment newInstance() {
+        return new ResultsFragment();
+    }
 
     public ResultsFragment() {
     }
@@ -44,13 +53,25 @@ public class ResultsFragment extends Fragment {
         rightAnswer = sharedPreferences.getStringSet(RIGHTANSWERS, null);
         wrongAnswer = sharedPreferences.getStringSet(WRONGANSWER, null);
         correctAnswer = sharedPreferences.getInt(ANSWERSCORRECT, 0);
+        correctAnswersStringSet = sharedPreferences.getStringSet(CORRECT_ANSWER_FOR_USER, null);
+        final StringBuilder rightAnswerBuilder = new StringBuilder();
+        final StringBuilder wrongAnswerBuilder = new StringBuilder();
+        final StringBuilder correctAnswerBuilder = new StringBuilder();
         for (String wrong : wrongAnswer) {
             map.put(wrong, sharedPreferences.getString(wrong, null));
         }
-    }
-
-    public static ResultsFragment newInstance() {
-        return new ResultsFragment();
+        for (String right : rightAnswer) {
+            rightAnswerBuilder.append(right + " ");
+        }
+        for (String wrongChoice : wrongAnswer) {
+            wrongAnswerBuilder.append(wrongChoice + " ");
+        }
+        for (String correctWay: correctAnswersStringSet) {
+            correctAnswerBuilder.append(correctWay + " ");
+        }
+        userRightAnswersString = " Your Right Answer: " + rightAnswerBuilder.toString();
+        userWrongAnswersString = " Your Wrong Answer: " + wrongAnswerBuilder.toString();
+        correctAnswerForUserString = " Correct Answer: " + correctAnswerBuilder.toString();
     }
 
     @Override
@@ -62,14 +83,22 @@ public class ResultsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        displayCorrectWordAttempts(view);
+        findViewByIds(view);
+        displayCorrectWordAttempts();
+        userRightAnswerTextView.setText(userRightAnswersString);
+        userWrongAnswerTextView.setText(userWrongAnswersString);
+        correctAnswerTextView.setText(correctAnswerForUserString);
     }
 
-    private void displayCorrectWordAttempts(View view) {
+    private void findViewByIds(@NonNull View view) {
+        userRightAnswerTextView = view.findViewById(R.id.result_fragment_user_right_answer_tv);
+        userWrongAnswerTextView = view.findViewById(R.id.result_fragment_user_wrong_answer_tv);
+        correctAnswerTextView = view.findViewById(R.id.result_fragment_correct_answer_tv);
         rainbowRatingBar = view.findViewById(R.id.rainbow_correctword_ratingbar);
+    }
+
+    private void displayCorrectWordAttempts() {
         rainbowRatingBar.setIsIndicator(true);
         rainbowRatingBar.setRating(correctAnswer);
     }
-
-
 }
