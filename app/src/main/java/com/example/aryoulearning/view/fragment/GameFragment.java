@@ -34,9 +34,7 @@ import java.util.Random;
 import java.util.Set;
 
 public class GameFragment extends Fragment {
-    public static final String WRONGANSWER = "WRONGANSWER";
-    public static final String ANSWERSCORRECT = "ANSWERSCORRECT";
-    public static final String RIGHTANSWERS = "RIGHTANSWERS";
+
     private NavListener listener;
     private List<Model> modelList;
     private ImageView imageView;
@@ -213,9 +211,9 @@ public class GameFragment extends Fragment {
             setWordsOnScreen(answer);
         }else{
             Toast.makeText(getContext(), "DONE", Toast.LENGTH_SHORT).show();
-            sharedPreferences.edit().putInt(ANSWERSCORRECT, answersCorrect).apply();
-            sharedPreferences.edit().putStringSet(RIGHTANSWERS, rightAnswer).apply();
-            sharedPreferences.edit().putStringSet(WRONGANSWER, wrongAnswer).apply();
+            sharedPreferences.edit().putInt(ResultsFragment.ANSWERSCORRECT, answersCorrect).apply();
+            sharedPreferences.edit().putStringSet(ResultsFragment.RIGHTANSWERS, rightAnswer).apply();
+            sharedPreferences.edit().putStringSet(ResultsFragment.WRONGANSWER, wrongAnswer).apply();
             listener.moveToResultsFragment();
         }
     }
