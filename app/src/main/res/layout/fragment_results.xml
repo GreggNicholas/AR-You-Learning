@@ -8,10 +8,10 @@
 
     <TextView
         android:id="@+id/correct_text_ratingbar_title"
+        style="@style/correctword_ratingbar_title"
         android:text="@string/correct_attempts_made"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="@id/rainbow_correctword_ratingbar"
-        style="@style/correctword_ratingbar_title" />
+        app:layout_constraintTop_toTopOf="@id/rainbow_correctword_ratingbar" />
 
     <RatingBar
         android:id="@+id/rainbow_correctword_ratingbar"
@@ -20,6 +20,15 @@
         android:layout_height="wrap_content"
         app:layout_constraintLeft_toRightOf="@id/correct_text_ratingbar_title"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/result_fragment_correct_answer_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/correct_text_ratingbar_title" />
+
 
 
 </android.support.constraint.ConstraintLayout>
