@@ -30,7 +30,7 @@ public class ResultsFragment extends Fragment {
     private Set<String> wrongAnswer;
     private int correctAnswer;
     private RatingBar rainbowRatingBar;
-    private String userRightAnswers;
+    private String userRightAnswers, userWrongAnswers, correctAnswerForUser;
     public static final String TAG = "ResultsFragment";
     private TextView userRightAnswerTextView, userWrongAnswerTextView, correctAnswerTextView;
 
@@ -53,14 +53,20 @@ public class ResultsFragment extends Fragment {
         rightAnswer = sharedPreferences.getStringSet(RIGHTANSWERS, null);
         wrongAnswer = sharedPreferences.getStringSet(WRONGANSWER, null);
         correctAnswer = sharedPreferences.getInt(ANSWERSCORRECT, 0);
-        final StringBuilder builder = new StringBuilder();
+        final StringBuilder rightAnswerBuilder = new StringBuilder();
+        final StringBuilder wrongAnswerBuilder = new StringBuilder();
+        final StringBuilder correctAnswerBuilder = new StringBuilder();
         for (String wrong : wrongAnswer) {
             map.put(wrong, sharedPreferences.getString(wrong, null));
         }
-        for (String right: rightAnswer) {
-            builder.append(right + " ");
+        for (String right : rightAnswer) {
+            rightAnswerBuilder.append(right + " ");
         }
-        userRightAnswers = " Your Right Answer: " + builder.toString();
+        for (String wrongChoice: wrongAnswer) {
+            wrongAnswerBuilder.append(wrongChoice + " ");
+        }
+        userRightAnswers = " Your Right Answer: " + rightAnswerBuilder.toString();
+        userWrongAnswers = " Your Wrong Answer: " + wrongAnswerBuilder.toString();
         Log.d(TAG, "userRightAnswers : " + userRightAnswers);
     }
 
@@ -74,8 +80,9 @@ public class ResultsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         findViewByIds(view);
-        displayCorrectWordAttempts(view);
+        displayCorrectWordAttempts();
         userRightAnswerTextView.setText(userRightAnswers);
+        userWrongAnswerTextView.setText(userWrongAnswers);
     }
 
     private void findViewByIds(@NonNull View view) {
@@ -85,7 +92,7 @@ public class ResultsFragment extends Fragment {
         rainbowRatingBar = view.findViewById(R.id.rainbow_correctword_ratingbar);
     }
 
-    private void displayCorrectWordAttempts(View view) {
+    private void displayCorrectWordAttempts() {
         rainbowRatingBar.setIsIndicator(true);
         rainbowRatingBar.setRating(correctAnswer);
     }
