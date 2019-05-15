@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RatingBar;
 
 import com.example.aryoulearning.R;
 
@@ -26,9 +27,11 @@ public class ResultsFragment extends Fragment {
     private HashMap<String, String> map = new HashMap<>();
     private Set<String> wrongAnswer;
     private int correctAnswer;
+    private RatingBar rainbowRatingBar;
 
 
-    public ResultsFragment() {}
+    public ResultsFragment() {
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -37,16 +40,16 @@ public class ResultsFragment extends Fragment {
         extractSharedPrefs();
     }
 
-    public void extractSharedPrefs(){
+    public void extractSharedPrefs() {
         rightAnswer = sharedPreferences.getStringSet(RIGHTANSWERS, null);
         wrongAnswer = sharedPreferences.getStringSet(WRONGANSWER, null);
         correctAnswer = sharedPreferences.getInt(ANSWERSCORRECT, 0);
-        for(String wrong : wrongAnswer){
+        for (String wrong : wrongAnswer) {
             map.put(wrong, sharedPreferences.getString(wrong, null));
         }
     }
 
-    public static ResultsFragment newInstance(){
+    public static ResultsFragment newInstance() {
         return new ResultsFragment();
     }
 
@@ -59,6 +62,13 @@ public class ResultsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        displayCorrectWordAttempts(view);
+    }
+
+    private void displayCorrectWordAttempts(View view) {
+        rainbowRatingBar = view.findViewById(R.id.rainbow_correctword_ratingbar);
+        rainbowRatingBar.setIsIndicator(true);
+        rainbowRatingBar.setRating(correctAnswer);
     }
 
 

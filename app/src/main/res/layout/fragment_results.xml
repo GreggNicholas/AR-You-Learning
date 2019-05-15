@@ -1,20 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".view.fragment.ResultsFragment">
+
+    <TextView
+        android:id="@+id/correct_text_ratingbar_title"
+        android:text="@string/correct_attempts_made"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="@id/rainbow_correctword_ratingbar"
+        style="@style/correctword_ratingbar_title" />
 
     <RatingBar
         android:id="@+id/rainbow_correctword_ratingbar"
         style="@style/RainbowStarsRatingBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:numStars="5" />
+        app:layout_constraintLeft_toRightOf="@id/correct_text_ratingbar_title"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
 
-</FrameLayout>
+</android.support.constraint.ConstraintLayout>
