@@ -6,7 +6,6 @@ import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,13 +23,14 @@ public class ResultsFragment extends Fragment {
     public static final String WRONGANSWER = "WRONGANSWER";
     public static final String ANSWERSCORRECT = "ANSWERSCORRECT";
     public static final String RIGHTANSWERS = "RIGHTANSWERS";
+    public static final String CORRECT_ANSWER_FOR_USER = "correct answer for user";
     private SharedPreferences sharedPreferences;
     private Set<String> rightAnswer = new HashSet<>();
     private HashMap<String, String> map = new HashMap<>();
-    private Set<String> wrongAnswer;
+    private Set<String> wrongAnswer, correctAnswersStringSet;
     private int correctAnswer;
     private RatingBar rainbowRatingBar;
-    private String userRightAnswers, userWrongAnswers, correctAnswerForUser;
+    private String userRightAnswersString, userWrongAnswersString, correctAnswerForUserString;
     public static final String TAG = "ResultsFragment";
     private TextView userRightAnswerTextView, userWrongAnswerTextView, correctAnswerTextView;
 
@@ -53,6 +53,7 @@ public class ResultsFragment extends Fragment {
         rightAnswer = sharedPreferences.getStringSet(RIGHTANSWERS, null);
         wrongAnswer = sharedPreferences.getStringSet(WRONGANSWER, null);
         correctAnswer = sharedPreferences.getInt(ANSWERSCORRECT, 0);
+        correctAnswersStringSet = sharedPreferences.getStringSet(CORRECT_ANSWER_FOR_USER, null);
         final StringBuilder rightAnswerBuilder = new StringBuilder();
         final StringBuilder wrongAnswerBuilder = new StringBuilder();
         final StringBuilder correctAnswerBuilder = new StringBuilder();
@@ -62,12 +63,15 @@ public class ResultsFragment extends Fragment {
         for (String right : rightAnswer) {
             rightAnswerBuilder.append(right + " ");
         }
-        for (String wrongChoice: wrongAnswer) {
+        for (String wrongChoice : wrongAnswer) {
             wrongAnswerBuilder.append(wrongChoice + " ");
         }
-        userRightAnswers = " Your Right Answer: " + rightAnswerBuilder.toString();
-        userWrongAnswers = " Your Wrong Answer: " + wrongAnswerBuilder.toString();
-        Log.d(TAG, "userRightAnswers : " + userRightAnswers);
+        for (String correctWay: correctAnswersStringSet) {
+            correctAnswerBuilder.append(correctWay + " ");
+        }
+        userRightAnswersString = " Your Right Answer: " + rightAnswerBuilder.toString();
+        userWrongAnswersString = " Your Wrong Answer: " + wrongAnswerBuilder.toString();
+        correctAnswerForUserString = " Correct Answer: " + correctAnswerBuilder.toString();
     }
 
     @Override
@@ -81,8 +85,9 @@ public class ResultsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         findViewByIds(view);
         displayCorrectWordAttempts();
-        userRightAnswerTextView.setText(userRightAnswers);
-        userWrongAnswerTextView.setText(userWrongAnswers);
+        userRightAnswerTextView.setText(userRightAnswersString);
+        userWrongAnswerTextView.setText(userWrongAnswersString);
+        correctAnswerTextView.setText(correctAnswerForUserString);
     }
 
     private void findViewByIds(@NonNull View view) {
