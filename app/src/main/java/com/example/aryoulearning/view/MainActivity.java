@@ -23,7 +23,6 @@ public class MainActivity extends AppCompatActivity implements NavListener {
     private static final String TAG = "Main";
     private List<String> categoryList = new ArrayList<>();
     private List<List<Model>> animalModelList = new ArrayList<>();
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,10 +52,11 @@ public class MainActivity extends AppCompatActivity implements NavListener {
 
     @Override
     public void moveToListFragment(List<List<Model>> modelResponseList, List<String> categoryName) {
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.fragment_container, ListFragment.newInstance(modelResponseList, categoryName))
-                .commit();
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, ListFragment.newInstance(modelResponseList, categoryName))
+                    .commit();
+
     }
 
     @Override
@@ -67,4 +67,5 @@ public class MainActivity extends AppCompatActivity implements NavListener {
                 .addToBackStack(null)
                 .commit();
     }
+
 }
