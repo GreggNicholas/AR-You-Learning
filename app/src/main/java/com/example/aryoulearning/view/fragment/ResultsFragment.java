@@ -47,7 +47,10 @@ public class ResultsFragment extends Fragment {
         super.onCreate(savedInstanceState);
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
         extractSharedPrefs();
+
+
     }
+
 
     public void extractSharedPrefs() {
         rightAnswer = sharedPreferences.getStringSet(RIGHTANSWERS, null);
@@ -72,7 +75,10 @@ public class ResultsFragment extends Fragment {
         userRightAnswersString = " Your Right Answer: " + rightAnswerBuilder.toString();
         userWrongAnswersString = " Your Wrong Answer: " + wrongAnswerBuilder.toString();
         correctAnswerForUserString = " Correct Answer: " + correctAnswerBuilder.toString();
+
+
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -85,9 +91,18 @@ public class ResultsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         findViewByIds(view);
         displayCorrectWordAttempts();
+        allAttemptsCorrectChecker();
         userRightAnswerTextView.setText(userRightAnswersString);
         userWrongAnswerTextView.setText(userWrongAnswersString);
         correctAnswerTextView.setText(correctAnswerForUserString);
+
+    }
+
+    private void allAttemptsCorrectChecker() {
+        if (userWrongAnswersString.isEmpty() || wrongAnswer.isEmpty() || userWrongAnswerTextView.getText().equals(String.valueOf(0))) {
+            userWrongAnswerTextView.setVisibility(View.INVISIBLE);
+            correctAnswerTextView.setVisibility(View.INVISIBLE);
+        }
     }
 
     private void findViewByIds(@NonNull View view) {
