@@ -1,5 +1,6 @@
 package com.example.aryoulearning.view.fragment;
 
+import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -9,6 +10,9 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -17,6 +21,8 @@ import com.example.aryoulearning.R;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
+
+import static com.example.aryoulearning.R.string.congratsYoutubeVideo;
 
 
 public class ResultsFragment extends Fragment {
@@ -33,7 +39,7 @@ public class ResultsFragment extends Fragment {
     private String userRightAnswersString, userWrongAnswersString, correctAnswerForUserString;
     public static final String TAG = "ResultsFragment";
     private TextView userRightAnswerTextView, userWrongAnswerTextView, correctAnswerTextView;
-
+    private WebView congratsWebView;
 
     public static ResultsFragment newInstance() {
         return new ResultsFragment();
@@ -91,17 +97,36 @@ public class ResultsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         findViewByIds(view);
         displayCorrectWordAttempts();
-        allAttemptsCorrectChecker();
+        allAttemptsCorrectChecker(view);
+        onlyOneWordCorrect(view);
         userRightAnswerTextView.setText(userRightAnswersString);
         userWrongAnswerTextView.setText(userWrongAnswersString);
         correctAnswerTextView.setText(correctAnswerForUserString);
 
     }
 
-    private void allAttemptsCorrectChecker() {
+    private void onlyOneWordCorrect(View view) {
+        if (userRightAnswersString.contains(String.valueOf(3))) {
+            userRightAnswerTextView.setText("");
+        }
+    }
+
+    @SuppressLint("SetJavaScriptEnabled")
+    private void allAttemptsCorrectChecker(View view) {
         if (userWrongAnswersString.isEmpty() || wrongAnswer.isEmpty() || userWrongAnswerTextView.getText().equals(String.valueOf(0))) {
             userWrongAnswerTextView.setVisibility(View.INVISIBLE);
             correctAnswerTextView.setVisibility(View.INVISIBLE);
+            congratsWebView = view.findViewById(R.id.congrats_webview);
+            congratsWebView.setWebViewClient(new WebViewClient(){
+                @Override
+                public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                    return false;
+                }
+            });
+            String youtubeFrame = getString(congratsYoutubeVideo);
+            WebSettings congratsWebSettings = congratsWebView.getSettings();
+            congratsWebSettings.setJavaScriptEnabled(true);
+            congratsWebView.loadData(youtubeFrame, "text/html", "utf-8");
         }
     }
 
@@ -110,6 +135,7 @@ public class ResultsFragment extends Fragment {
         userWrongAnswerTextView = view.findViewById(R.id.result_fragment_user_wrong_answer_tv);
         correctAnswerTextView = view.findViewById(R.id.result_fragment_correct_answer_tv);
         rainbowRatingBar = view.findViewById(R.id.rainbow_correctword_ratingbar);
+
     }
 
     private void displayCorrectWordAttempts() {
