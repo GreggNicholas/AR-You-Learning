@@ -30,7 +30,7 @@
         android:textSize="30sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/correct_text_ratingbar_title"
-        tools:text="Your Right Answer: " />
+        tools:text="@string/rightanswers" />
 
     <TextView
         android:id="@+id/result_fragment_user_wrong_answer_tv"
@@ -41,7 +41,7 @@
         android:textSize="30sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/result_fragment_user_right_answer_tv"
-        tools:text="Your Wrong Answer: " />
+        tools:text="@string/wronganswers" />
 
     <TextView
         android:id="@+id/result_fragment_correct_answer_tv"
@@ -52,7 +52,7 @@
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/result_fragment_user_wrong_answer_tv"
-        tools:text="Correct Answer: " />
+        tools:text="@string/correctanswers" />
 
     <WebView
         android:id="@+id/congrats_webview"
