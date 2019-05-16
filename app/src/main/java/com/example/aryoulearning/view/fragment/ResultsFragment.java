@@ -1,5 +1,6 @@
 package com.example.aryoulearning.view.fragment;
 
+import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -9,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -17,6 +19,11 @@ import com.example.aryoulearning.R;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
+
+import static com.example.aryoulearning.R.string.congratsgif;
+import static com.example.aryoulearning.R.string.correctanswers;
+import static com.example.aryoulearning.R.string.rightanswers;
+import static com.example.aryoulearning.R.string.wronganswers;
 
 
 public class ResultsFragment extends Fragment {
@@ -33,7 +40,7 @@ public class ResultsFragment extends Fragment {
     private String userRightAnswersString, userWrongAnswersString, correctAnswerForUserString;
     public static final String TAG = "ResultsFragment";
     private TextView userRightAnswerTextView, userWrongAnswerTextView, correctAnswerTextView;
-
+    WebView congratsWebView;
 
     public static ResultsFragment newInstance() {
         return new ResultsFragment();
@@ -47,7 +54,10 @@ public class ResultsFragment extends Fragment {
         super.onCreate(savedInstanceState);
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
         extractSharedPrefs();
+
+
     }
+
 
     public void extractSharedPrefs() {
         rightAnswer = sharedPreferences.getStringSet(RIGHTANSWERS, null);
@@ -69,10 +79,13 @@ public class ResultsFragment extends Fragment {
         for (String correctWay : correctAnswersStringSet) {
             correctAnswerBuilder.append(correctWay + " ");
         }
-        userRightAnswersString = " Your Right Answer: " + rightAnswerBuilder.toString();
-        userWrongAnswersString = " Your Wrong Answer: " + wrongAnswerBuilder.toString();
-        correctAnswerForUserString = " Correct Answer: " + correctAnswerBuilder.toString();
+        userRightAnswersString = getString(rightanswers) + rightAnswerBuilder.toString();
+        userWrongAnswersString = getString(wronganswers) + wrongAnswerBuilder.toString();
+        correctAnswerForUserString = getString(correctanswers) + correctAnswerBuilder.toString();
+
+
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -88,6 +101,20 @@ public class ResultsFragment extends Fragment {
         userRightAnswerTextView.setText(userRightAnswersString);
         userWrongAnswerTextView.setText(userWrongAnswersString);
         correctAnswerTextView.setText(correctAnswerForUserString);
+        allAttemptsCorrectChecker();
+
+    }
+
+
+    @SuppressLint("SetJavaScriptEnabled")
+    private void allAttemptsCorrectChecker() {
+        if (userWrongAnswersString.isEmpty() || wrongAnswer.isEmpty() || userWrongAnswerTextView.getText().equals(String.valueOf(0))) {
+            userWrongAnswerTextView.setVisibility(View.INVISIBLE);
+            correctAnswerTextView.setVisibility(View.INVISIBLE);
+            congratsWebView.setVisibility(View.VISIBLE);
+            String congratsImage = getString(congratsgif);
+            congratsWebView.loadUrl(congratsImage);
+        }
     }
 
     private void findViewByIds(@NonNull View view) {
@@ -95,6 +122,8 @@ public class ResultsFragment extends Fragment {
         userWrongAnswerTextView = view.findViewById(R.id.result_fragment_user_wrong_answer_tv);
         correctAnswerTextView = view.findViewById(R.id.result_fragment_correct_answer_tv);
         rainbowRatingBar = view.findViewById(R.id.rainbow_correctword_ratingbar);
+        congratsWebView = view.findViewById(R.id.congrats_webview);
+        congratsWebView.setVisibility(View.INVISIBLE);
     }
 
     private void displayCorrectWordAttempts() {

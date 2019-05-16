@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 import java.util.Set;
 
@@ -121,7 +122,7 @@ public class GameFragment extends Fragment {
 
         Log.d("pixels", width + " " + height);
 
-        AbsoluteLayout layout = (AbsoluteLayout) getActivity().findViewById(R.id.game_layout);
+        AbsoluteLayout layout = (AbsoluteLayout) Objects.requireNonNull(getActivity()).findViewById(R.id.game_layout);
 
         AbsoluteLayout.LayoutParams params = new AbsoluteLayout.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT,

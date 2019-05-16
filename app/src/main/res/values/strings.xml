@@ -1,7 +1,14 @@
 <resources>
     <string name="app_name">AR you learning</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="correct_attempts_made">Correct attempts made :</string>
+    <string name="rightanswers">Your Right Answers:</string>
+    <string name="rightanswer">Your Right Answer:</string>
+    <string name="wronganswers">Your Wrong Answers:</string>
+    <string name="wronganswer">Your Wrong Answer:</string>
+    <string name="correctanswers">Correct Answers:</string>
+    <string name="correctanswer">Correct Answer:</string>
+    <string name="congratsgif">https://media.tenor.com/images/24520b4497153abb91ca769fe4a7f23f/tenor.gif</string>
+
 </resources>
