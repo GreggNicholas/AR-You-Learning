@@ -6,6 +6,7 @@ import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.preference.PreferenceManager;
+import android.speech.tts.TextToSpeech;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -22,7 +23,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.aryoulearning.R;
+import com.example.aryoulearning.audio.PronunciationUtil;
 import com.example.aryoulearning.controller.NavListener;
+import com.example.aryoulearning.controller.TextToSpeechListener;
 import com.example.aryoulearning.model.Model;
 import com.squareup.picasso.Picasso;
 
@@ -30,11 +33,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.Random;
 import java.util.Set;
 
-public class GameFragment extends Fragment {
+public class GameFragment extends Fragment implements TextToSpeechListener {
 
     private NavListener listener;
     private List<Model> modelList;
@@ -49,6 +53,8 @@ public class GameFragment extends Fragment {
     private Set<String> wrongAnswer = new HashSet<>();
     private Set<String> correctAnswerSet = new HashSet<>();
     private SharedPreferences sharedPreferences;
+    private PronunciationUtil pronunciationUtil;
+    private TextToSpeech textToSpeech;
 
     @Override
     public void onAttach(Context context) {
@@ -135,8 +141,8 @@ public class GameFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 checker.append(letter.getText().toString());
-                letter.setVisibility(View.INVISIBLE);
-                letter.setClickable(false);
+
+
 
                 if (checker.getText().length() == answer.length()) {
                     if (checker.getText().toString().equals(answer)) {
@@ -220,5 +226,37 @@ public class GameFragment extends Fragment {
             sharedPreferences.edit().putStringSet(ResultsFragment.CORRECT_ANSWER_FOR_USER, correctAnswerSet).apply();
             listener.moveToResultsFragment();
         }
+    }
+
+    @Override
+    public void getSpeech(final TextView textView, Context context) {
+        textView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int speakText = textToSpeech.speak(String.valueOf(textView.getText()),
+                        TextToSpeech.QUEUE_FLUSH, null);
+                if (speakText == TextToSpeech.ERROR) {
+                    Log.e("TTS", "Error in converting Text to Speech!");
+                }
+            }
+        });
+    }
+
+    @Override
+    public void getContextOfSpeech(final Context context) {
+        textToSpeech = new TextToSpeech(context, new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                if (status == TextToSpeech.SUCCESS) {
+                    int language = textToSpeech.setLanguage(Locale.US);
+                    if (language == TextToSpeech.LANG_MISSING_DATA
+                            || language == TextToSpeech.LANG_NOT_SUPPORTED) {
+                        Log.e("TTS", "Language not supported");
+                    } else {
+                        Log.e("TTS", "Initialization failed");
+                    }
+                }
+            }
+        });
     }
 }
