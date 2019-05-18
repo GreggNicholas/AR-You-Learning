@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface NavListener {
     void moveToListFragment(List<List<Model>> animalResponseList, List<String> categoryName);
-    void moveToGameFragment(List<Model> animalResponseList);
+    void moveToGameFragment(List<Model> animalResponseList,boolean isAR_on);
     void moveToResultsFragment();
 
 }

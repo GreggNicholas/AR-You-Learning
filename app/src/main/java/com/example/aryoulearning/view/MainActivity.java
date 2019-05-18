@@ -2,9 +2,13 @@ package com.example.aryoulearning.view;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.AbsoluteLayout;
+import android.widget.Switch;
+import android.widget.Toast;
 
 import com.example.aryoulearning.R;
 import com.example.aryoulearning.controller.NavListener;
+import com.example.aryoulearning.controller.SwitchListener;
 import com.example.aryoulearning.model.Model;
 import com.example.aryoulearning.model.ModelResponse;
 import com.example.aryoulearning.network.RetrofitSingleton;
@@ -19,10 +23,12 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity implements NavListener {
+public class MainActivity extends AppCompatActivity implements NavListener, SwitchListener {
     private static final String TAG = "Main";
     private List<String> categoryList = new ArrayList<>();
     private List<List<Model>> animalModelList = new ArrayList<>();
+    public static boolean AR_SWITCH_STATUS;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,14 +66,18 @@ public class MainActivity extends AppCompatActivity implements NavListener {
     }
 
     @Override
-    public void moveToGameFragment(List<Model> modelList) {
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.fragment_container, GameFragment.newInstance(modelList))
-                .addToBackStack(null)
-                .commit();
+    public void moveToGameFragment(List<Model> modelList, boolean AR_is_on) {
+        if(AR_is_on){
+            //move to AR fragment
+            Toast.makeText(this, "TODO:IMPLEMENT AR FRAGMENT", Toast.LENGTH_SHORT).show();
+        }else {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, GameFragment.newInstance(modelList))
+                    .addToBackStack(null)
+                    .commit();
+        }
     }
-
 
     @Override
     public void moveToResultsFragment() {
@@ -78,4 +88,12 @@ public class MainActivity extends AppCompatActivity implements NavListener {
                 .commit();
     }
 
+    @Override
+    public void updateSwitchStatus(boolean isOn) {
+        if(isOn){
+            AR_SWITCH_STATUS = true;
+        }else{
+            AR_SWITCH_STATUS = false;
+        }
+    }
 }

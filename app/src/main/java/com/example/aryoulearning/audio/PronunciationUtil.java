@@ -42,6 +42,14 @@ public final class PronunciationUtil {
                     Log.e("TTS", "Error in converting Text to Speech!");
                 }
     }
+    public void textToSpeechAnnouncer(final String message, final TextToSpeech textToSpeech) {
+        ;
+        int speakText = textToSpeech.speak(message,
+                TextToSpeech.QUEUE_ADD, null);
+        if (speakText == TextToSpeech.ERROR) {
+            Log.e("TTS", "Error in converting Text to Speech!");
+        }
+    }
 
     private static String pronounceSingleLetter(String letter) {
         switch (letter) {

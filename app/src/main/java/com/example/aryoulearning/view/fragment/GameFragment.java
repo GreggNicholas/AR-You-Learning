@@ -56,7 +56,6 @@ public class GameFragment extends Fragment{
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        super.onAttach(context);
         if (context instanceof NavListener) {
             listener = (NavListener) context;
         }
@@ -155,6 +154,7 @@ public class GameFragment extends Fragment{
                         wrongAnswer.add(checker.getText().toString());
                         sharedPreferences.edit().putString(checker.getText().toString(), answer).apply();
                         correctAnswerSet.add(answer);
+                        pronunciationUtil.textToSpeechAnnouncer("wrong!",textToSpeech);
                     }
 
                     loadNext();
@@ -229,35 +229,4 @@ public class GameFragment extends Fragment{
         }
     }
 
-//    @Override
-//    public void getSpeech(final TextView textView, Context context) {
-//        textView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                int speakText = textToSpeech.speak(String.valueOf(textView.getText()),
-//                        TextToSpeech.QUEUE_FLUSH, null);
-//                if (speakText == TextToSpeech.ERROR) {
-//                    Log.e("TTS", "Error in converting Text to Speech!");
-//                }
-//            }
-//        });
-//    }
-
-//    @Override
-//    public void getContextOfSpeech(final Context context) {
-//        textToSpeech = new TextToSpeech(context, new TextToSpeech.OnInitListener() {
-//            @Override
-//            public void onInit(int status) {
-//                if (status == TextToSpeech.SUCCESS) {
-//                    int language = textToSpeech.setLanguage(Locale.US);
-//                    if (language == TextToSpeech.LANG_MISSING_DATA
-//                            || language == TextToSpeech.LANG_NOT_SUPPORTED) {
-//                        Log.e("TTS", "Language not supported");
-//                    } else {
-//                        Log.e("TTS", "Initialization failed");
-//                    }
-//                }
-//            }
-//        });
-//    }
 }
