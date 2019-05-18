@@ -20,12 +20,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
-import static com.example.aryoulearning.R.string.congratsgif;
-import static com.example.aryoulearning.R.string.correctanswers;
-import static com.example.aryoulearning.R.string.rightanswers;
-import static com.example.aryoulearning.R.string.wronganswers;
-
-
 public class ResultsFragment extends Fragment {
     public static final String WRONGANSWER = "WRONGANSWER";
     public static final String ANSWERSCORRECT = "ANSWERSCORRECT";
@@ -79,9 +73,9 @@ public class ResultsFragment extends Fragment {
         for (String correctWay : correctAnswersStringSet) {
             correctAnswerBuilder.append(correctWay + " ");
         }
-        userRightAnswersString = getString(rightanswers) + rightAnswerBuilder.toString();
-        userWrongAnswersString = getString(wronganswers) + wrongAnswerBuilder.toString();
-        correctAnswerForUserString = getString(correctanswers) + correctAnswerBuilder.toString();
+        userRightAnswersString = getString(R.string.rightanswers) + rightAnswerBuilder.toString();
+        userWrongAnswersString = getString(R.string.wronganswers) + wrongAnswerBuilder.toString();
+        correctAnswerForUserString = getString(R.string.correctanswers) + correctAnswerBuilder.toString();
 
 
     }
@@ -112,7 +106,7 @@ public class ResultsFragment extends Fragment {
             userWrongAnswerTextView.setVisibility(View.INVISIBLE);
             correctAnswerTextView.setVisibility(View.INVISIBLE);
             congratsWebView.setVisibility(View.VISIBLE);
-            String congratsImage = getString(congratsgif);
+            String congratsImage = getString(R.string.congratsgif);
             congratsWebView.loadUrl(congratsImage);
         }
     }

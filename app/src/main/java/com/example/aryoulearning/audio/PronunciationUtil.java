@@ -6,97 +6,99 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
 import java.util.Locale;
 
 public final class PronunciationUtil {
     private TextToSpeech textToSpeech;
 
-    public void initializeTextToSpeech(Context context) {
-        textToSpeech = new TextToSpeech(context, new TextToSpeech.OnInitListener() {
-            @Override
-            public void onInit(int status) {
-                if (status == TextToSpeech.SUCCESS) {
-                    int language = textToSpeech.setLanguage(Locale.US);
-                    if (language == TextToSpeech.LANG_MISSING_DATA
-                            || language == TextToSpeech.LANG_NOT_SUPPORTED) {
-                        Log.e("TTS", "Language not supported");
-                    } else {
-                        Log.e("TTS", "Initialization failed");
+    public TextToSpeech getTTS(final Context context) {
+        if(textToSpeech == null) {
+            textToSpeech = new TextToSpeech(context, new TextToSpeech.OnInitListener() {
+                @Override
+                public void onInit(int status) {
+                    if (status == TextToSpeech.SUCCESS) {
+                        int language = textToSpeech.setLanguage(Locale.US);
+                        if (language == TextToSpeech.LANG_MISSING_DATA
+                                || language == TextToSpeech.LANG_NOT_SUPPORTED) {
+                            Log.e("TTS", "Language not supported");
+                        } else {
+                            Log.e("TTS", "Initialization failed");
+                        }
                     }
                 }
-            }
-        });
+            });
+        }
+        return textToSpeech;
     }
 
-    public void textToSpeechAnnouncer(final TextView textView) {
-        textView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int speakText = textToSpeech.speak(String.valueOf(textView.getText()),
-                        TextToSpeech.QUEUE_FLUSH, null);
+
+    public void textToSpeechAnnouncer(final TextView textView, final TextToSpeech textToSpeech) {
+        String letter = textView.getText().toString().toLowerCase();
+                int speakText = textToSpeech.speak(pronounceSingleLetter(letter),
+                        TextToSpeech.QUEUE_ADD, null);
                 if (speakText == TextToSpeech.ERROR) {
                     Log.e("TTS", "Error in converting Text to Speech!");
                 }
-            }
-        });
     }
 
-    private static String pronounceSingleLetter(char letter) {
+    private static String pronounceSingleLetter(String letter) {
         switch (letter) {
-            case 'a':
-                return "a";
-            case 'b':
+            case "a":
+                return "ayee";
+            case "b":
                 return "bee";
-            case 'c':
+            case "c":
                 return "cee";
-            case 'd':
+            case "d":
                 return "dee";
-            case 'e':
+            case "e":
                 return "e";
-            case 'f':
+            case "f":
                 return "ef";
-            case 'g':
+            case "g":
                 return "gee";
-            case 'h':
+            case "h":
                 return "aitch";
-            case 'i':
+            case "i":
                 return "i";
-            case 'j':
+            case "j":
                 return "jay";
-            case 'k':
+            case "k":
                 return "kay";
-            case 'l':
+            case "l":
                 return "el";
-            case 'm':
+            case "m":
                 return "em";
-            case 'n':
+            case "n":
                 return "en";
-            case 'o':
+            case "o":
                 return "o";
-            case 'p':
+            case "p":
                 return "pee";
-            case 'q':
+            case "q":
                 return "cue";
-            case 'r':
+            case "r":
                 return "ar";
-            case 's':
+            case "s":
                 return "ess";
-            case 't':
+            case "t":
                 return "tee";
-            case 'u':
+            case "u":
                 return "u";
-            case 'v':
+            case "v":
                 return "vee";
-            case 'w':
+            case "w":
                 return "double-u";
-            case 'x':
+            case "x":
                 return "ex";
-            case 'y':
+            case "y":
                 return "wy";
-            case 'z':
+            case "z":
                 return "zed";
         }
-        return "";
+        return letter;
 
     }
 
