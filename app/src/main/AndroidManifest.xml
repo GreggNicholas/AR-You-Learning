@@ -11,7 +11,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".view.SplashScreen"
+        <activity
+            android:name=".augmented.ARFragment"
+            android:label="@string/title_activity_arfragment"
+            android:parentActivityName=".view.SplashScreen"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.aryoulearning.view.SplashScreen" />
+        </activity>
+        <activity
+            android:name=".view.SplashScreen"
             android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,8 +31,7 @@
         </activity>
         <activity
             android:name=".view.MainActivity"
-            android:screenOrientation="landscape">
-        </activity>
+            android:screenOrientation="landscape"></activity>
     </application>
 
 </manifest>

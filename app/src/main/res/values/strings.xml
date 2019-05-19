@@ -10,5 +10,7 @@
     <string name="correctanswers">Correct Answers:</string>
     <string name="correctanswer">Correct Answer:</string>
     <string name="congratsgif">https://media.tenor.com/images/24520b4497153abb91ca769fe4a7f23f/tenor.gif</string>
+    <string name="title_activity_arfragment">ARFragment</string>
+    <string name="action_settings">Settings</string>
 
 </resources>
