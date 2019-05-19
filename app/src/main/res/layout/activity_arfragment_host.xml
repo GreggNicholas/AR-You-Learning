@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".augmented.ARFragmentHost">
+    tools:context=".augmented.ARHostFragment">
 
 
     <fragment
@@ -13,7 +13,14 @@
         android:layout_height="match_parent" />
 
     <LinearLayout
-        android:id="@+id/gallery_layout"
+        android:id="@+id/gallery_layout_left"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:orientation="vertical" />
+
+    <LinearLayout
+        android:layout_marginLeft="650dp"
+        android:id="@+id/gallery_layout_right"
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:orientation="vertical" />

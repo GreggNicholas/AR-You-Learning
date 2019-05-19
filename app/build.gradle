@@ -80,3 +80,8 @@ sceneform.asset('sampledata/animal/cow.fbx',
         'default',
         'sampledata/animal/cow.sfa',
         'src/main/assets/cow')
+
+sceneform.asset('sampledata/alphabet/CC.obj',
+        'default',
+        'sampledata/alphabet/CC.sfa',
+        'src/main/assets/CC')

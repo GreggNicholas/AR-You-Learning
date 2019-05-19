@@ -4,17 +4,17 @@ import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
 
-import com.example.aryoulearning.augmented.ARFragmentHost;
+import com.example.aryoulearning.augmented.ARHostFragment;
 import com.google.ar.core.Anchor;
 import com.google.ar.sceneform.rendering.ModelRenderable;
 
 import java.lang.ref.WeakReference;
 
 public class ModelLoader {
-    private final WeakReference<ARFragmentHost> owner;
+    private final WeakReference<ARHostFragment> owner;
     private static final String TAG = "modelLoader";
 
-    public ModelLoader(WeakReference<ARFragmentHost> owner) {
+    public ModelLoader(WeakReference<ARHostFragment> owner) {
         this.owner = owner;
     }
 
@@ -28,7 +28,7 @@ public class ModelLoader {
                     .setSource(owner.get(), uri)
                     .build()
                     .handle(((renderable, throwable) -> {
-                        ARFragmentHost activity = owner.get();
+                        ARHostFragment activity = owner.get();
                         if(activity == null){
                             return null;
                         }else if(throwable != null){
