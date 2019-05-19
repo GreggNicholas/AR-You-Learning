@@ -36,7 +36,7 @@ import java.util.Objects;
 import java.util.Random;
 import java.util.Set;
 
-public class GameFragment extends Fragment{
+public class GameFragment extends Fragment {
     private NavListener listener;
     private List<Model> modelList;
     private ImageView imageView;
@@ -141,20 +141,20 @@ public class GameFragment extends Fragment{
 
                 checker.append(letter.getText().toString());
                 letter.setVisibility(View.INVISIBLE);
-                pronunciationUtil.textToSpeechAnnouncer(letter,textToSpeech);
+                pronunciationUtil.textToSpeechAnnouncer(letter, textToSpeech);
 
                 if (checker.getText().length() == answer.length()) {
                     if (checker.getText().toString().equals(answer)) {
                         Toast.makeText(getContext(), "right", Toast.LENGTH_SHORT).show();
                         answersCorrect++;
                         rightAnswer.add(checker.getText().toString());
-                        pronunciationUtil.textToSpeechAnnouncer(checker,textToSpeech);
+                        pronunciationUtil.textToSpeechAnnouncer(checker, textToSpeech);
                     } else {
                         Toast.makeText(getContext(), "wrong", Toast.LENGTH_SHORT).show();
                         wrongAnswer.add(checker.getText().toString());
                         sharedPreferences.edit().putString(checker.getText().toString(), answer).apply();
                         correctAnswerSet.add(answer);
-                        pronunciationUtil.textToSpeechAnnouncer("wrong!",textToSpeech);
+                        pronunciationUtil.textToSpeechAnnouncer("wrong!", textToSpeech);
                     }
 
                     loadNext();

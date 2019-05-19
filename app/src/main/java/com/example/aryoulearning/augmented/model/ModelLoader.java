@@ -18,8 +18,8 @@ public class ModelLoader {
         this.owner = owner;
     }
 
-    public void loadModel(Anchor anchor, Uri uri){
-        if(owner.get() == null){
+    public void loadModel(Anchor anchor, Uri uri) {
+        if (owner.get() == null) {
             Log.d(TAG, "Activity is null.  Cannot load model.");
             return;
         }
@@ -29,11 +29,11 @@ public class ModelLoader {
                     .build()
                     .handle(((renderable, throwable) -> {
                         ARHostFragment activity = owner.get();
-                        if(activity == null){
+                        if (activity == null) {
                             return null;
-                        }else if(throwable != null){
+                        } else if (throwable != null) {
                             activity.onException(throwable);
-                        }else{
+                        } else {
                             activity.addNodeToScene(anchor, renderable);
                         }
                         return null;

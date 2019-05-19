@@ -18,7 +18,7 @@ public final class RetrofitSingleton {
         return instance;
     }
 
-    public static ModelService getService(){
+    public static ModelService getService() {
         return getInstance().create(ModelService.class);
     }
 }

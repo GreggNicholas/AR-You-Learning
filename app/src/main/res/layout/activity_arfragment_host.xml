@@ -15,13 +15,13 @@
     <LinearLayout
         android:id="@+id/gallery_layout_left"
         android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_height="wrap_content"
         android:orientation="vertical" />
 
     <LinearLayout
-        android:layout_marginLeft="650dp"
         android:id="@+id/gallery_layout_right"
         android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="650dp"
         android:orientation="vertical" />
 </FrameLayout>

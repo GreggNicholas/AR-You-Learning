@@ -3,7 +3,6 @@ package com.example.aryoulearning.view;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.Toast;
 
 import com.example.aryoulearning.R;
 import com.example.aryoulearning.augmented.ARHostFragment;
@@ -42,7 +41,7 @@ public class MainActivity extends AppCompatActivity implements NavListener, Swit
                 .enqueue(new Callback<List<ModelResponse>>() {
                     @Override
                     public void onResponse(Call<List<ModelResponse>> call, Response<List<ModelResponse>> response) {
-                        for(int i = 0; i < response.body().size(); i++){
+                        for (int i = 0; i < response.body().size(); i++) {
                             animalModelList.add(response.body().get(i).getList());
                             categoryList.add(response.body().get(i).getCategory());
                         }
@@ -58,21 +57,19 @@ public class MainActivity extends AppCompatActivity implements NavListener, Swit
 
     @Override
     public void moveToListFragment(List<List<Model>> modelResponseList, List<String> categoryName) {
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.fragment_container, ListFragment.newInstance(modelResponseList, categoryName))
-                    .commit();
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container, ListFragment.newInstance(modelResponseList, categoryName))
+                .commit();
 
     }
 
     @Override
     public void moveToGameFragment(List<Model> modelList, boolean AR_is_on) {
-        if(AR_is_on){
+        if (AR_is_on) {
             Intent arIntent = new Intent(this, ARHostFragment.class);
             startActivity(arIntent);
-
-            Toast.makeText(this, "TODO:IMPLEMENT AR FRAGMENT", Toast.LENGTH_SHORT).show();
-        }else {
+        } else {
             getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.fragment_container, GameFragment.newInstance(modelList))
@@ -92,9 +89,9 @@ public class MainActivity extends AppCompatActivity implements NavListener, Swit
 
     @Override
     public void updateSwitchStatus(boolean isOn) {
-        if(isOn){
+        if (isOn) {
             AR_SWITCH_STATUS = true;
-        }else{
+        } else {
             AR_SWITCH_STATUS = false;
         }
     }

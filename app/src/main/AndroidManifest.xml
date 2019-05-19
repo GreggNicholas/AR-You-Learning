@@ -3,9 +3,11 @@
     package="com.example.aryoulearning">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.CAMERA" />
 
-    <uses-feature android:name="android.hardware.camera.ar" android:required="true"/>
+    <uses-feature
+        android:name="android.hardware.camera.ar"
+        android:required="true" />
 
     <application
         android:allowBackup="true"
@@ -17,10 +19,10 @@
         <meta-data
             android:name="com.google.ar.core"
             android:value="required" />
+
         <activity
             android:name=".augmented.ARHostFragment"
-            android:screenOrientation="landscape">
-        </activity>
+            android:screenOrientation="landscape"></activity>
         <activity
             android:name=".view.SplashScreen"
             android:screenOrientation="landscape">

@@ -31,11 +31,13 @@
     attributes: [
       'Position',
       'Orientation',
+
     ],
     collision: {},
     file: 'sampledata/alphabet/DD.obj',
     name: 'DD',
     recenter: 'root',
+
   },
   version: '0.54:2',
 }
