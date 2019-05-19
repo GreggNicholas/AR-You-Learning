@@ -8,6 +8,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.example.aryoulearning.R;
+import com.google.ar.core.Anchor;
+import com.google.ar.sceneform.rendering.ModelRenderable;
 
 public class ARFragment extends AppCompatActivity {
 
@@ -21,4 +23,9 @@ public class ARFragment extends AppCompatActivity {
 
     }
 
+    public void onException(Throwable throwable) {
+    }
+
+    public void addNodeToScene(Anchor anchor, ModelRenderable renderable) {
+    }
 }
