@@ -1,12 +1,15 @@
 package com.example.aryoulearning.view;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.AbsoluteLayout;
 import android.widget.Switch;
 import android.widget.Toast;
 
 import com.example.aryoulearning.R;
+import com.example.aryoulearning.augmented.ARFragmentHost;
 import com.example.aryoulearning.controller.NavListener;
 import com.example.aryoulearning.controller.SwitchListener;
 import com.example.aryoulearning.model.Model;
@@ -68,7 +71,9 @@ public class MainActivity extends AppCompatActivity implements NavListener, Swit
     @Override
     public void moveToGameFragment(List<Model> modelList, boolean AR_is_on) {
         if(AR_is_on){
-            //move to AR fragment
+            Intent arIntent = new Intent(this, ARFragmentHost.class);
+            startActivity(arIntent);
+
             Toast.makeText(this, "TODO:IMPLEMENT AR FRAGMENT", Toast.LENGTH_SHORT).show();
         }else {
             getSupportFragmentManager()

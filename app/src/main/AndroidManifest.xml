@@ -15,10 +15,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".augmented.ARFragment"
-            android:label="@string/title_activity_arfragment"
-            android:parentActivityName=".view.SplashScreen"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:name=".augmented.ARFragmentHost"
+            android:parentActivityName=".view.SplashScreen">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.aryoulearning.view.SplashScreen" />
