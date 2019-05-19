@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.google.ar.sceneform.plugin'
 
 
 android {
@@ -48,3 +49,9 @@ dependencies {
 
 
 }
+
+
+sceneform.asset('sampledata/animal/dog.fbx',
+        'default',
+        'sampledata/animal/dog.sfa',
+        'src/main/assets/dog')
