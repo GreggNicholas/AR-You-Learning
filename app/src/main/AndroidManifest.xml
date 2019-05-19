@@ -14,12 +14,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <meta-data
+            android:name="com.google.ar.core"
+            android:value="required" />
         <activity
             android:name=".augmented.ARFragmentHost"
-            android:parentActivityName=".view.SplashScreen">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.aryoulearning.view.SplashScreen" />
+            android:screenOrientation="landscape">
         </activity>
         <activity
             android:name=".view.SplashScreen"
