@@ -1,0 +1,74 @@
+{
+  animations: [
+    {
+      path: 'sampledata/animal/cow.fbx',
+    },
+  ],
+  materials: [
+    {
+      name: 'Material_44',
+      parameters: [
+        {
+          baseColor: [
+            1,
+            1,
+            1,
+            1,
+          ],
+        },
+        {
+          baseColorMap: '5',
+        },
+        {
+          normalMap: null,
+        },
+        {
+          interpolatedColor: null,
+        },
+        {
+          metallic: 0,
+        },
+        {
+          metallicMap: null,
+        },
+        {
+          roughness: 1,
+        },
+        {
+          roughnessMap: null,
+        },
+        {
+          opacity: null,
+        },
+      ],
+      source: 'build/sceneform_sdk/default_materials/fbx_material.sfm',
+    },
+  ],
+  model: {
+    attributes: [
+      'Position',
+      'TexCoord',
+      'Orientation',
+      'BoneIndices',
+      'BoneWeights',
+    ],
+    collision: {},
+    file: 'sampledata/animal/cow.fbx',
+    name: 'cow',
+    recenter: 'root',
+    scale: 120,
+  },
+  samplers: [
+    {
+      file: 'sampledata/animal/cow.fbm/5.png',
+      name: '5',
+      pipeline_name: 'cow.fbm/5.png',
+    },
+    {
+      file: 'sampledata/animal/cow.fbm/7.png',
+      name: '7',
+      pipeline_name: 'cow.fbm/7.png',
+    },
+  ],
+  version: '0.54:2',
+}

@@ -1,10 +1,12 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.google.ar.sceneform.plugin'
+
 
 android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.example.aryoulearning"
-        minSdkVersion 19
+        minSdkVersion 24
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
@@ -16,6 +18,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    compileOptions {
+        sourceCompatibility = '1.8'
+        targetCompatibility = '1.8'
+    }
 }
 
 dependencies {
@@ -26,6 +32,7 @@ dependencies {
     implementation 'com.android.support:support-v4:28.0.0'
     implementation 'com.android.support:multidex:1.0.3'
     //Tests
+    implementation 'com.android.support:design:28.0.0'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
@@ -37,5 +44,44 @@ dependencies {
     implementation 'com.android.support:recyclerview-v7:28.0.0'
     implementation 'com.android.support:cardview-v7:28.0.0'
     implementation 'com.squareup.picasso:picasso:2.71828'
+    //Sceneform
+    implementation "com.google.ar.sceneform.ux:sceneform-ux:1.9.0"
+
 
 }
+
+
+sceneform.asset('sampledata/animal/dog.fbx',
+        'default',
+        'sampledata/animal/dog.sfa',
+        'src/main/assets/dog')
+
+sceneform.asset('sampledata/alphabet/DD.obj',
+        'default',
+        'sampledata/alphabet/DD.sfa',
+        'src/main/assets/DD')
+
+sceneform.asset('sampledata/alphabet/OO.obj',
+        'default',
+        'sampledata/alphabet/OO.sfa',
+        'src/main/assets/OO')
+
+sceneform.asset('sampledata/alphabet/G.FBX',
+        'default',
+        'sampledata/alphabet/G.sfa',
+        'src/main/assets/G')
+
+sceneform.asset('sampledata/animal/cat.fbx',
+        'default',
+        'sampledata/animal/cat.sfa',
+        'src/main/assets/cat')
+
+sceneform.asset('sampledata/animal/cow.fbx',
+        'default',
+        'sampledata/animal/cow.sfa',
+        'src/main/assets/cow')
+
+sceneform.asset('sampledata/alphabet/CC.obj',
+        'default',
+        'sampledata/alphabet/CC.sfa',
+        'src/main/assets/CC')

@@ -3,10 +3,7 @@ package com.example.aryoulearning.audio;
 import android.content.Context;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
-import android.view.View;
 import android.widget.TextView;
-
-import org.w3c.dom.Text;
 
 import java.util.Locale;
 
@@ -14,7 +11,7 @@ public final class PronunciationUtil {
     private TextToSpeech textToSpeech;
 
     public TextToSpeech getTTS(final Context context) {
-        if(textToSpeech == null) {
+        if (textToSpeech == null) {
             textToSpeech = new TextToSpeech(context, new TextToSpeech.OnInitListener() {
                 @Override
                 public void onInit(int status) {
@@ -36,12 +33,13 @@ public final class PronunciationUtil {
 
     public void textToSpeechAnnouncer(final TextView textView, final TextToSpeech textToSpeech) {
         String letter = textView.getText().toString().toLowerCase();
-                int speakText = textToSpeech.speak(pronounceSingleLetter(letter),
-                        TextToSpeech.QUEUE_ADD, null);
-                if (speakText == TextToSpeech.ERROR) {
-                    Log.e("TTS", "Error in converting Text to Speech!");
-                }
+        int speakText = textToSpeech.speak(pronounceSingleLetter(letter),
+                TextToSpeech.QUEUE_ADD, null);
+        if (speakText == TextToSpeech.ERROR) {
+            Log.e("TTS", "Error in converting Text to Speech!");
+        }
     }
+
     public void textToSpeechAnnouncer(final String message, final TextToSpeech textToSpeech) {
         ;
         int speakText = textToSpeech.speak(message,
