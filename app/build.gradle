@@ -70,3 +70,13 @@ sceneform.asset('sampledata/alphabet/G.FBX',
         'default',
         'sampledata/alphabet/G.sfa',
         'src/main/assets/G')
+
+sceneform.asset('sampledata/animal/cat.fbx',
+        'default',
+        'sampledata/animal/cat.sfa',
+        'src/main/assets/cat')
+
+sceneform.asset('sampledata/animal/cow.fbx',
+        'default',
+        'sampledata/animal/cow.sfa',
+        'src/main/assets/cow')
