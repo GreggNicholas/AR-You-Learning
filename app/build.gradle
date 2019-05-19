@@ -55,3 +55,18 @@ sceneform.asset('sampledata/animal/dog.fbx',
         'default',
         'sampledata/animal/dog.sfa',
         'src/main/assets/dog')
+
+sceneform.asset('sampledata/alphabet/DD.obj',
+        'default',
+        'sampledata/alphabet/DD.sfa',
+        'src/main/assets/DD')
+
+sceneform.asset('sampledata/alphabet/OO.obj',
+        'default',
+        'sampledata/alphabet/OO.sfa',
+        'src/main/assets/OO')
+
+sceneform.asset('sampledata/alphabet/G.FBX',
+        'default',
+        'sampledata/alphabet/G.sfa',
+        'src/main/assets/G')
