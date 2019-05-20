@@ -137,7 +137,25 @@ public class ARHostFragment extends AppCompatActivity {
 
         AnchorNode anchorNode = new AnchorNode(anchor);
         TransformableNode node = new TransformableNode(arFragment.getTransformationSystem());
+        node.setRenderable(renderable);
+        node.setParent(anchorNode);
+        arFragment.getArSceneView().getScene().addChild(anchorNode);
+        node.select();
+        node.setOnTapListener(new Node.OnTapListener() {
+            @Override
+            public void onTap(HitTestResult hitTestResult, MotionEvent motionEvent) {
+                anchorNode.getAnchor().detach();
+            }
+        });
+    }
 
+    public void addLetterNodeToScene(Anchor anchor, ModelRenderable renderable) {
+
+        AnchorNode anchorNode = new AnchorNode(anchor);
+        TransformableNode node = new TransformableNode(arFragment.getTransformationSystem());
+        node.getScaleController().setMaxScale(0.009f);
+        node.getScaleController().setMinScale(0.008f);
+        node.setRenderable(renderable);
         node.setRenderable(renderable);
         node.setParent(anchorNode);
 
