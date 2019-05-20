@@ -104,7 +104,7 @@ public class ARHostFragment extends AppCompatActivity {
         letterD.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ARHostFragment.this.addObject(Uri.parse("DD.sfb"));
+                ARHostFragment.this.addLetterObject(Uri.parse("DD.sfb"));
             }
         });
         gallery.addView(letterD);
@@ -114,7 +114,7 @@ public class ARHostFragment extends AppCompatActivity {
         letterO.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ARHostFragment.this.addObject(Uri.parse("OO.sfb"));
+                ARHostFragment.this.addLetterObject(Uri.parse("OO.sfb"));
 
             }
         });
@@ -125,7 +125,7 @@ public class ARHostFragment extends AppCompatActivity {
         letterG.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ARHostFragment.this.addObject(Uri.parse("GG.sfb"));
+                ARHostFragment.this.addLetterObject(Uri.parse("GG.sfb"));
             }
         });
         gallery.addView(letterG);
@@ -188,6 +188,26 @@ public class ARHostFragment extends AppCompatActivity {
             }
         }
     }
+
+    private void addLetterObject(Uri model) {
+        Frame frame = arFragment.getArSceneView().getArFrame();
+        Point pt = getScreenCenter();
+        List<HitResult> hits;
+
+
+        if (frame != null) {
+            hits = frame.hitTest(pt.x, pt.y);
+            for (HitResult hit : hits) {
+                Trackable trackable = hit.getTrackable();
+                if (trackable instanceof Plane && ((Plane) trackable).isPoseInPolygon(hit.getHitPose())) {
+                    modelLoader.loadLetterModel(hit.createAnchor(), model);
+
+                    break;
+                }
+            }
+        }
+    }
+
 
     private void onUpdate() {
         boolean trackingChanged = updateTracking();
