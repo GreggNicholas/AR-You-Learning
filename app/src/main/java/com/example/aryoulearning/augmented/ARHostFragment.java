@@ -1,16 +1,19 @@
 package com.example.aryoulearning.augmented;
 
+import android.Manifest;
+import android.app.Activity;
 import android.graphics.Point;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 
 import com.example.aryoulearning.R;
+import com.example.aryoulearning.augmented.model.Letter;
 import com.example.aryoulearning.augmented.model.ModelLoader;
 import com.example.aryoulearning.augmented.pointer.PointerDrawable;
 import com.google.ar.core.Anchor;
@@ -22,21 +25,31 @@ import com.google.ar.core.TrackingState;
 import com.google.ar.sceneform.AnchorNode;
 import com.google.ar.sceneform.HitTestResult;
 import com.google.ar.sceneform.Node;
+import com.google.ar.sceneform.math.Vector3;
 import com.google.ar.sceneform.rendering.ModelRenderable;
 import com.google.ar.sceneform.ux.ArFragment;
 import com.google.ar.sceneform.ux.TransformableNode;
 
 import java.lang.ref.WeakReference;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 public class ARHostFragment extends AppCompatActivity {
+    private static final int RC_PERMISSIONS = 0x123;
+//    private boolean installRequested;
+    private GestureDetector gestureDetector;
     private ArFragment arFragment;
     private PointerDrawable pointer = new PointerDrawable();
     private boolean isTracking;
     private boolean isHitting;
     private ModelLoader modelLoader;
+    private ModelRenderable dRenderable;
+    private ModelRenderable cowRenderable;
+    private ModelRenderable dogRenderable;
     private ModelRenderable catRenderable;
-
+    private boolean hasFinishedLoading = false;
+    private boolean hasPlacedGame = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,9 +57,98 @@ public class ARHostFragment extends AppCompatActivity {
         setContentView(R.layout.activity_arfragment_host);
         modelLoader = new ModelLoader(new WeakReference<>(this));
         arFragment = (ArFragment) getSupportFragmentManager().findFragmentById(R.id.ux_fragment);
-        initializeAnimalGallery();
-        initializeLetterGallery();
-        getScene();
+//        initializeAnimalGallery();
+//        initializeLetterGallery();
+
+        CompletableFuture<ModelRenderable> dogStage =
+                ModelRenderable.builder().setSource(this, Uri.parse("dog.sfb")).build();
+        CompletableFuture<ModelRenderable> cowStage =
+                ModelRenderable.builder().setSource(this, Uri.parse("cow.sfb")).build();
+        CompletableFuture<ModelRenderable> catStage =
+                ModelRenderable.builder().setSource(this, Uri.parse("cat.sfb")).build();
+        CompletableFuture<ModelRenderable> dStage =
+                ModelRenderable.builder().setSource(this, Uri.parse("DD.sfb")).build();
+
+        CompletableFuture.allOf(
+                cowStage,
+                dogStage,
+                catStage,
+                dStage)
+                .handle(
+                        (notUsed, throwable) -> {
+                            // When you build a Renderable, Sceneform loads its resources in the background while
+                            // returning a CompletableFuture. Call handle(), thenAccept(), or check isDone()
+                            // before calling get().
+
+                            if (throwable != null) {
+                                return null;
+                            }
+
+                            try {
+                                dRenderable = dStage.get();
+                                cowRenderable = cowStage.get();
+                                dogRenderable = dogStage.get();
+                                catRenderable = catStage.get();
+
+                                // Everything finished loading successfully.
+                                hasFinishedLoading = true;
+
+                            } catch (InterruptedException | ExecutionException ex) {
+                            }
+
+                            return null;
+                        });
+
+        gestureDetector =
+                new GestureDetector(
+                        this,
+                        new GestureDetector.SimpleOnGestureListener() {
+                            @Override
+                            public boolean onSingleTapUp(MotionEvent e) {
+                                onSingleTap(e);
+                                return true;
+                            }
+
+                            @Override
+                            public boolean onDown(MotionEvent e) {
+                                return true;
+                            }
+                        });
+
+        arFragment.getArSceneView()
+                .getScene()
+                .setOnTouchListener(
+                        (HitTestResult hitTestResult, MotionEvent event) -> {
+                            // If the solar system hasn't been placed yet, detect a tap and then check to see if
+                            // the tap occurred on an ARCore plane to place the solar system.
+                            if (!hasPlacedGame) {
+                                return gestureDetector.onTouchEvent(event);
+                            }
+
+                            // Otherwise return false so that the touch event can propagate to the scene.
+                            return false;
+                        });
+
+        arFragment.getArSceneView()
+                .getScene()
+                .addOnUpdateListener(
+                        frameTime -> {
+                            Frame frame = arFragment.getArSceneView().getArFrame();
+                            if (frame == null) {
+                                return;
+                            }
+
+                            if (frame.getCamera().getTrackingState() != TrackingState.TRACKING) {
+                                return;
+                            }
+
+                        });
+
+        // Lastly request CAMERA permission which is required by ARCore.
+        requestCameraPermission(this, RC_PERMISSIONS);
+
+//        getScene();
+
 
 
     }
@@ -60,78 +162,133 @@ public class ARHostFragment extends AppCompatActivity {
         }
     }
 
+//    private void initializeModels(){
+//
+//        ARHostFragment.this.addObject(Uri.parse("dog.sfb"));
+//        ARHostFragment.this.addObject(Uri.parse("cat.sfb"));
+//        ARHostFragment.this.addObject(Uri.parse("cow.sfb"));
+//
+//    }
 
-    private void initializeAnimalGallery() {
-        LinearLayout gallery = findViewById(R.id.gallery_layout_left);
+    private Node createGame(){
 
-        ImageView dog = new ImageView(this);
-        dog.setImageResource(R.drawable.dog);
-        dog.setContentDescription("Dog");
-        dog.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ARHostFragment.this.addObject(Uri.parse("dog.sfb"));
-            }
-        });
-        gallery.addView(dog);
+        Node base = new Node();
 
-        ImageView cat = new ImageView(this);
-        cat.setImageResource(R.drawable.cat);
-        cat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ARHostFragment.this.addObject(Uri.parse("cat.sfb"));
-            }
-        });
-        gallery.addView(cat);
+        Node center = new Node();
+        center.setParent(base);
+        center.setLocalPosition(new Vector3(0.0f, 0.5f, 0.0f));
 
-        ImageView cow = new ImageView(this);
-        cow.setImageResource(R.drawable.cow);
-        cow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ARHostFragment.this.addObject(Uri.parse("cow.sfb"));
-            }
-        });
-        gallery.addView(cow);
+        Node sunVisual = new Node();
+        sunVisual.setParent(center);
+        sunVisual.setRenderable(cowRenderable);
+        sunVisual.setLocalScale(new Vector3(0.5f, 0.5f, 0.5f));
+
+        createLetter("D", center, 2.2f, dRenderable, 0.01f);
+
+        createLetter("dog", center, 3.5f, dogRenderable, 0.5f);
+
+        createLetter("cat", center, 5.0f, catRenderable, 0.5f);
+
+        return base;
     }
 
-    private void initializeLetterGallery() {
-        LinearLayout gallery = findViewById(R.id.gallery_layout_right);
+    private Node createLetter(
+            String letter,
+            Node parent,
+            float auFromParent,
+            ModelRenderable renderable,
+            float scale) {
+        // Orbit is a rotating node with no renderable positioned at the sun.
+        // The planet is positioned relative to the orbit so that it appears to rotate around the sun.
+        // This is done instead of making the sun rotate so each planet can orbit at its own speed.
+        Node base = new Node();
+        base.setParent(parent);
 
-        ImageView letterD = new ImageView(this);
-        letterD.setImageResource(R.drawable.d);
-        letterD.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ARHostFragment.this.addObject(Uri.parse("DD.sfb"));
-            }
-        });
-        gallery.addView(letterD);
+        // Create the planet and position it relative to the sun.
+        Letter child =
+                new Letter(
+                        this, letter, scale,renderable);
+        child.setParent(parent);
+        if(letter.equals("D")){
+            child.setLocalScale(new Vector3(.1f,.1f,.1f));
+        }
+        child.setLocalPosition(new Vector3(auFromParent * .5f, 0.0f, 0.0f));
 
-        ImageView letterO = new ImageView(this);
-        letterO.setImageResource(R.drawable.o);
-        letterO.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ARHostFragment.this.addObject(Uri.parse("OO.sfb"));
-
-            }
-        });
-        gallery.addView(letterO);
-
-        ImageView letterG = new ImageView(this);
-        letterG.setImageResource(R.drawable.g);
-        letterG.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ARHostFragment.this.addObject(Uri.parse("GG.sfb"));
-            }
-        });
-        gallery.addView(letterG);
-
-
+        return child;
     }
+
+//
+//    private void initializeAnimalGallery() {
+//        LinearLayout gallery = findViewById(R.id.gallery_layout_left);
+//
+//        ImageView dog = new ImageView(this);
+//        dog.setImageResource(R.drawable.dog);
+//        dog.setContentDescription("Dog");
+//        dog.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                ARHostFragment.this.addObject(Uri.parse("dog.sfb"));
+//            }
+//        });
+//        gallery.addView(dog);
+//
+//        ImageView cat = new ImageView(this);
+//        cat.setImageResource(R.drawable.cat);
+//        cat.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                ARHostFragment.this.addObject(Uri.parse("cat.sfb"));
+//            }
+//        });
+//        gallery.addView(cat);
+//
+//        ImageView cow = new ImageView(this);
+//        cow.setImageResource(R.drawable.cow);
+//        cow.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                ARHostFragment.this.addObject(Uri.parse("cow.sfb"));
+//            }
+//        });
+//        gallery.addView(cow);
+//    }
+//
+//    private void initializeLetterGallery() {
+//        LinearLayout gallery = findViewById(R.id.gallery_layout_right);
+//
+//        ImageView letterD = new ImageView(this);
+//        letterD.setImageResource(R.drawable.d);
+//        letterD.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                ARHostFragment.this.addObject(Uri.parse("DD.sfb"));
+//            }
+//        });
+//        gallery.addView(letterD);
+//
+//        ImageView letterO = new ImageView(this);
+//        letterO.setImageResource(R.drawable.o);
+//        letterO.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                ARHostFragment.this.addObject(Uri.parse("OO.sfb"));
+//
+//            }
+//        });
+//        gallery.addView(letterO);
+//
+//        ImageView letterG = new ImageView(this);
+//        letterG.setImageResource(R.drawable.g);
+//        letterG.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                ARHostFragment.this.addObject(Uri.parse("GG.sfb"));
+//            }
+//        });
+//        gallery.addView(letterG);
+//
+//
+//    }
 
     public void addNodeToScene(Anchor anchor, ModelRenderable renderable) {
 
@@ -152,24 +309,24 @@ public class ARHostFragment extends AppCompatActivity {
     }
 
 
-    private void addObject(Uri model) {
-        Frame frame = arFragment.getArSceneView().getArFrame();
-        Point pt = getScreenCenter();
-        List<HitResult> hits;
-
-
-        if (frame != null) {
-            hits = frame.hitTest(pt.x, pt.y);
-            for (HitResult hit : hits) {
-                Trackable trackable = hit.getTrackable();
-                if (trackable instanceof Plane && ((Plane) trackable).isPoseInPolygon(hit.getHitPose())) {
-                    modelLoader.loadModel(hit.createAnchor(), model);
-
-                    break;
-                }
-            }
-        }
-    }
+//    private void addObject(Uri model) {
+//        Frame frame = arFragment.getArSceneView().getArFrame();
+//        Point pt = getScreenCenter();
+//        List<HitResult> hits;
+//
+//
+//        if (frame != null) {
+//            hits = frame.hitTest(pt.x, pt.y);
+//            for (HitResult hit : hits) {
+//                Trackable trackable = hit.getTrackable();
+//                if (trackable instanceof Plane && ((Plane) trackable).isPoseInPolygon(hit.getHitPose())) {
+//                    modelLoader.loadModel(hit.createAnchor(), model);
+//
+//                    break;
+//                }
+//            }
+//        }
+//    }
 
     private void onUpdate() {
         boolean trackingChanged = updateTracking();
@@ -236,5 +393,43 @@ public class ARHostFragment extends AppCompatActivity {
 
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+    public static void requestCameraPermission(Activity activity, int requestCode) {
+        ActivityCompat.requestPermissions(
+                activity, new String[] {Manifest.permission.CAMERA}, requestCode);
+    }
+
+    private void onSingleTap(MotionEvent tap) {
+        if (!hasFinishedLoading) {
+            // We can't do anything yet.
+            return;
+        }
+
+        Frame frame = arFragment.getArSceneView().getArFrame();
+        if (frame != null) {
+            if (!hasPlacedGame && tryPlaceGame(tap, frame)) {
+                hasPlacedGame = true;
+            }
+        }
+    }
+
+    private boolean tryPlaceGame(MotionEvent tap, Frame frame) {
+        if (tap != null && frame.getCamera().getTrackingState() == TrackingState.TRACKING) {
+            for (HitResult hit : frame.hitTest(tap)) {
+                Trackable trackable = hit.getTrackable();
+                if (trackable instanceof Plane && ((Plane) trackable).isPoseInPolygon(hit.getHitPose())) {
+                    // Create the Anchor.
+                    Anchor anchor = hit.createAnchor();
+                    AnchorNode anchorNode = new AnchorNode(anchor);
+                    anchorNode.setParent(arFragment.getArSceneView().getScene());
+                    Node gameSystem = createGame();
+                    anchorNode.addChild(gameSystem);
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 }
