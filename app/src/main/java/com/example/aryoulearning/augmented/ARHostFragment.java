@@ -13,13 +13,14 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import com.example.aryoulearning.R;
-import com.example.aryoulearning.augmented.model.Letter;
 import com.example.aryoulearning.augmented.model.ModelLoader;
 import com.example.aryoulearning.augmented.pointer.PointerDrawable;
 import com.google.ar.core.Anchor;
 import com.google.ar.core.Frame;
 import com.google.ar.core.HitResult;
 import com.google.ar.core.Plane;
+import com.google.ar.core.Pose;
+import com.google.ar.core.Session;
 import com.google.ar.core.Trackable;
 import com.google.ar.core.TrackingState;
 import com.google.ar.sceneform.AnchorNode;
@@ -45,9 +46,9 @@ public class ARHostFragment extends AppCompatActivity {
     private boolean isHitting;
     private ModelLoader modelLoader;
     private ModelRenderable dRenderable;
-    private ModelRenderable cowRenderable;
+    private ModelRenderable oRenderable;
+    private ModelRenderable gRenderable;
     private ModelRenderable dogRenderable;
-    private ModelRenderable catRenderable;
     private boolean hasFinishedLoading = false;
     private boolean hasPlacedGame = false;
 
@@ -62,17 +63,17 @@ public class ARHostFragment extends AppCompatActivity {
 
         CompletableFuture<ModelRenderable> dogStage =
                 ModelRenderable.builder().setSource(this, Uri.parse("dog.sfb")).build();
-        CompletableFuture<ModelRenderable> cowStage =
-                ModelRenderable.builder().setSource(this, Uri.parse("cow.sfb")).build();
-        CompletableFuture<ModelRenderable> catStage =
-                ModelRenderable.builder().setSource(this, Uri.parse("cat.sfb")).build();
+        CompletableFuture<ModelRenderable> oStage =
+                ModelRenderable.builder().setSource(this, Uri.parse("OO.sfb")).build();
+        CompletableFuture<ModelRenderable> gStage =
+                ModelRenderable.builder().setSource(this, Uri.parse("DD.sfb")).build();
         CompletableFuture<ModelRenderable> dStage =
                 ModelRenderable.builder().setSource(this, Uri.parse("DD.sfb")).build();
 
         CompletableFuture.allOf(
-                cowStage,
+                oStage,
                 dogStage,
-                catStage,
+                gStage,
                 dStage)
                 .handle(
                         (notUsed, throwable) -> {
@@ -86,9 +87,9 @@ public class ARHostFragment extends AppCompatActivity {
 
                             try {
                                 dRenderable = dStage.get();
-                                cowRenderable = cowStage.get();
+                                gRenderable = gStage.get();
                                 dogRenderable = dogStage.get();
-                                catRenderable = catStage.get();
+                                oRenderable = oStage.get();
 
                                 // Everything finished loading successfully.
                                 hasFinishedLoading = true;
@@ -180,14 +181,14 @@ public class ARHostFragment extends AppCompatActivity {
 
         Node sunVisual = new Node();
         sunVisual.setParent(center);
-        sunVisual.setRenderable(cowRenderable);
-        sunVisual.setLocalScale(new Vector3(0.5f, 0.5f, 0.5f));
+        sunVisual.setRenderable(dogRenderable);
+        sunVisual.setLocalScale(new Vector3(1.0f, 1.0f, 1.0f));
 
-        createLetter("D", center, 2.2f, dRenderable, 0.01f);
+        createLetter("D", center, 1.2f, dRenderable);
 
-        createLetter("dog", center, 3.5f, dogRenderable, 0.5f);
+        createLetter("O", center, 3.5f, oRenderable);
 
-        createLetter("cat", center, 5.0f, catRenderable, 0.5f);
+        createLetter("G", center, -1.0f, gRenderable);
 
         return base;
     }
@@ -196,25 +197,37 @@ public class ARHostFragment extends AppCompatActivity {
             String letter,
             Node parent,
             float auFromParent,
-            ModelRenderable renderable,
-            float scale) {
-        // Orbit is a rotating node with no renderable positioned at the sun.
-        // The planet is positioned relative to the orbit so that it appears to rotate around the sun.
-        // This is done instead of making the sun rotate so each planet can orbit at its own speed.
-        Node base = new Node();
+            ModelRenderable renderable) {
+
+        Session session = arFragment.getArSceneView().getSession();
+        float[] pos = {0.0f, 0.0f, 0.0f};
+        float[] rotation = {0,0,0,0};
+        Anchor anchor =  session.createAnchor(new Pose(pos, rotation));
+
+        AnchorNode base = new AnchorNode(anchor);
+        arFragment.getArSceneView().getScene().addChild(base);
         base.setParent(parent);
-
+        TransformableNode trNode = new TransformableNode(arFragment.getTransformationSystem());
         // Create the planet and position it relative to the sun.
-        Letter child =
-                new Letter(
-                        this, letter, scale,renderable);
-        child.setParent(parent);
-        if(letter.equals("D")){
-            child.setLocalScale(new Vector3(.1f,.1f,.1f));
-        }
-        child.setLocalPosition(new Vector3(auFromParent * .5f, 0.0f, 0.0f));
+        trNode.setParent(base);
 
-        return child;
+        Node tNode = new Node();
+
+
+//        trNode.select();
+        tNode.setOnTapListener(new Node.OnTapListener() {
+            @Override
+            public void onTap(HitTestResult hitTestResult, MotionEvent motionEvent) {
+                base.getAnchor().detach();
+            }
+        });
+
+
+        tNode.setRenderable(renderable);
+        tNode.setLocalScale(new Vector3(.1f,.1f,.1f));
+        tNode.setLocalPosition(new Vector3(auFromParent * .5f, 0.0f, 0.0f));
+        tNode.setParent(trNode);
+        return tNode;
     }
 
 //
