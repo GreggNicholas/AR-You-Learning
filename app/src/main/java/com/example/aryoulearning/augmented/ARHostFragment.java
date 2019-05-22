@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -15,6 +16,7 @@ import android.view.View;
 import com.example.aryoulearning.R;
 import com.example.aryoulearning.augmented.model.ModelLoader;
 import com.example.aryoulearning.augmented.pointer.PointerDrawable;
+import com.example.aryoulearning.model.Model;
 import com.google.ar.core.Anchor;
 import com.google.ar.core.Frame;
 import com.google.ar.core.HitResult;
@@ -32,6 +34,7 @@ import com.google.ar.sceneform.ux.ArFragment;
 import com.google.ar.sceneform.ux.TransformableNode;
 
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -51,6 +54,10 @@ public class ARHostFragment extends AppCompatActivity {
     private ModelRenderable dogRenderable;
     private boolean hasFinishedLoading = false;
     private boolean hasPlacedGame = false;
+    private String[] dog = {"dog", "OO", "DD", "DD"};
+    private List<Model> categoryList = new ArrayList<>();
+    private List<List<CompletableFuture<ModelRenderable>>> modelRenderables = new ArrayList<>();
+    private List<List<ModelRenderable>> modelRenderableListPart2 = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,47 +65,66 @@ public class ARHostFragment extends AppCompatActivity {
         setContentView(R.layout.activity_arfragment_host);
         modelLoader = new ModelLoader(new WeakReference<>(this));
         arFragment = (ArFragment) getSupportFragmentManager().findFragmentById(R.id.ux_fragment);
+//        categoryList = getIntent().getParcelableArrayListExtra(MainActivity.ARLIST);
+        categoryList.add(new Model("dog", ""));
+
 //        initializeAnimalGallery();
 //        initializeLetterGallery();
 
-        CompletableFuture<ModelRenderable> dogStage =
-                ModelRenderable.builder().setSource(this, Uri.parse("dog.sfb")).build();
-        CompletableFuture<ModelRenderable> oStage =
-                ModelRenderable.builder().setSource(this, Uri.parse("OO.sfb")).build();
-        CompletableFuture<ModelRenderable> gStage =
-                ModelRenderable.builder().setSource(this, Uri.parse("DD.sfb")).build();
-        CompletableFuture<ModelRenderable> dStage =
-                ModelRenderable.builder().setSource(this, Uri.parse("DD.sfb")).build();
+        for(int i = 0; i < categoryList.size(); i++){
+            List<CompletableFuture<ModelRenderable>> modelRenderableList = new ArrayList<>();
 
-        CompletableFuture.allOf(
-                oStage,
-                dogStage,
-                gStage,
-                dStage)
-                .handle(
-                        (notUsed, throwable) -> {
-                            // When you build a Renderable, Sceneform loads its resources in the background while
-                            // returning a CompletableFuture. Call handle(), thenAccept(), or check isDone()
-                            // before calling get().
+            modelRenderableList.add(ModelRenderable.builder().setSource(this, Uri.parse(categoryList.get(i).getName() + ".sfb")).build());
+            for(int k = 0; k < categoryList.get(i).getName().length(); k++){
+                modelRenderableList.add(ModelRenderable.builder().setSource(this, Uri.parse(categoryList.get(i).getName().charAt(k) + ".sfb")).build());
+            }
+            modelRenderables.add(modelRenderableList);
+        }
 
-                            if (throwable != null) {
-                                return null;
-                            }
+        //dog.sfb, d.sfb, o.sfb, g.sfb
 
-                            try {
-                                dRenderable = dStage.get();
-                                gRenderable = gStage.get();
-                                dogRenderable = dogStage.get();
-                                oRenderable = oStage.get();
 
-                                // Everything finished loading successfully.
-                                hasFinishedLoading = true;
+//        CompletableFuture<ModelRenderable> dogStage =
+//                ModelRenderable.builder().setSource(this, Uri.parse("dog.sfb")).build();
+//        CompletableFuture<ModelRenderable> oStage =
+//                ModelRenderable.builder().setSource(this, Uri.parse("o.sfb")).build();
+//        CompletableFuture<ModelRenderable> gStage =
+//                ModelRenderable.builder().setSource(this, Uri.parse("d.sfb")).build();
+//        CompletableFuture<ModelRenderable> dStage =
+//                ModelRenderable.builder().setSource(this, Uri.parse("d.sfb")).build();
 
-                            } catch (InterruptedException | ExecutionException ex) {
-                            }
+        for(int i = 0; i < modelRenderables.size(); i++){
+            List<ModelRenderable> newList = new ArrayList<>();
+            for(int k = 0; k < modelRenderables.get(i).size(); k++){
+                final int num1 = i;
+                final int num2 = k;
+                CompletableFuture.allOf(modelRenderables.get(num1).get(num2))
+                        .handle(
+                                (notUsed, throwable) -> {
+                                    // When you build a Renderable, Sceneform loads its resources in the background while
+                                    // returning a CompletableFuture. Call handle(), thenAccept(), or check isDone()
+                                    // before calling get().
 
-                            return null;
-                        });
+                                    if (throwable != null) {
+                                        return null;
+                                    }
+
+                                    try {
+                                        newList.add(modelRenderables.get(num1).get(num2).get());
+
+                                        // Everything finished loading successfully.
+                                        hasFinishedLoading = true;
+
+                                    } catch (InterruptedException | ExecutionException ex) {
+                                    }
+                                    return null;
+                                });
+            }
+            modelRenderableListPart2.add(newList);
+        }
+
+
+
 
         gestureDetector =
                 new GestureDetector(
@@ -171,30 +197,30 @@ public class ARHostFragment extends AppCompatActivity {
 //
 //    }
 
-    private Node createGame(){
+    private Node createGame(List<ModelRenderable> modelRenderableList){
 
         Node base = new Node();
 
-        Node center = new Node();
-        center.setParent(base);
-        center.setLocalPosition(new Vector3(0.0f, 0.5f, 0.0f));
+//        Node center = new Node();
+//        center.setParent(base);
+//        center.setLocalPosition(new Vector3(0.0f, 0.5f, 0.0f));
 
         Node sunVisual = new Node();
-        sunVisual.setParent(center);
-        sunVisual.setRenderable(dogRenderable);
+        sunVisual.setParent(base);
+        sunVisual.setRenderable(modelRenderableList.get(0));
         sunVisual.setLocalScale(new Vector3(1.0f, 1.0f, 1.0f));
 
-        createLetter("D", center, 1.2f, dRenderable);
 
-        createLetter("O", center, 3.5f, oRenderable);
+        for(int i = 1; i < modelRenderableList.size();i++){
+            createLetter(sunVisual, 3.5f, modelRenderableList.get(i));
+        }
 
-        createLetter("G", center, -1.0f, gRenderable);
+
 
         return base;
     }
 
     private Node createLetter(
-            String letter,
             Node parent,
             float auFromParent,
             ModelRenderable renderable) {
@@ -211,11 +237,9 @@ public class ARHostFragment extends AppCompatActivity {
         // Create the planet and position it relative to the sun.
         trNode.setParent(base);
 
-        Node tNode = new Node();
 
-
-//        trNode.select();
-        tNode.setOnTapListener(new Node.OnTapListener() {
+        trNode.select();
+        trNode.setOnTapListener(new Node.OnTapListener() {
             @Override
             public void onTap(HitTestResult hitTestResult, MotionEvent motionEvent) {
                 base.getAnchor().detach();
@@ -223,11 +247,11 @@ public class ARHostFragment extends AppCompatActivity {
         });
 
 
-        tNode.setRenderable(renderable);
-        tNode.setLocalScale(new Vector3(.1f,.1f,.1f));
-        tNode.setLocalPosition(new Vector3(auFromParent * .5f, 0.0f, 0.0f));
-        tNode.setParent(trNode);
-        return tNode;
+        trNode.setRenderable(renderable);
+//        trNode.setLocalScale(new Vector3(.1f,.1f,.1f));
+        trNode.setLocalPosition(new Vector3(auFromParent * .5f, 0.0f, 0.0f));
+
+        return trNode;
     }
 
 //
@@ -274,7 +298,7 @@ public class ARHostFragment extends AppCompatActivity {
 //        letterD.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View view) {
-//                ARHostFragment.this.addObject(Uri.parse("DD.sfb"));
+//                ARHostFragment.this.addObject(Uri.parse("d.sfb"));
 //            }
 //        });
 //        gallery.addView(letterD);
@@ -284,7 +308,7 @@ public class ARHostFragment extends AppCompatActivity {
 //        letterO.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View view) {
-//                ARHostFragment.this.addObject(Uri.parse("OO.sfb"));
+//                ARHostFragment.this.addObject(Uri.parse("o.sfb"));
 //
 //            }
 //        });
@@ -428,6 +452,10 @@ public class ARHostFragment extends AppCompatActivity {
     }
 
     private boolean tryPlaceGame(MotionEvent tap, Frame frame) {
+        for(int i = 0; i < modelRenderableListPart2.get(0).size(); i++){
+            Log.d("TAG", modelRenderableListPart2.get(0).get(i).toString());
+        }
+
         if (tap != null && frame.getCamera().getTrackingState() == TrackingState.TRACKING) {
             for (HitResult hit : frame.hitTest(tap)) {
                 Trackable trackable = hit.getTrackable();
@@ -436,7 +464,7 @@ public class ARHostFragment extends AppCompatActivity {
                     Anchor anchor = hit.createAnchor();
                     AnchorNode anchorNode = new AnchorNode(anchor);
                     anchorNode.setParent(arFragment.getArSceneView().getScene());
-                    Node gameSystem = createGame();
+                    Node gameSystem = createGame(modelRenderableListPart2.get(0));
                     anchorNode.addChild(gameSystem);
                     return true;
                 }
