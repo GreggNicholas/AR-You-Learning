@@ -225,6 +225,7 @@ public class ARHostFragment extends AppCompatActivity {
             float auFromParent,
             ModelRenderable renderable) {
 
+
         Session session = arFragment.getArSceneView().getSession();
         float[] pos = {0.0f, 0.0f, 0.0f};
         float[] rotation = {0,0,0,0};
@@ -238,11 +239,14 @@ public class ARHostFragment extends AppCompatActivity {
         trNode.setParent(base);
 
 
+
         trNode.select();
         trNode.setOnTapListener(new Node.OnTapListener() {
             @Override
+
             public void onTap(HitTestResult hitTestResult, MotionEvent motionEvent) {
                 base.getAnchor().detach();
+
             }
         });
 
@@ -331,7 +335,25 @@ public class ARHostFragment extends AppCompatActivity {
 
         AnchorNode anchorNode = new AnchorNode(anchor);
         TransformableNode node = new TransformableNode(arFragment.getTransformationSystem());
+        node.setRenderable(renderable);
+        node.setParent(anchorNode);
+        arFragment.getArSceneView().getScene().addChild(anchorNode);
+        node.select();
+        node.setOnTapListener(new Node.OnTapListener() {
+            @Override
+            public void onTap(HitTestResult hitTestResult, MotionEvent motionEvent) {
+                anchorNode.getAnchor().detach();
+            }
+        });
+    }
 
+    public void addLetterNodeToScene(Anchor anchor, ModelRenderable renderable) {
+
+        AnchorNode anchorNode = new AnchorNode(anchor);
+        TransformableNode node = new TransformableNode(arFragment.getTransformationSystem());
+        node.getScaleController().setMaxScale(0.009f);
+        node.getScaleController().setMinScale(0.008f);
+        node.setRenderable(renderable);
         node.setRenderable(renderable);
         node.setParent(anchorNode);
 
@@ -364,6 +386,26 @@ public class ARHostFragment extends AppCompatActivity {
 //            }
 //        }
 //    }
+
+    private void addLetterObject(Uri model) {
+        Frame frame = arFragment.getArSceneView().getArFrame();
+        Point pt = getScreenCenter();
+        List<HitResult> hits;
+
+
+        if (frame != null) {
+            hits = frame.hitTest(pt.x, pt.y);
+            for (HitResult hit : hits) {
+                Trackable trackable = hit.getTrackable();
+                if (trackable instanceof Plane && ((Plane) trackable).isPoseInPolygon(hit.getHitPose())) {
+                    modelLoader.loadLetterModel(hit.createAnchor(), model);
+
+                    break;
+                }
+            }
+        }
+    }
+
 
     private void onUpdate() {
         boolean trackingChanged = updateTracking();
