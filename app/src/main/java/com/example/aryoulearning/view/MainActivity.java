@@ -2,6 +2,7 @@ package com.example.aryoulearning.view;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 
 import com.example.aryoulearning.R;
@@ -24,6 +25,7 @@ import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity implements NavListener, SwitchListener {
     private static final String TAG = "Main";
+    public static final String ARLIST = "ARLIST";
     private List<String> categoryList = new ArrayList<>();
     private List<List<Model>> animalModelList = new ArrayList<>();
     public static boolean AR_SWITCH_STATUS;
@@ -68,6 +70,7 @@ public class MainActivity extends AppCompatActivity implements NavListener, Swit
     public void moveToGameFragment(List<Model> modelList, boolean AR_is_on) {
         if (AR_is_on) {
             Intent arIntent = new Intent(this, ARHostFragment.class);
+            arIntent.putParcelableArrayListExtra(ARLIST, (ArrayList<? extends Parcelable>) modelList);
             startActivity(arIntent);
         } else {
             getSupportFragmentManager()

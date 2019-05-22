@@ -51,37 +51,34 @@ dependencies {
 }
 
 
+
+
 sceneform.asset('sampledata/animal/dog.fbx',
         'default',
         'sampledata/animal/dog.sfa',
         'src/main/assets/dog')
 
-sceneform.asset('sampledata/alphabet/DD.obj',
-        'default',
-        'sampledata/alphabet/DD.sfa',
-        'src/main/assets/DD')
-
-sceneform.asset('sampledata/alphabet/OO.obj',
-        'default',
-        'sampledata/alphabet/OO.sfa',
-        'src/main/assets/OO')
-
-sceneform.asset('sampledata/alphabet/G.FBX',
-        'default',
-        'sampledata/alphabet/G.sfa',
-        'src/main/assets/G')
-
-sceneform.asset('sampledata/animal/cat.fbx',
-        'default',
-        'sampledata/animal/cat.sfa',
-        'src/main/assets/cat')
-
-sceneform.asset('sampledata/animal/cow.fbx',
-        'default',
-        'sampledata/animal/cow.sfa',
-        'src/main/assets/cow')
-
 sceneform.asset('sampledata/alphabet/CC.obj',
         'default',
         'sampledata/alphabet/CC.sfa',
         'src/main/assets/CC')
+
+sceneform.asset('sampledata/alphabet/CC.obj',
+        'default',
+        'sampledata/alphabet/c.sfa',
+        'src/main/assets/c')
+
+sceneform.asset('sampledata/alphabet/DD.obj',
+        'default',
+        'sampledata/alphabet/d.sfa',
+        'src/main/assets/d')
+
+sceneform.asset('sampledata/alphabet/G.FBX',
+        'default',
+        'sampledata/alphabet/g.sfa',
+        'src/main/assets/g')
+
+sceneform.asset('sampledata/alphabet/OO.obj',
+        'default',
+        'sampledata/alphabet/o.sfa',
+        'src/main/assets/o')
