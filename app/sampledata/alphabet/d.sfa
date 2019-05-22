@@ -28,7 +28,7 @@
     },
   ],
   model: {
-  scale:0.025,
+  scale:0.075,
     attributes: [
       'Position',
       'Orientation',
