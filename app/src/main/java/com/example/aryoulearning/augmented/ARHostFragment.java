@@ -2,20 +2,15 @@ package com.example.aryoulearning.augmented;
 
 import android.Manifest;
 import android.app.Activity;
-import android.graphics.Point;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
-import android.view.View;
 
 import com.example.aryoulearning.R;
-import com.example.aryoulearning.augmented.model.ModelLoader;
-import com.example.aryoulearning.augmented.pointer.PointerDrawable;
 import com.example.aryoulearning.model.Model;
 import com.google.ar.core.Anchor;
 import com.google.ar.core.Frame;
@@ -33,98 +28,49 @@ import com.google.ar.sceneform.rendering.ModelRenderable;
 import com.google.ar.sceneform.ux.ArFragment;
 import com.google.ar.sceneform.ux.TransformableNode;
 
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Random;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class ARHostFragment extends AppCompatActivity {
     private static final int RC_PERMISSIONS = 0x123;
-//    private boolean installRequested;
+
     private GestureDetector gestureDetector;
     private ArFragment arFragment;
-    private PointerDrawable pointer = new PointerDrawable();
-    private boolean isTracking;
-    private boolean isHitting;
-    private ModelLoader modelLoader;
-    private ModelRenderable dRenderable;
-    private ModelRenderable oRenderable;
-    private ModelRenderable gRenderable;
-    private ModelRenderable dogRenderable;
-    private boolean hasFinishedLoading = false;
+
+    private boolean hasFinishedLoadingModels = false;
+    private boolean hasFinishedLoadingLetters = false;
     private boolean hasPlacedGame = false;
-    private String[] dog = {"dog", "OO", "DD", "DD"};
+
     private List<Model> categoryList = new ArrayList<>();
-    private List<List<CompletableFuture<ModelRenderable>>> modelRenderables = new ArrayList<>();
-    private List<List<ModelRenderable>> modelRenderableListPart2 = new ArrayList<>();
+
+    private List<HashMap<String, CompletableFuture<ModelRenderable>>> futureModelMapList = new ArrayList<>();
+    private HashMap<String, CompletableFuture<ModelRenderable>> futureLetterMap = new HashMap<>();
+
+    private List<HashMap<String, ModelRenderable>> modelMapList = new ArrayList<>();
+    private HashMap<String, ModelRenderable> letterMap = new HashMap<>();
+
+    Random r = new Random();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_arfragment_host);
-        modelLoader = new ModelLoader(new WeakReference<>(this));
         arFragment = (ArFragment) getSupportFragmentManager().findFragmentById(R.id.ux_fragment);
+
 //        categoryList = getIntent().getParcelableArrayListExtra(MainActivity.ARLIST);
         categoryList.add(new Model("dog", ""));
 
-//        initializeAnimalGallery();
-//        initializeLetterGallery();
+        setListMapsOfFutureModels(categoryList);
+        setMapOfFutureLetters(futureModelMapList);
 
-        for(int i = 0; i < categoryList.size(); i++){
-            List<CompletableFuture<ModelRenderable>> modelRenderableList = new ArrayList<>();
-
-            modelRenderableList.add(ModelRenderable.builder().setSource(this, Uri.parse(categoryList.get(i).getName() + ".sfb")).build());
-            for(int k = 0; k < categoryList.get(i).getName().length(); k++){
-                modelRenderableList.add(ModelRenderable.builder().setSource(this, Uri.parse(categoryList.get(i).getName().charAt(k) + ".sfb")).build());
-            }
-            modelRenderables.add(modelRenderableList);
-        }
-
-        //dog.sfb, d.sfb, o.sfb, g.sfb
-
-
-//        CompletableFuture<ModelRenderable> dogStage =
-//                ModelRenderable.builder().setSource(this, Uri.parse("dog.sfb")).build();
-//        CompletableFuture<ModelRenderable> oStage =
-//                ModelRenderable.builder().setSource(this, Uri.parse("o.sfb")).build();
-//        CompletableFuture<ModelRenderable> gStage =
-//                ModelRenderable.builder().setSource(this, Uri.parse("d.sfb")).build();
-//        CompletableFuture<ModelRenderable> dStage =
-//                ModelRenderable.builder().setSource(this, Uri.parse("d.sfb")).build();
-
-        for(int i = 0; i < modelRenderables.size(); i++){
-            List<ModelRenderable> newList = new ArrayList<>();
-            for(int k = 0; k < modelRenderables.get(i).size(); k++){
-                final int num1 = i;
-                final int num2 = k;
-                CompletableFuture.allOf(modelRenderables.get(num1).get(num2))
-                        .handle(
-                                (notUsed, throwable) -> {
-                                    // When you build a Renderable, Sceneform loads its resources in the background while
-                                    // returning a CompletableFuture. Call handle(), thenAccept(), or check isDone()
-                                    // before calling get().
-
-                                    if (throwable != null) {
-                                        return null;
-                                    }
-
-                                    try {
-                                        newList.add(modelRenderables.get(num1).get(num2).get());
-
-                                        // Everything finished loading successfully.
-                                        hasFinishedLoading = true;
-
-                                    } catch (InterruptedException | ExecutionException ex) {
-                                    }
-                                    return null;
-                                });
-            }
-            modelRenderableListPart2.add(newList);
-        }
-
-
-
+        setModelRenderables(futureModelMapList);
+        setLetterRenderables(futureLetterMap);
 
         gestureDetector =
                 new GestureDetector(
@@ -170,66 +116,47 @@ public class ARHostFragment extends AppCompatActivity {
                             }
 
                         });
-
         // Lastly request CAMERA permission which is required by ARCore.
         requestCameraPermission(this, RC_PERMISSIONS);
-
-//        getScene();
-
-
-
     }
 
-    private void getScene() {
-        if (arFragment != null) {
-            arFragment.getArSceneView().getScene().addOnUpdateListener(frameTime -> {
-                arFragment.onUpdate(frameTime);
-                onUpdate();
-            });
-        }
-    }
-
-//    private void initializeModels(){
-//
-//        ARHostFragment.this.addObject(Uri.parse("dog.sfb"));
-//        ARHostFragment.this.addObject(Uri.parse("cat.sfb"));
-//        ARHostFragment.this.addObject(Uri.parse("cow.sfb"));
-//
-//    }
-
-    private Node createGame(List<ModelRenderable> modelRenderableList){
+    private Node createGame(Map<String,ModelRenderable> modelMap) {
 
         Node base = new Node();
 
-//        Node center = new Node();
-//        center.setParent(base);
-//        center.setLocalPosition(new Vector3(0.0f, 0.5f, 0.0f));
-
         Node sunVisual = new Node();
         sunVisual.setParent(base);
-        sunVisual.setRenderable(modelRenderableList.get(0));
-        sunVisual.setLocalScale(new Vector3(1.0f, 1.0f, 1.0f));
+
+        for(Map.Entry<String,ModelRenderable> e : modelMap.entrySet()){
+            sunVisual.setRenderable(e.getValue());
+            sunVisual.setLookDirection(new Vector3(0,0,4));
+            sunVisual.setLocalScale(new Vector3(1.0f, 1.0f, 1.0f));
 
 
-        for(int i = 1; i < modelRenderableList.size();i++){
-            createLetter(sunVisual, 3.5f, modelRenderableList.get(i));
+            for (int i = 0; i < e.getKey().length(); i++) {
+                createLetter(base, letterMap.get(Character.toString(e.getKey().charAt(i))));
+            }
         }
-
-
 
         return base;
     }
 
-    private Node createLetter(
+    private TransformableNode createLetter(
             Node parent,
-            float auFromParent,
             ModelRenderable renderable) {
 
 
         Session session = arFragment.getArSceneView().getSession();
-        float[] pos = {0.0f, 0.0f, 0.0f};
-        float[] rotation = {0,0,0,0};
-        Anchor anchor =  session.createAnchor(new Pose(pos, rotation));
+        float[] pos = {parent.getLocalPosition().x,
+                parent.getLocalPosition().y,
+                parent.getLocalPosition().z};
+        float[] rotation = {0,0,0, 0};
+
+
+        Anchor anchor = null;
+        if (session != null) {
+            anchor = session.createAnchor(new Pose(pos,rotation));
+        }
 
         AnchorNode base = new AnchorNode(anchor);
         arFragment.getArSceneView().getScene().addChild(base);
@@ -238,9 +165,6 @@ public class ARHostFragment extends AppCompatActivity {
         // Create the planet and position it relative to the sun.
         trNode.setParent(base);
 
-
-
-        trNode.select();
         trNode.setOnTapListener(new Node.OnTapListener() {
             @Override
 
@@ -253,83 +177,10 @@ public class ARHostFragment extends AppCompatActivity {
 
         trNode.setRenderable(renderable);
 //        trNode.setLocalScale(new Vector3(.1f,.1f,.1f));
-        trNode.setLocalPosition(new Vector3(auFromParent * .5f, 0.0f, 0.0f));
+        trNode.setLocalPosition(new Vector3(getRandom(2.5f,-1.5f),getRandom(.5f,-.5f),getRandom(-3,-5)));
 
         return trNode;
     }
-
-//
-//    private void initializeAnimalGallery() {
-//        LinearLayout gallery = findViewById(R.id.gallery_layout_left);
-//
-//        ImageView dog = new ImageView(this);
-//        dog.setImageResource(R.drawable.dog);
-//        dog.setContentDescription("Dog");
-//        dog.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                ARHostFragment.this.addObject(Uri.parse("dog.sfb"));
-//            }
-//        });
-//        gallery.addView(dog);
-//
-//        ImageView cat = new ImageView(this);
-//        cat.setImageResource(R.drawable.cat);
-//        cat.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                ARHostFragment.this.addObject(Uri.parse("cat.sfb"));
-//            }
-//        });
-//        gallery.addView(cat);
-//
-//        ImageView cow = new ImageView(this);
-//        cow.setImageResource(R.drawable.cow);
-//        cow.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                ARHostFragment.this.addObject(Uri.parse("cow.sfb"));
-//            }
-//        });
-//        gallery.addView(cow);
-//    }
-//
-//    private void initializeLetterGallery() {
-//        LinearLayout gallery = findViewById(R.id.gallery_layout_right);
-//
-//        ImageView letterD = new ImageView(this);
-//        letterD.setImageResource(R.drawable.d);
-//        letterD.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                ARHostFragment.this.addObject(Uri.parse("d.sfb"));
-//            }
-//        });
-//        gallery.addView(letterD);
-//
-//        ImageView letterO = new ImageView(this);
-//        letterO.setImageResource(R.drawable.o);
-//        letterO.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                ARHostFragment.this.addObject(Uri.parse("o.sfb"));
-//
-//            }
-//        });
-//        gallery.addView(letterO);
-//
-//        ImageView letterG = new ImageView(this);
-//        letterG.setImageResource(R.drawable.g);
-//        letterG.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                ARHostFragment.this.addObject(Uri.parse("GG.sfb"));
-//            }
-//        });
-//        gallery.addView(letterG);
-//
-//
-//    }
 
     public void addNodeToScene(Anchor anchor, ModelRenderable renderable) {
 
@@ -359,109 +210,7 @@ public class ARHostFragment extends AppCompatActivity {
 
         arFragment.getArSceneView().getScene().addChild(anchorNode);
         node.select();
-        node.setOnTapListener(new Node.OnTapListener() {
-            @Override
-            public void onTap(HitTestResult hitTestResult, MotionEvent motionEvent) {
-                anchorNode.getAnchor().detach();
-            }
-        });
-    }
-
-
-//    private void addObject(Uri model) {
-//        Frame frame = arFragment.getArSceneView().getArFrame();
-//        Point pt = getScreenCenter();
-//        List<HitResult> hits;
-//
-//
-//        if (frame != null) {
-//            hits = frame.hitTest(pt.x, pt.y);
-//            for (HitResult hit : hits) {
-//                Trackable trackable = hit.getTrackable();
-//                if (trackable instanceof Plane && ((Plane) trackable).isPoseInPolygon(hit.getHitPose())) {
-//                    modelLoader.loadModel(hit.createAnchor(), model);
-//
-//                    break;
-//                }
-//            }
-//        }
-//    }
-
-    private void addLetterObject(Uri model) {
-        Frame frame = arFragment.getArSceneView().getArFrame();
-        Point pt = getScreenCenter();
-        List<HitResult> hits;
-
-
-        if (frame != null) {
-            hits = frame.hitTest(pt.x, pt.y);
-            for (HitResult hit : hits) {
-                Trackable trackable = hit.getTrackable();
-                if (trackable instanceof Plane && ((Plane) trackable).isPoseInPolygon(hit.getHitPose())) {
-                    modelLoader.loadLetterModel(hit.createAnchor(), model);
-
-                    break;
-                }
-            }
-        }
-    }
-
-
-    private void onUpdate() {
-        boolean trackingChanged = updateTracking();
-        View contentView = findViewById(android.R.id.content);
-        if (trackingChanged) {
-            if (isTracking) {
-                contentView.getOverlay().add(pointer);
-            } else {
-                contentView.getOverlay().remove(pointer);
-            }
-            contentView.invalidate();
-        }
-
-        if (isTracking) {
-            boolean hitTestChanged = updateHitTest();
-            if (hitTestChanged) {
-                pointer.setEnabled(isHitting);
-                contentView.invalidate();
-            }
-        }
-    }
-
-    private boolean updateTracking() {
-        Frame frame = arFragment.getArSceneView().getArFrame();
-        boolean wasTracking = isTracking;
-        isTracking = frame != null && frame.getCamera().getTrackingState() == TrackingState.TRACKING;
-
-        return isTracking != wasTracking;
-    }
-
-    private boolean updateHitTest() {
-        Frame frame = arFragment.getArSceneView().getArFrame();
-        android.graphics.Point pt = getScreenCenter();
-        List<HitResult> hits;
-
-        boolean wasHitting = isHitting;
-        isHitting = false;
-
-        if (frame != null) {
-            hits = frame.hitTest(pt.x, pt.y);
-
-            for (HitResult hit : hits) {
-                Trackable trackable = hit.getTrackable();
-                if (trackable instanceof Plane && ((Plane) trackable).isPoseInPolygon(hit.getHitPose())) {
-                    isHitting = true;
-                    break;
-                }
-            }
-        }
-
-        return wasHitting != isHitting;
-    }
-
-    private Point getScreenCenter() {
-        View vw = findViewById(android.R.id.content);
-        return new android.graphics.Point(vw.getWidth() / 2, vw.getHeight() / 2);
+        node.setOnTapListener((hitTestResult, motionEvent) -> anchorNode.getAnchor().detach());
     }
 
     public void onException(Throwable throwable) {
@@ -476,11 +225,11 @@ public class ARHostFragment extends AppCompatActivity {
 
     public static void requestCameraPermission(Activity activity, int requestCode) {
         ActivityCompat.requestPermissions(
-                activity, new String[] {Manifest.permission.CAMERA}, requestCode);
+                activity, new String[]{Manifest.permission.CAMERA}, requestCode);
     }
 
     private void onSingleTap(MotionEvent tap) {
-        if (!hasFinishedLoading) {
+        if (!hasFinishedLoadingModels || !hasFinishedLoadingLetters) {
             // We can't do anything yet.
             return;
         }
@@ -494,10 +243,6 @@ public class ARHostFragment extends AppCompatActivity {
     }
 
     private boolean tryPlaceGame(MotionEvent tap, Frame frame) {
-        for(int i = 0; i < modelRenderableListPart2.get(0).size(); i++){
-            Log.d("TAG", modelRenderableListPart2.get(0).get(i).toString());
-        }
-
         if (tap != null && frame.getCamera().getTrackingState() == TrackingState.TRACKING) {
             for (HitResult hit : frame.hitTest(tap)) {
                 Trackable trackable = hit.getTrackable();
@@ -506,7 +251,7 @@ public class ARHostFragment extends AppCompatActivity {
                     Anchor anchor = hit.createAnchor();
                     AnchorNode anchorNode = new AnchorNode(anchor);
                     anchorNode.setParent(arFragment.getArSceneView().getScene());
-                    Node gameSystem = createGame(modelRenderableListPart2.get(0));
+                    Node gameSystem = createGame(modelMapList.get(0));
                     anchorNode.addChild(gameSystem);
                     return true;
                 }
@@ -515,4 +260,85 @@ public class ARHostFragment extends AppCompatActivity {
 
         return false;
     }
+
+    private void setListMapsOfFutureModels(List<Model> modelList) {
+
+        for (int i = 0; i < modelList.size(); i++) {
+            HashMap<String, CompletableFuture<ModelRenderable>> futureMap = new HashMap();
+            futureMap.put(modelList.get(i).getName(),
+                    ModelRenderable.builder().
+                            setSource(this, Uri.parse(categoryList.get(i).getName() + ".sfb")).build());
+            futureModelMapList.add(futureMap);
+        }
+    }
+
+    private void setMapOfFutureLetters(List<HashMap<String, CompletableFuture<ModelRenderable>>> futureMapList) {
+        for (int i = 0; i < futureMapList.size(); i++) {
+            String modelName = futureMapList.get(i).keySet().toString();
+            for (int j = 0; j < modelName.length(); j++) {
+                futureLetterMap.put(Character.toString(modelName.charAt(j)), ModelRenderable.builder().
+                        setSource(this, Uri.parse(modelName.charAt(j) + ".sfb")).build());
+            }
+        }
+    }
+
+    private void setModelRenderables(List<HashMap<String, CompletableFuture<ModelRenderable>>> futureModelMapList) {
+
+        for (int i = 0; i < futureModelMapList.size(); i++) {
+
+            for (Map.Entry<String, CompletableFuture<ModelRenderable>> e : futureModelMapList.get(i).entrySet()) {
+
+                HashMap<String, ModelRenderable> modelMap = new HashMap<>();
+
+                CompletableFuture.allOf(e.getValue())
+                        .handle(
+                                (notUsed, throwable) -> {
+                                    // When you build a Renderable, Sceneform loads its resources in the background while
+                                    // returning a CompletableFuture. Call handle(), thenAccept(), or check isDone()
+                                    // before calling get().
+                                    if (throwable != null) {
+                                        return null;
+                                    }
+                                    try {
+                                        modelMap.put(e.getKey(), e.getValue().get());
+                                    } catch (InterruptedException | ExecutionException ex) {
+                                    }
+                                    return null;
+                                });
+                modelMapList.add(modelMap);
+            }
+        }
+        hasFinishedLoadingModels = true;
+    }
+
+    private void setLetterRenderables(HashMap<String, CompletableFuture<ModelRenderable>> futureLetterMap) {
+
+        for (Map.Entry<String, CompletableFuture<ModelRenderable>> e : futureLetterMap.entrySet()) {
+
+            CompletableFuture.allOf(e.getValue())
+                    .handle(
+                            (notUsed, throwable) -> {
+                                // When you build a Renderable, Sceneform loads its resources in the background while
+                                // returning a CompletableFuture. Call handle(), thenAccept(), or check isDone()
+                                // before calling get().
+                                if (throwable != null) {
+                                    return null;
+                                }
+                                try {
+                                    letterMap.put(e.getKey(), e.getValue().get());
+                                } catch (InterruptedException | ExecutionException ex) {
+                                }
+                                return null;
+                            });
+        }
+        hasFinishedLoadingLetters = true;
+    }
+//
+    private float getRandom(float max, float min){
+
+
+        return r.nextFloat() * (max - min) + min;
+    }
+
+
 }
