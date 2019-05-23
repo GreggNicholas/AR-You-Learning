@@ -2,7 +2,6 @@ package com.example.aryoulearning.augmented;
 
 import android.Manifest;
 import android.app.Activity;
-import android.graphics.Point;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
@@ -10,10 +9,8 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
-import android.view.View;
 
 import com.example.aryoulearning.R;
-import com.example.aryoulearning.augmented.pointer.PointerDrawable;
 import com.example.aryoulearning.model.Model;
 import com.google.ar.core.Anchor;
 import com.google.ar.core.Frame;
@@ -35,8 +32,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class ARHostFragment extends AppCompatActivity {
     private static final int RC_PERMISSIONS = 0x123;
@@ -55,6 +54,8 @@ public class ARHostFragment extends AppCompatActivity {
 
     private List<HashMap<String, ModelRenderable>> modelMapList = new ArrayList<>();
     private HashMap<String, ModelRenderable> letterMap = new HashMap<>();
+
+    Random r = new Random();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,19 +124,17 @@ public class ARHostFragment extends AppCompatActivity {
 
         Node base = new Node();
 
-//        Node center = new Node();
-//        center.setParent(base);
-//        center.setLocalPosition(new Vector3(0.0f, 0.5f, 0.0f));
-
         Node sunVisual = new Node();
         sunVisual.setParent(base);
 
         for(Map.Entry<String,ModelRenderable> e : modelMap.entrySet()){
             sunVisual.setRenderable(e.getValue());
+            sunVisual.setLookDirection(new Vector3(0,0,4));
             sunVisual.setLocalScale(new Vector3(1.0f, 1.0f, 1.0f));
 
+
             for (int i = 0; i < e.getKey().length(); i++) {
-                createLetter(sunVisual,1 + i, letterMap.get(Character.toString(e.getKey().charAt(i))));
+                createLetter(base, letterMap.get(Character.toString(e.getKey().charAt(i))));
             }
         }
 
@@ -144,13 +143,19 @@ public class ARHostFragment extends AppCompatActivity {
 
     private TransformableNode createLetter(
             Node parent,
-            float auFromParent,
             ModelRenderable renderable) {
 
         Session session = arFragment.getArSceneView().getSession();
-        float[] pos = {0.0f, 0.0f, 0.0f};
-        float[] rotation = {0, 0, 0, 0};
-        Anchor anchor = session.createAnchor(new Pose(pos, rotation));
+        float[] pos = {parent.getLocalPosition().x,
+                parent.getLocalPosition().y,
+                parent.getLocalPosition().z};
+        float[] rotation = {0,0,0, 0};
+
+
+        Anchor anchor = null;
+        if (session != null) {
+            anchor = session.createAnchor(new Pose(pos,rotation));
+        }
 
         AnchorNode base = new AnchorNode(anchor);
         arFragment.getArSceneView().getScene().addChild(base);
@@ -158,9 +163,6 @@ public class ARHostFragment extends AppCompatActivity {
         TransformableNode trNode = new TransformableNode(arFragment.getTransformationSystem());
         // Create the planet and position it relative to the sun.
         trNode.setParent(base);
-
-
-        trNode.select();
         trNode.setOnTapListener(new Node.OnTapListener() {
             @Override
             public void onTap(HitTestResult hitTestResult, MotionEvent motionEvent) {
@@ -171,7 +173,7 @@ public class ARHostFragment extends AppCompatActivity {
 
         trNode.setRenderable(renderable);
 //        trNode.setLocalScale(new Vector3(.1f,.1f,.1f));
-        trNode.setLocalPosition(new Vector3(auFromParent * .5f, 0.0f, 0.0f));
+        trNode.setLocalPosition(new Vector3(getRandom(2.5f,-1.5f),getRandom(.5f,-.5f),getRandom(-3,-5)));
 
         return trNode;
     }
@@ -186,12 +188,7 @@ public class ARHostFragment extends AppCompatActivity {
 
         arFragment.getArSceneView().getScene().addChild(anchorNode);
         node.select();
-        node.setOnTapListener(new Node.OnTapListener() {
-            @Override
-            public void onTap(HitTestResult hitTestResult, MotionEvent motionEvent) {
-                anchorNode.getAnchor().detach();
-            }
-        });
+        node.setOnTapListener((hitTestResult, motionEvent) -> anchorNode.getAnchor().detach());
     }
 
 
@@ -252,7 +249,6 @@ public class ARHostFragment extends AppCompatActivity {
                             setSource(this, Uri.parse(categoryList.get(i).getName() + ".sfb")).build());
             futureModelMapList.add(futureMap);
         }
-
     }
 
     private void setMapOfFutureLetters(List<HashMap<String, CompletableFuture<ModelRenderable>>> futureMapList) {
@@ -266,10 +262,13 @@ public class ARHostFragment extends AppCompatActivity {
     }
 
     private void setModelRenderables(List<HashMap<String, CompletableFuture<ModelRenderable>>> futureModelMapList) {
+
         for (int i = 0; i < futureModelMapList.size(); i++) {
 
             for (Map.Entry<String, CompletableFuture<ModelRenderable>> e : futureModelMapList.get(i).entrySet()) {
+
                 HashMap<String, ModelRenderable> modelMap = new HashMap<>();
+
                 CompletableFuture.allOf(e.getValue())
                         .handle(
                                 (notUsed, throwable) -> {
@@ -292,8 +291,8 @@ public class ARHostFragment extends AppCompatActivity {
     }
 
     private void setLetterRenderables(HashMap<String, CompletableFuture<ModelRenderable>> futureLetterMap) {
-        for (Map.Entry<String, CompletableFuture<ModelRenderable>> e : futureLetterMap.entrySet()) {
 
+        for (Map.Entry<String, CompletableFuture<ModelRenderable>> e : futureLetterMap.entrySet()) {
 
             CompletableFuture.allOf(e.getValue())
                     .handle(
@@ -313,4 +312,12 @@ public class ARHostFragment extends AppCompatActivity {
         }
         hasFinishedLoadingLetters = true;
     }
+//
+    private float getRandom(float max, float min){
+
+
+        return r.nextFloat() * (max - min) + min;
+    }
+
+
 }
