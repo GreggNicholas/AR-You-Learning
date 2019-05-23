@@ -58,10 +58,7 @@ sceneform.asset('sampledata/animal/dog.fbx',
         'sampledata/animal/dog.sfa',
         'src/main/assets/dog')
 
-sceneform.asset('sampledata/alphabet/CC.obj',
-        'default',
-        'sampledata/alphabet/CC.sfa',
-        'src/main/assets/CC')
+
 
 sceneform.asset('sampledata/alphabet/CC.obj',
         'default',
