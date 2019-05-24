@@ -54,79 +54,79 @@ dependencies {
 sceneform.asset('sampledata/alphabet/balloonb.obj',
         'default',
         'sampledata/alphabet/balloonb.sfa',
-        'src/main/assets/balloonb')
+        'src/main/assets/b')
 
 sceneform.asset('sampledata/alphabet/balloonc.obj',
         'default',
         'sampledata/alphabet/balloonc.sfa',
-        'src/main/assets/balloonc')
+        'src/main/assets/c')
 
 sceneform.asset('sampledata/alphabet/balloond.obj',
         'default',
         'sampledata/alphabet/balloond.sfa',
-        'src/main/assets/balloond')
+        'src/main/assets/d')
 
 sceneform.asset('sampledata/alphabet/balloone.obj',
         'default',
         'sampledata/alphabet/balloone.sfa',
-        'src/main/assets/balloone')
+        'src/main/assets/e')
 
 sceneform.asset('sampledata/alphabet/balloonf.obj',
         'default',
         'sampledata/alphabet/balloonf.sfa',
-        'src/main/assets/balloonf')
+        'src/main/assets/f')
 
 sceneform.asset('sampledata/alphabet/balloong.obj',
         'default',
         'sampledata/alphabet/balloong.sfa',
-        'src/main/assets/balloong')
+        'src/main/assets/g')
 
 sceneform.asset('sampledata/alphabet/balloonh.obj',
         'default',
         'sampledata/alphabet/balloonh.sfa',
-        'src/main/assets/balloonh')
+        'src/main/assets/h')
 
 sceneform.asset('sampledata/alphabet/ballooni.obj',
         'default',
         'sampledata/alphabet/ballooni.sfa',
-        'src/main/assets/ballooni')
+        'src/main/assets/i')
 
 sceneform.asset('sampledata/alphabet/balloonj.obj',
         'default',
         'sampledata/alphabet/balloonj.sfa',
-        'src/main/assets/balloonj')
+        'src/main/assets/j')
 
 sceneform.asset('sampledata/alphabet/balloonk.obj',
         'default',
         'sampledata/alphabet/balloonk.sfa',
-        'src/main/assets/balloonk')
+        'src/main/assets/k')
 
 sceneform.asset('sampledata/alphabet/balloonl.obj',
         'default',
         'sampledata/alphabet/balloonl.sfa',
-        'src/main/assets/balloonl')
+        'src/main/assets/l')
 
 sceneform.asset('sampledata/alphabet/balloonm.obj',
         'default',
         'sampledata/alphabet/balloonm.sfa',
-        'src/main/assets/balloonm')
+        'src/main/assets/m')
 
 sceneform.asset('sampledata/alphabet/balloonn.obj',
         'default',
         'sampledata/alphabet/balloonn.sfa',
-        'src/main/assets/balloonn')
+        'src/main/assets/n')
 
 sceneform.asset('sampledata/alphabet/balloonp.obj',
         'default',
         'sampledata/alphabet/balloonp.sfa',
-        'src/main/assets/balloonp')
+        'src/main/assets/p')
 
 sceneform.asset('sampledata/alphabet/balloona.fbx',
         'default',
         'sampledata/alphabet/balloona.sfa',
-        'src/main/assets/ballona')
+        'src/main/assets/a')
 
 sceneform.asset('sampledata/alphabet/balloono.fbx',
         'default',
         'sampledata/alphabet/balloono.sfa',
-        'src/main/assets/balloono')
+        'src/main/assets/o')
