@@ -1,24 +1,24 @@
 {
   materials: [
     {
-      name: 'wire_255255255',
+      name: 'Ballon_kupfer_01',
       parameters: [
         {
           baseColor: null,
         },
         {
           baseColorTint: [
-            0.59999999999999998,
-            0.59999999999999998,
-            0.59999999999999998,
+            0.64000000000000001,
+            0.64000000000000001,
+            0.64000000000000001,
             1,
           ],
         },
         {
-          metallic: 0,
+          metallic: 1,
         },
         {
-          roughness: 1,
+          roughness: 0.14280000000000001,
         },
         {
           opacity: null,
@@ -30,12 +30,14 @@
   model: {
     attributes: [
       'Position',
+      'TexCoord',
       'Orientation',
     ],
     collision: {},
-    file: 'sampledata/alphabet/CC.obj',
-    name: 'CC',
+    file: 'sampledata/alphabet/balloonb.obj',
+    name: 'balloonb',
     recenter: 'root',
+    scale: 0.055738999999999997,
   },
   version: '0.54:2',
 }

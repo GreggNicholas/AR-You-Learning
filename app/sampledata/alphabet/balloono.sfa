@@ -1,14 +1,19 @@
 {
+  animations: [
+    {
+      path: 'sampledata/alphabet/balloono.fbx',
+    },
+  ],
   materials: [
     {
-      name: 'unnamed material',
+      name: 'Ballon_kupfer_01',
       parameters: [
         {
           baseColor: [
             1,
-            1,
-            1,
-            1,
+                       0,
+                      0,
+                       1,
           ],
         },
         {
@@ -42,14 +47,16 @@
   model: {
     attributes: [
       'Position',
+      'TexCoord',
       'Orientation',
       'BoneIndices',
       'BoneWeights',
     ],
     collision: {},
-    file: 'sampledata/alphabet/G.FBX',
-    name: 'G',
+    file: 'sampledata/alphabet/balloono.fbx',
+    name: 'balloono',
     recenter: 'root',
+    scale: 0.056445000000000002,
   },
   version: '0.54:2',
 }
