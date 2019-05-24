@@ -1,6 +1,5 @@
 package com.example.aryoulearning.view.fragment;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
@@ -11,12 +10,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
-import android.widget.Switch;
 
 import com.example.aryoulearning.R;
 import com.example.aryoulearning.controller.CategoryAdapter;
-import com.example.aryoulearning.controller.SwitchListener;
 import com.example.aryoulearning.model.Model;
 
 import java.util.ArrayList;

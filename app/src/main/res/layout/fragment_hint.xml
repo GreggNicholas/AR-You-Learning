@@ -18,7 +18,7 @@
         android:layout_height="60dp"
         android:layout_marginLeft="550dp"
         android:layout_marginTop="300dp"
-        android:text="start"
+        android:text="@string/hint_frag_start_button_text"
         android:textSize="30sp" />
 
     <Switch
@@ -27,9 +27,9 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="300dp"
         android:layout_marginTop="320dp"
-        android:text="AR MODE"
-        android:textOff="OFF"
-        android:textOn="ON"
+        android:text="@string/switch_button_text"
+        android:textOff="@string/switch_off"
+        android:textOn="@string/switch_on"
         android:textSize="24sp" />
 
 </RelativeLayout>

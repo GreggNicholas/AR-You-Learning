@@ -14,14 +14,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.Switch;
 
 import com.example.aryoulearning.R;
 import com.example.aryoulearning.controller.HintAdapter;
 import com.example.aryoulearning.controller.NavListener;
 import com.example.aryoulearning.controller.SwitchListener;
-import com.example.aryoulearning.model.HintObjectModel;
 import com.example.aryoulearning.model.Model;
 import com.example.aryoulearning.view.MainActivity;
 
@@ -40,7 +38,8 @@ public class HintFragment extends Fragment {
     public HintFragment() {
 
     }
-    public static HintFragment newInstance(List<Model> modelList ) {
+
+    public static HintFragment newInstance(List<Model> modelList) {
         HintFragment fragment = new HintFragment();
         Bundle args = new Bundle();
         args.putParcelableArrayList("model-list-key", (ArrayList<? extends Parcelable>) modelList);

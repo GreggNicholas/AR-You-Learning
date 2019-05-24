@@ -12,5 +12,9 @@
     <string name="congratsgif">https://media.tenor.com/images/24520b4497153abb91ca769fe4a7f23f/tenor.gif</string>
     <string name="title_activity_arfragment">ARFragment</string>
     <string name="action_settings">Settings</string>
+    <string name="switch_button_text">AR MODE</string>
+    <string name="switch_off">OFF</string>
+    <string name="switch_on">ON</string>
+    <string name="hint_frag_start_button_text">start</string>
 
 </resources>
