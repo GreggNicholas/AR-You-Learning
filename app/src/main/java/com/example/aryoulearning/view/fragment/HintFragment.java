@@ -34,6 +34,8 @@ public class HintFragment extends Fragment {
     private Switch arSwitch;
     private SwitchListener switchlistener;
     private List<Model> modelList;
+    private Button startGameButton;
+    private RecyclerView hintRecyclerView;
 
     public HintFragment() {
 
@@ -76,16 +78,17 @@ public class HintFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Button startGameButton = view.findViewById(R.id.hint_fragment_button);
-        arSwitch = view.findViewById(R.id.switch_ar);
-
-        RecyclerView recyclerView = view.findViewById(R.id.hint_recycler_view);
-        HintAdapter hintAdapter = new HintAdapter(modelList);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false);
-        recyclerView.setAdapter(hintAdapter);
-        recyclerView.setLayoutManager(layoutManager);
+        findViewByIds(view);
+        hintRecyclerView.setAdapter(new HintAdapter(modelList));
+        hintRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false));
         setArSwitch();
         startGameButton.setOnClickListener(v -> listener.moveToGameOrARFragment(modelList, MainActivity.AR_SWITCH_STATUS));
+    }
+
+    private void findViewByIds(@NonNull View view) {
+        startGameButton = view.findViewById(R.id.hint_fragment_button);
+        arSwitch = view.findViewById(R.id.switch_ar);
+        hintRecyclerView = view.findViewById(R.id.hint_recycler_view);
     }
 
     private void setArSwitch() {

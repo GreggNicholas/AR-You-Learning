@@ -23,13 +23,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ListFragment extends Fragment {
-    private SwitchListener listener;
+
     private RecyclerView rv;
-    private CategoryAdapter adapter;
     private List<List<Model>> categoryList = new ArrayList<>();
     private List<String> categoryName;
     private int size;
-    private Switch arSwitch;
 
     private static final String TAG = "Main";
 
@@ -48,14 +46,6 @@ public class ListFragment extends Fragment {
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof SwitchListener) {
-            listener = (SwitchListener) context;
-        }
-    }
-
-    @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
@@ -64,7 +54,6 @@ public class ListFragment extends Fragment {
             for (int i = 0; i < size; i++) {
                 categoryList.add(getArguments().<Model>getParcelableArrayList("category-key" + i));
             }
-
             categoryName = getArguments().getStringArrayList("category-name");
         }
     }
@@ -79,28 +68,8 @@ public class ListFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        initializeViews(view);
-        adapter = new CategoryAdapter(categoryList, categoryName);
-        rv.setAdapter(adapter);
+        rv = view.findViewById(R.id.category_rv);
+        rv.setAdapter(new CategoryAdapter(categoryList, categoryName));
         rv.setLayoutManager(new LinearLayoutManager(requireContext()));
-
-    }
-
-    /*private void initializeViews(@NonNull View view) {
-        rv = view.findViewById(R.id.category_rv);
-        arSwitch = view.findViewById(R.id.switch_ar);
-        setArSwitch();
-    }
-
-    private void setArSwitch() {
-        arSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                listener.updateSwitchStatus(isChecked);
-            }
-        });
-    }*/
-    private void initializeViews(@NonNull View view) {
-        rv = view.findViewById(R.id.category_rv);
     }
 }
