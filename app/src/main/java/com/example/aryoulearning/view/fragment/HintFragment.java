@@ -94,13 +94,6 @@ public class HintFragment extends Fragment {
         Button startGameButton = view.findViewById(R.id.hint_fragment_button);
         arSwitch = view.findViewById(R.id.switch_ar);
 
-//        List<HintObjectModel> hintObjectModelList = new ArrayList<>();
-//        hintObjectModelList.add(new HintObjectModel(R.drawable.hintdogimage, "dog"));
-//        hintObjectModelList.add(new HintObjectModel(R.drawable.hintcatimage, "cat"));
-//        hintObjectModelList.add(new HintObjectModel(R.drawable.hintratimage, "rat"));
-//        hintObjectModelList.add(new HintObjectModel(R.drawable.hintbatimage, "bat"));
-//        hintObjectModelList.add(new HintObjectModel(R.drawable.hintyakimage, "yak"));
-
         RecyclerView recyclerView = view.findViewById(R.id.hint_recycler_view);
         HintAdapter hintAdapter = new HintAdapter(modelList);
         LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false);
