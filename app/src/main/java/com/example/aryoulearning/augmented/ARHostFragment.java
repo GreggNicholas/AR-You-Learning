@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 
@@ -35,7 +36,6 @@ import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class ARHostFragment extends AppCompatActivity {
     private static final int RC_PERMISSIONS = 0x123;
@@ -54,6 +54,8 @@ public class ARHostFragment extends AppCompatActivity {
 
     private List<HashMap<String, ModelRenderable>> modelMapList = new ArrayList<>();
     private HashMap<String, ModelRenderable> letterMap = new HashMap<>();
+    private String letters = "";
+    private String word = "";
 
     Random r = new Random();
 
@@ -134,14 +136,14 @@ public class ARHostFragment extends AppCompatActivity {
 
 
             for (int i = 0; i < e.getKey().length(); i++) {
-                createLetter(base, letterMap.get(Character.toString(e.getKey().charAt(i))));
+                createLetter(Character.toString(e.getKey().charAt(i)), e.getKey(), base, letterMap.get(Character.toString(e.getKey().charAt(i))));
             }
         }
 
         return base;
     }
 
-    private TransformableNode createLetter(
+    private TransformableNode createLetter(String letter, String word,
             Node parent,
             ModelRenderable renderable) {
 
@@ -170,7 +172,8 @@ public class ARHostFragment extends AppCompatActivity {
 
             public void onTap(HitTestResult hitTestResult, MotionEvent motionEvent) {
                 base.getAnchor().detach();
-
+                letters = letters + letter;
+                checkLetters(letters, word);
             }
         });
 
@@ -180,6 +183,15 @@ public class ARHostFragment extends AppCompatActivity {
         trNode.setLocalPosition(new Vector3(getRandom(2.5f,-1.5f),getRandom(.5f,-.5f),getRandom(-3,-5)));
 
         return trNode;
+    }
+
+    private void checkLetters(String letters, String word) {
+        if(letters.equals(word)){
+            Log.d("TAG", letters + " is equal to " + word);
+        }else{
+            Log.d("TAG", letters + "is not equal to" + word);
+        }
+
     }
 
     public void addNodeToScene(Anchor anchor, ModelRenderable renderable) {
