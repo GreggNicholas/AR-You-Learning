@@ -64,8 +64,8 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
             categoryName.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //listener.moveToGameFragment(categoryList, MainActivity.AR_SWITCH_STATUS);
-                    listener.moveToHintFragment(categoryList, MainActivity.AR_SWITCH_STATUS);
+                    //listener.moveToGameOrARFragment(categoryList, MainActivity.AR_SWITCH_STATUS);
+                    listener.moveToHintFragment(categoryList);
 
                 }
             });

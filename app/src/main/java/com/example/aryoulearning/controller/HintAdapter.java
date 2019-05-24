@@ -6,15 +6,15 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import com.example.aryoulearning.R;
-import com.example.aryoulearning.model.HintObjectModel;
+import com.example.aryoulearning.model.Model;
 
 import java.util.List;
 
 public class HintAdapter extends RecyclerView.Adapter<HintViewHolder> {
-    private List<HintObjectModel> hintModelList;
+    private List<Model> modelList;
 
-    public HintAdapter(List<HintObjectModel> hintModelList) {
-        this.hintModelList = hintModelList;
+    public HintAdapter(List<Model> hintModelList) {
+        this.modelList = hintModelList;
     }
 
     @NonNull
@@ -25,11 +25,11 @@ public class HintAdapter extends RecyclerView.Adapter<HintViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull HintViewHolder hintViewHolder, int i) {
-        hintViewHolder.onBind(hintModelList.get(i));
+        hintViewHolder.onBind(modelList.get(i));
     }
 
     @Override
     public int getItemCount() {
-        return hintModelList.size();
+        return modelList.size();
     }
 }

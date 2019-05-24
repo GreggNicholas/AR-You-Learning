@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity implements NavListener, Swit
     }
 
     @Override
-    public void moveToGameFragment(List<Model> modelList, boolean AR_is_on) {
+    public void moveToGameOrARFragment(List<Model> modelList, boolean AR_is_on) {
         if (AR_is_on) {
             Intent arIntent = new Intent(this, ARHostFragment.class);
             arIntent.putParcelableArrayListExtra(ARLIST, (ArrayList<? extends Parcelable>) modelList);
@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity implements NavListener, Swit
     }
 
     @Override
-    public void moveToHintFragment(List<Model> modelWithImageNameList, boolean isAR_on) {
+    public void moveToHintFragment(List<Model> modelWithImageNameList) {
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.fragment_container, HintFragment.newInstance(modelWithImageNameList))

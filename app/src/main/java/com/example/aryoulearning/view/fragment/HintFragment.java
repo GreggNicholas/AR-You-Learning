@@ -7,6 +7,7 @@ import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -78,6 +79,7 @@ public class HintFragment extends Fragment {
         if (context instanceof NavListener) {
             listener = (NavListener) context;
         }
+        ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
     }
 
     @Override
@@ -91,27 +93,27 @@ public class HintFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         Button startGameButton = view.findViewById(R.id.hint_fragment_button);
         arSwitch = view.findViewById(R.id.switch_ar);
-        setArSwitch();
-        List<HintObjectModel> hintObjectModelList = new ArrayList<>();
-        hintObjectModelList.add(new HintObjectModel(R.drawable.hintdogimage, "dog"));
-        hintObjectModelList.add(new HintObjectModel(R.drawable.hintcatimage, "cat"));
-        hintObjectModelList.add(new HintObjectModel(R.drawable.hintratimage, "rat"));
-        hintObjectModelList.add(new HintObjectModel(R.drawable.hintbatimage, "bat"));
-        hintObjectModelList.add(new HintObjectModel(R.drawable.hintyakimage, "yak"));
+
+//        List<HintObjectModel> hintObjectModelList = new ArrayList<>();
+//        hintObjectModelList.add(new HintObjectModel(R.drawable.hintdogimage, "dog"));
+//        hintObjectModelList.add(new HintObjectModel(R.drawable.hintcatimage, "cat"));
+//        hintObjectModelList.add(new HintObjectModel(R.drawable.hintratimage, "rat"));
+//        hintObjectModelList.add(new HintObjectModel(R.drawable.hintbatimage, "bat"));
+//        hintObjectModelList.add(new HintObjectModel(R.drawable.hintyakimage, "yak"));
 
         RecyclerView recyclerView = view.findViewById(R.id.hint_recycler_view);
-        HintAdapter hintAdapter = new HintAdapter(hintObjectModelList);
+        HintAdapter hintAdapter = new HintAdapter(modelList);
         LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setAdapter(hintAdapter);
         recyclerView.setLayoutManager(layoutManager);
+        setArSwitch();
         startGameButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                listener.moveToGameFragment(modelList, MainActivity.AR_SWITCH_STATUS);
+                listener.moveToGameOrARFragment(modelList, MainActivity.AR_SWITCH_STATUS);
             }
         });
     }
-
 
     private void setArSwitch() {
         arSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
