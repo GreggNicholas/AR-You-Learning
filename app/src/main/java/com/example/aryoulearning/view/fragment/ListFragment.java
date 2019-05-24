@@ -86,7 +86,7 @@ public class ListFragment extends Fragment {
 
     }
 
-    private void initializeViews(@NonNull View view) {
+    /*private void initializeViews(@NonNull View view) {
         rv = view.findViewById(R.id.category_rv);
         arSwitch = view.findViewById(R.id.switch_ar);
         setArSwitch();
@@ -99,5 +99,8 @@ public class ListFragment extends Fragment {
                 listener.updateSwitchStatus(isChecked);
             }
         });
+    }*/
+    private void initializeViews(@NonNull View view) {
+        rv = view.findViewById(R.id.category_rv);
     }
 }

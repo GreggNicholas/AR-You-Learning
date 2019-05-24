@@ -11,6 +11,6 @@ public interface NavListener {
 
     void moveToResultsFragment();
 
-    void moveToHintFragment();
+    void moveToHintFragment(List<Model> animalResponseList, boolean isAR_on);
 
 }

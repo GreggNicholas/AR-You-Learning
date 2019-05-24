@@ -3,6 +3,7 @@ package com.example.aryoulearning.view.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -12,11 +13,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 
 import com.example.aryoulearning.R;
 import com.example.aryoulearning.controller.HintAdapter;
 import com.example.aryoulearning.controller.NavListener;
+import com.example.aryoulearning.controller.SwitchListener;
 import com.example.aryoulearning.model.HintObjectModel;
+import com.example.aryoulearning.model.Model;
+import com.example.aryoulearning.view.MainActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +32,10 @@ public class HintFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private NavListener listener;
+    private Switch arSwitch;
+    private SwitchListener switchlistener;
+    private List<Model> modelList;
+
 
     private String mParam1;
     private String mParam2;
@@ -43,20 +53,22 @@ public class HintFragment extends Fragment {
 //        fragment.setArguments(args);
 //        return fragment;
 //    }
-    public static HintFragment newInstance() {
+    public static HintFragment newInstance(List<Model> modelList ) {
         HintFragment fragment = new HintFragment();
 //        Bundle args = new Bundle();
 //        fragment.setArguments(args);
+        Bundle args = new Bundle();
+        args.putParcelableArrayList("model-list-key", (ArrayList<? extends Parcelable>) modelList);
+        fragment.setArguments(args);
         return fragment;
     }
 
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            modelList = getArguments().getParcelableArrayList("model-list-key");
         }
     }
 
@@ -78,26 +90,35 @@ public class HintFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         Button startGameButton = view.findViewById(R.id.hint_fragment_button);
-        List<HintObjectModel> modelList = new ArrayList<>();
-        modelList.add(new HintObjectModel(R.drawable.hintdogimage, "dog"));
-        modelList.add(new HintObjectModel(R.drawable.hintcatimage, "cat"));
-        modelList.add(new HintObjectModel(R.drawable.hintratimage, "rat"));
-        modelList.add(new HintObjectModel(R.drawable.hintbatimage, "bat"));
-        modelList.add(new HintObjectModel(R.drawable.hintyakimage, "yak"));
+        arSwitch = view.findViewById(R.id.switch_ar);
+        setArSwitch();
+        List<HintObjectModel> hintObjectModelList = new ArrayList<>();
+        hintObjectModelList.add(new HintObjectModel(R.drawable.hintdogimage, "dog"));
+        hintObjectModelList.add(new HintObjectModel(R.drawable.hintcatimage, "cat"));
+        hintObjectModelList.add(new HintObjectModel(R.drawable.hintratimage, "rat"));
+        hintObjectModelList.add(new HintObjectModel(R.drawable.hintbatimage, "bat"));
+        hintObjectModelList.add(new HintObjectModel(R.drawable.hintyakimage, "yak"));
 
         RecyclerView recyclerView = view.findViewById(R.id.hint_recycler_view);
-        HintAdapter hintAdapter = new HintAdapter(modelList);
+        HintAdapter hintAdapter = new HintAdapter(hintObjectModelList);
         LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setAdapter(hintAdapter);
         recyclerView.setLayoutManager(layoutManager);
         startGameButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                listener.moveToGameFragment(modelList, MainActivity.AR_SWITCH_STATUS);
             }
         });
-
-
     }
 
+
+    private void setArSwitch() {
+        arSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                switchlistener.updateSwitchStatus(isChecked);
+            }
+        });
+    }
 }

@@ -53,6 +53,14 @@ public class GameFragment extends Fragment {
     private PronunciationUtil pronunciationUtil;
     private TextToSpeech textToSpeech;
 
+    public static GameFragment newInstance(List<Model> modelList) {
+        GameFragment fragment = new GameFragment();
+        Bundle args = new Bundle();
+        args.putParcelableArrayList("model-list-key", (ArrayList<? extends Parcelable>) modelList);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -90,14 +98,6 @@ public class GameFragment extends Fragment {
         answer = modelList.get(0).getName();
         Picasso.get().load(modelList.get(0).getImage()).into(imageView);
         setWordsOnScreen(answer);
-    }
-
-    public static GameFragment newInstance(List<Model> modelList) {
-        GameFragment fragment = new GameFragment();
-        Bundle args = new Bundle();
-        args.putParcelableArrayList("model-list-key", (ArrayList<? extends Parcelable>) modelList);
-        fragment.setArguments(args);
-        return fragment;
     }
 
     public void setWordsOnScreen(String word) {

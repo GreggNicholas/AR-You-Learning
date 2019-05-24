@@ -92,10 +92,10 @@ public class MainActivity extends AppCompatActivity implements NavListener, Swit
     }
 
     @Override
-    public void moveToHintFragment() {
+    public void moveToHintFragment(List<Model> modelWithImageNameList, boolean isAR_on) {
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.fragment_container, HintFragment.newInstance())
+                .replace(R.id.fragment_container, HintFragment.newInstance(modelWithImageNameList))
                 .addToBackStack(null)
                 .commit();
     }
