@@ -9,13 +9,23 @@
         android:id="@+id/category_rv"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@id/switch_ar"
+        app:layout_constraintBottom_toTopOf="@id/gallery_layout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:listitem="@layout/category_item">
+        tools:listitem="@layout/category_item"
+        app:layout_constraintVertical_weight="9">
 
     </android.support.v7.widget.RecyclerView>
+    <LinearLayout
+        android:id="@+id/gallery_layout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/switch_ar"
+        app:layout_constraintTop_toBottomOf="@+id/category_rv"
+        app:layout_constraintVertical_chainStyle="spread"
+        app:layout_constraintVertical_weight="2"/>
 
     <Switch
         android:id="@+id/switch_ar"

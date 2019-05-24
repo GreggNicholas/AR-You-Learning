@@ -35,7 +35,6 @@ import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class ARHostFragment extends AppCompatActivity {
     private static final int RC_PERMISSIONS = 0x123;
@@ -120,16 +119,16 @@ public class ARHostFragment extends AppCompatActivity {
         requestCameraPermission(this, RC_PERMISSIONS);
     }
 
-    private Node createGame(Map<String,ModelRenderable> modelMap) {
+    private Node createGame(Map<String, ModelRenderable> modelMap) {
 
         Node base = new Node();
 
         Node sunVisual = new Node();
         sunVisual.setParent(base);
 
-        for(Map.Entry<String,ModelRenderable> e : modelMap.entrySet()){
+        for (Map.Entry<String, ModelRenderable> e : modelMap.entrySet()) {
             sunVisual.setRenderable(e.getValue());
-            sunVisual.setLookDirection(new Vector3(0,0,4));
+            sunVisual.setLookDirection(new Vector3(0, 0, 4));
             sunVisual.setLocalScale(new Vector3(1.0f, 1.0f, 1.0f));
 
 
@@ -149,12 +148,12 @@ public class ARHostFragment extends AppCompatActivity {
         float[] pos = {parent.getLocalPosition().x,
                 parent.getLocalPosition().y,
                 parent.getLocalPosition().z};
-        float[] rotation = {0,0,0, 0};
+        float[] rotation = {0, 0, 0, 0};
 
 
         Anchor anchor = null;
         if (session != null) {
-            anchor = session.createAnchor(new Pose(pos,rotation));
+            anchor = session.createAnchor(new Pose(pos, rotation));
         }
 
         AnchorNode base = new AnchorNode(anchor);
@@ -173,7 +172,7 @@ public class ARHostFragment extends AppCompatActivity {
 
         trNode.setRenderable(renderable);
 //        trNode.setLocalScale(new Vector3(.1f,.1f,.1f));
-        trNode.setLocalPosition(new Vector3(getRandom(2.5f,-1.5f),getRandom(.5f,-.5f),getRandom(-3,-5)));
+        trNode.setLocalPosition(new Vector3(getRandom(2.5f, -1.5f), getRandom(.5f, -.5f), getRandom(-3, -5)));
 
         return trNode;
     }
@@ -312,8 +311,8 @@ public class ARHostFragment extends AppCompatActivity {
         }
         hasFinishedLoadingLetters = true;
     }
-//
-    private float getRandom(float max, float min){
+
+    private float getRandom(float max, float min) {
 
 
         return r.nextFloat() * (max - min) + min;

@@ -11,4 +11,6 @@ public interface NavListener {
 
     void moveToResultsFragment();
 
+    void moveToHintFragment();
+
 }

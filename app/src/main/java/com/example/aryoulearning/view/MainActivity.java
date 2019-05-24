@@ -13,6 +13,7 @@ import com.example.aryoulearning.model.Model;
 import com.example.aryoulearning.model.ModelResponse;
 import com.example.aryoulearning.network.RetrofitSingleton;
 import com.example.aryoulearning.view.fragment.GameFragment;
+import com.example.aryoulearning.view.fragment.HintFragment;
 import com.example.aryoulearning.view.fragment.ListFragment;
 import com.example.aryoulearning.view.fragment.ResultsFragment;
 
@@ -86,6 +87,15 @@ public class MainActivity extends AppCompatActivity implements NavListener, Swit
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.fragment_container, ResultsFragment.newInstance())
+                .addToBackStack(null)
+                .commit();
+    }
+
+    @Override
+    public void moveToHintFragment() {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container, HintFragment.newInstance())
                 .addToBackStack(null)
                 .commit();
     }
