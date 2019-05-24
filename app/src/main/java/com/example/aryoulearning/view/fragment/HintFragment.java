@@ -30,34 +30,16 @@ import java.util.List;
 
 public class HintFragment extends Fragment {
 
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
     private NavListener listener;
     private Switch arSwitch;
     private SwitchListener switchlistener;
     private List<Model> modelList;
 
-
-    private String mParam1;
-    private String mParam2;
-
-
     public HintFragment() {
 
     }
-
-    //    public static HintFragment newInstance(String param1, String param2) {
-//        HintFragment fragment = new HintFragment();
-//        Bundle args = new Bundle();
-//        args.putString(ARG_PARAM1, param1);
-//        args.putString(ARG_PARAM2, param2);
-//        fragment.setArguments(args);
-//        return fragment;
-//    }
     public static HintFragment newInstance(List<Model> modelList ) {
         HintFragment fragment = new HintFragment();
-//        Bundle args = new Bundle();
-//        fragment.setArguments(args);
         Bundle args = new Bundle();
         args.putParcelableArrayList("model-list-key", (ArrayList<? extends Parcelable>) modelList);
         fragment.setArguments(args);
@@ -78,6 +60,9 @@ public class HintFragment extends Fragment {
         super.onAttach(context);
         if (context instanceof NavListener) {
             listener = (NavListener) context;
+        }
+        if (context instanceof SwitchListener) {
+            switchlistener = (SwitchListener) context;
         }
         ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
     }
@@ -100,20 +85,10 @@ public class HintFragment extends Fragment {
         recyclerView.setAdapter(hintAdapter);
         recyclerView.setLayoutManager(layoutManager);
         setArSwitch();
-        startGameButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                listener.moveToGameOrARFragment(modelList, MainActivity.AR_SWITCH_STATUS);
-            }
-        });
+        startGameButton.setOnClickListener(v -> listener.moveToGameOrARFragment(modelList, MainActivity.AR_SWITCH_STATUS));
     }
 
     private void setArSwitch() {
-        arSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                switchlistener.updateSwitchStatus(isChecked);
-            }
-        });
+        arSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> switchlistener.updateSwitchStatus(isChecked));
     }
 }
