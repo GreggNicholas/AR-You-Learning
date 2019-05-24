@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -31,9 +30,11 @@ import com.google.ar.sceneform.ux.TransformableNode;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
@@ -57,6 +58,8 @@ public class ARHostFragment extends AppCompatActivity {
     private String letters = "";
     private String word = "";
 
+    private Set<Vector3> collisionSet = new HashSet<>();
+
     Random r = new Random();
 
     @Override
@@ -64,7 +67,6 @@ public class ARHostFragment extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_arfragment_host);
         arFragment = (ArFragment) getSupportFragmentManager().findFragmentById(R.id.ux_fragment);
-
 //        categoryList = getIntent().getParcelableArrayListExtra(MainActivity.ARLIST);
         categoryList.add(new Model("dog", ""));
 
@@ -83,7 +85,6 @@ public class ARHostFragment extends AppCompatActivity {
                                 onSingleTap(e);
                                 return true;
                             }
-
                             @Override
                             public boolean onDown(MotionEvent e) {
                                 return true;
@@ -99,7 +100,6 @@ public class ARHostFragment extends AppCompatActivity {
                             if (!hasPlacedGame) {
                                 return gestureDetector.onTouchEvent(event);
                             }
-
                             // Otherwise return false so that the touch event can propagate to the scene.
                             return false;
                         });
@@ -112,37 +112,30 @@ public class ARHostFragment extends AppCompatActivity {
                             if (frame == null) {
                                 return;
                             }
-
                             if (frame.getCamera().getTrackingState() != TrackingState.TRACKING) {
                                 return;
                             }
-
                         });
         // Lastly request CAMERA permission which is required by ARCore.
         requestCameraPermission(this, RC_PERMISSIONS);
     }
 
-
     private Node createGame(Map<String, ModelRenderable> modelMap) {
-
 
         Node base = new Node();
 
         Node sunVisual = new Node();
         sunVisual.setParent(base);
 
-
         for (Map.Entry<String, ModelRenderable> e : modelMap.entrySet()) {
             sunVisual.setRenderable(e.getValue());
             sunVisual.setLookDirection(new Vector3(0, 0, 4));
             sunVisual.setLocalScale(new Vector3(1.0f, 1.0f, 1.0f));
 
-
             for (int i = 0; i < e.getKey().length(); i++) {
                 createLetter(Character.toString(e.getKey().charAt(i)), e.getKey(), base, letterMap.get(Character.toString(e.getKey().charAt(i))));
             }
         }
-
         return base;
     }
 
@@ -150,20 +143,16 @@ public class ARHostFragment extends AppCompatActivity {
             Node parent,
             ModelRenderable renderable) {
 
-
         Session session = arFragment.getArSceneView().getSession();
-        float[] pos = {parent.getLocalPosition().x,
-                parent.getLocalPosition().y,
-                parent.getLocalPosition().z};
-
+        float[] pos = {0,//x
+                0,//y
+                0};//z
         float[] rotation = {0, 0, 0, 0};
 
-
         Anchor anchor = null;
+
         if (session != null) {
-
             anchor = session.createAnchor(new Pose(pos, rotation));
-
         }
 
         AnchorNode base = new AnchorNode(anchor);
@@ -183,11 +172,16 @@ public class ARHostFragment extends AppCompatActivity {
             }
         });
 
-
         trNode.setRenderable(renderable);
 //        trNode.setLocalScale(new Vector3(.1f,.1f,.1f));
+        Vector3 coordinates = getRandomCoordinates();
 
-        trNode.setLocalPosition(new Vector3(getRandom(2.5f, -1.5f), getRandom(.5f, -.5f), getRandom(-3, -5)));
+        while (checkDoesLetterCollide(coordinates)) {
+            coordinates = getRandomCoordinates();
+        }
+
+        trNode.setLocalPosition(coordinates);
+
         return trNode;
     }
 
@@ -198,42 +192,6 @@ public class ARHostFragment extends AppCompatActivity {
             Log.d("TAG", letters + "is not equal to" + word);
         }
 
-    }
-
-    public void addNodeToScene(Anchor anchor, ModelRenderable renderable) {
-
-        AnchorNode anchorNode = new AnchorNode(anchor);
-        TransformableNode node = new TransformableNode(arFragment.getTransformationSystem());
-        node.setRenderable(renderable);
-        node.setParent(anchorNode);
-        arFragment.getArSceneView().getScene().addChild(anchorNode);
-        node.select();
-        node.setOnTapListener((hitTestResult, motionEvent) -> anchorNode.getAnchor().detach());
-    }
-
-    public void addLetterNodeToScene(Anchor anchor, ModelRenderable renderable) {
-   
-        AnchorNode anchorNode = new AnchorNode(anchor);
-        TransformableNode node = new TransformableNode(arFragment.getTransformationSystem());
-        node.getScaleController().setMaxScale(0.009f);
-        node.getScaleController().setMinScale(0.008f);
-        node.setRenderable(renderable);
-        node.setRenderable(renderable);
-        node.setParent(anchorNode);
-
-        arFragment.getArSceneView().getScene().addChild(anchorNode);
-        node.select();
-        node.setOnTapListener((hitTestResult, motionEvent) -> anchorNode.getAnchor().detach());
-    }
-
-    public void onException(Throwable throwable) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-        builder.setMessage(throwable.getMessage())
-                .setTitle("Codelab error!");
-
-        AlertDialog dialog = builder.create();
-        dialog.show();
     }
 
     public static void requestCameraPermission(Activity activity, int requestCode) {
@@ -347,10 +305,31 @@ public class ARHostFragment extends AppCompatActivity {
         hasFinishedLoadingLetters = true;
     }
 
-
-    private float getRandom(float max, float min) {
-        return r.nextFloat() * (max - min) + min;
+    private int getRandom(int max, int min) {
+        return r.nextInt((max - min)) + min;
     }
 
+    private boolean checkDoesLetterCollide(Vector3 newV3) {
+        if (collisionSet.isEmpty()) {
+            collisionSet.add(newV3);
+            return false;
+        }
 
+        for (Vector3 v : collisionSet) {
+            if ((newV3.x < v.x + 2 && newV3.x > v.x - 2)
+                    && (newV3.y < v.y + 2 && newV3.y > v.y - 2)) {
+                return true;
+            } else {
+                collisionSet.add(newV3);
+                return false;
+            }
+        }
+        return false;
+    }
+
+    private Vector3 getRandomCoordinates() {
+        return new Vector3(getRandom(5, -5),//x
+                getRandom(2, -2),//y
+                getRandom(-7, -9));//z
+    }
 }

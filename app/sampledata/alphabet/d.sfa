@@ -37,7 +37,7 @@
     file: 'sampledata/alphabet/balloond.obj',
     name: 'balloond',
     recenter: 'root',
-    scale: 0.055536000000000002,
+    scale: 0.035536000000000002,
   },
   version: '0.54:2',
 }
