@@ -150,19 +150,32 @@ public class GameFragment extends Fragment {
                         answersCorrect++;
                         rightAnswer.add(checker.getText().toString());
                         pronunciationUtil.textToSpeechAnnouncer(checker, textToSpeech);
+                        loadNext();
                     } else {
                         Toast.makeText(getContext(), "wrong", Toast.LENGTH_SHORT).show();
                         wrongAnswer.add(checker.getText().toString());
                         sharedPreferences.edit().putString(checker.getText().toString(), answer).apply();
                         correctAnswerSet.add(answer);
                         pronunciationUtil.textToSpeechAnnouncer("wrong!", textToSpeech);
+                        repeatTheSameWordUntilCorrectlySpelled(answer);
                     }
-
-                    loadNext();
                 }
             }
         });
         layout.addView(letter);
+    }
+
+    private void repeatTheSameWordUntilCorrectlySpelled(String mistakenWord) {
+        setWordsOnScreen(mistakenWord);
+        if (checker.getText().length() == answer.length()) {
+            if (checker.getText().toString().equals(answer)) {
+                pronunciationUtil.textToSpeechAnnouncer("Correct!", textToSpeech);
+                loadNext();
+            } else {
+                pronunciationUtil.textToSpeechAnnouncer("try again!", textToSpeech);
+                checker.setText("");
+            }
+        }
     }
 
     private HashMap<String, Integer> getCoordinates() {
