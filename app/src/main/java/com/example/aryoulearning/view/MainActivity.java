@@ -16,6 +16,12 @@ import com.example.aryoulearning.view.fragment.GameFragment;
 import com.example.aryoulearning.view.fragment.HintFragment;
 import com.example.aryoulearning.view.fragment.ListFragment;
 import com.example.aryoulearning.view.fragment.ResultsFragment;
+import com.google.ar.core.Frame;
+import com.google.ar.core.TrackingState;
+import com.google.ar.sceneform.ArSceneView;
+import com.google.ar.sceneform.FrameTime;
+import com.google.ar.sceneform.Scene;
+import com.google.ar.sceneform.ux.ArFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +36,8 @@ public class MainActivity extends AppCompatActivity implements NavListener, Swit
     private List<String> categoryList = new ArrayList<>();
     private List<List<Model>> animalModelList = new ArrayList<>();
     public static boolean AR_SWITCH_STATUS;
+
+//    ArFragment arFragment = (ArFragment) getSupportFragmentManager().findFragmentById(R.id.ux_fragment);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,14 +78,16 @@ public class MainActivity extends AppCompatActivity implements NavListener, Swit
     @Override
     public void moveToGameOrARFragment(List<Model> modelList, boolean AR_is_on) {
         if (AR_is_on) {
-            Intent arIntent = new Intent(this, ARHostFragment.class);
-            arIntent.putParcelableArrayListExtra(ARLIST, (ArrayList<? extends Parcelable>) modelList);
-            startActivity(arIntent);
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, ARHostFragment.newInstance(modelList))
+//                    .addToBackStack(null)
+                    .commit();
         } else {
             getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.fragment_container, GameFragment.newInstance(modelList))
-                    .addToBackStack(null)
+//                    .addToBackStack(null)
                     .commit();
         }
     }
@@ -87,7 +97,6 @@ public class MainActivity extends AppCompatActivity implements NavListener, Swit
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.fragment_container, ResultsFragment.newInstance())
-                .addToBackStack(null)
                 .commit();
     }
 
