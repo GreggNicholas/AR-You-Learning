@@ -1,0 +1,62 @@
+{
+  animations: [
+    {
+      path: 'sampledata/alphabet/balloono.fbx',
+    },
+  ],
+  materials: [
+    {
+      name: 'Ballon_kupfer_01',
+      parameters: [
+        {
+          baseColor: [
+            0.80000000000000004,
+            0.80000000000000004,
+            0.80000000000000004,
+            1,
+          ],
+        },
+        {
+          baseColorMap: null,
+        },
+        {
+          normalMap: null,
+        },
+        {
+          interpolatedColor: null,
+        },
+        {
+          metallic: 0,
+        },
+        {
+          metallicMap: null,
+        },
+        {
+          roughness: 1,
+        },
+        {
+          roughnessMap: null,
+        },
+        {
+          opacity: null,
+        },
+      ],
+      source: 'build/sceneform_sdk/default_materials/fbx_material.sfm',
+    },
+  ],
+  model: {
+    attributes: [
+      'Position',
+      'TexCoord',
+      'Orientation',
+      'BoneIndices',
+      'BoneWeights',
+    ],
+    collision: {},
+    file: 'sampledata/alphabet/balloono.fbx',
+    name: 'balloono',
+    recenter: 'root',
+    scale: 0.056445000000000002,
+  },
+  version: '0.54:2',
+}
