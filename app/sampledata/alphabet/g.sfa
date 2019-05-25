@@ -9,9 +9,9 @@
         {
           baseColorTint: [
             0,
-            0,
-           1,
-            1,
+                       1,
+                      0,
+                       1,
           ],
         },
         {
@@ -34,10 +34,10 @@
       'Orientation',
     ],
     collision: {},
-    file: 'sampledata/alphabet/balloond.obj',
-    name: 'balloond',
+    file: 'sampledata/alphabet/balloong.obj',
+    name: 'balloong',
     recenter: 'root',
-    scale: 0.055536000000000002,
+    scale: 0.055227999999999999,
   },
   version: '0.54:2',
 }

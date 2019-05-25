@@ -8,9 +8,9 @@
         },
         {
           baseColorTint: [
-            0,
-            0,
-           1,
+            0.64000000000000001,
+            0.64000000000000001,
+            0.64000000000000001,
             1,
           ],
         },
@@ -18,7 +18,7 @@
           metallic: 1,
         },
         {
-          roughness: 0.14280000000000001,
+          roughness: 0.14424899999999999,
         },
         {
           opacity: null,
@@ -34,10 +34,10 @@
       'Orientation',
     ],
     collision: {},
-    file: 'sampledata/alphabet/balloond.obj',
-    name: 'balloond',
+    file: 'sampledata/alphabet/u.obj',
+    name: 'u',
     recenter: 'root',
-    scale: 0.055536000000000002,
+    scale: 0.056128999999999998,
   },
   version: '0.54:2',
 }

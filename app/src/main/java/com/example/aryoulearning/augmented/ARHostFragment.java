@@ -35,6 +35,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class ARHostFragment extends AppCompatActivity {
     private static final int RC_PERMISSIONS = 0x123;
@@ -119,12 +120,15 @@ public class ARHostFragment extends AppCompatActivity {
         requestCameraPermission(this, RC_PERMISSIONS);
     }
 
+
     private Node createGame(Map<String, ModelRenderable> modelMap) {
+
 
         Node base = new Node();
 
         Node sunVisual = new Node();
         sunVisual.setParent(base);
+
 
         for (Map.Entry<String, ModelRenderable> e : modelMap.entrySet()) {
             sunVisual.setRenderable(e.getValue());
@@ -144,16 +148,20 @@ public class ARHostFragment extends AppCompatActivity {
             Node parent,
             ModelRenderable renderable) {
 
+
         Session session = arFragment.getArSceneView().getSession();
         float[] pos = {parent.getLocalPosition().x,
                 parent.getLocalPosition().y,
                 parent.getLocalPosition().z};
+
         float[] rotation = {0, 0, 0, 0};
 
 
         Anchor anchor = null;
         if (session != null) {
+
             anchor = session.createAnchor(new Pose(pos, rotation));
+
         }
 
         AnchorNode base = new AnchorNode(anchor);
@@ -162,18 +170,21 @@ public class ARHostFragment extends AppCompatActivity {
         TransformableNode trNode = new TransformableNode(arFragment.getTransformationSystem());
         // Create the planet and position it relative to the sun.
         trNode.setParent(base);
+
         trNode.setOnTapListener(new Node.OnTapListener() {
             @Override
+
             public void onTap(HitTestResult hitTestResult, MotionEvent motionEvent) {
                 base.getAnchor().detach();
+
             }
         });
 
 
         trNode.setRenderable(renderable);
 //        trNode.setLocalScale(new Vector3(.1f,.1f,.1f));
-        trNode.setLocalPosition(new Vector3(getRandom(2.5f, -1.5f), getRandom(.5f, -.5f), getRandom(-3, -5)));
 
+        trNode.setLocalPosition(new Vector3(getRandom(2.5f, -1.5f), getRandom(.5f, -.5f), getRandom(-3, -5)));
         return trNode;
     }
 
@@ -181,7 +192,20 @@ public class ARHostFragment extends AppCompatActivity {
 
         AnchorNode anchorNode = new AnchorNode(anchor);
         TransformableNode node = new TransformableNode(arFragment.getTransformationSystem());
+        node.setRenderable(renderable);
+        node.setParent(anchorNode);
+        arFragment.getArSceneView().getScene().addChild(anchorNode);
+        node.select();
+        node.setOnTapListener((hitTestResult, motionEvent) -> anchorNode.getAnchor().detach());
+    }
 
+    public void addLetterNodeToScene(Anchor anchor, ModelRenderable renderable) {
+   
+        AnchorNode anchorNode = new AnchorNode(anchor);
+        TransformableNode node = new TransformableNode(arFragment.getTransformationSystem());
+        node.getScaleController().setMaxScale(0.009f);
+        node.getScaleController().setMinScale(0.008f);
+        node.setRenderable(renderable);
         node.setRenderable(renderable);
         node.setParent(anchorNode);
 
@@ -189,7 +213,6 @@ public class ARHostFragment extends AppCompatActivity {
         node.select();
         node.setOnTapListener((hitTestResult, motionEvent) -> anchorNode.getAnchor().detach());
     }
-
 
     public void onException(Throwable throwable) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -312,9 +335,8 @@ public class ARHostFragment extends AppCompatActivity {
         hasFinishedLoadingLetters = true;
     }
 
+
     private float getRandom(float max, float min) {
-
-
         return r.nextFloat() * (max - min) + min;
     }
 
