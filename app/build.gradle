@@ -194,3 +194,36 @@ sceneform.asset('sampledata/alphabet/y.obj',
         'default',
         'sampledata/alphabet/y.sfa',
         'src/main/assets/y')
+
+
+
+
+sceneform.asset('sampledata/color/blue.obj',
+        'default',
+        'sampledata/color/blue.sfa',
+        'src/main/assets/blue')
+
+sceneform.asset('sampledata/color/green.obj',
+        'default',
+        'sampledata/color/green.sfa',
+        'src/main/assets/green')
+
+sceneform.asset('sampledata/color/red.obj',
+        'default',
+        'sampledata/color/red.sfa',
+        'src/main/assets/red')
+
+sceneform.asset('sampledata/color/purple.obj',
+        'default',
+        'sampledata/color/purple.sfa',
+        'src/main/assets/purple')
+
+sceneform.asset('sampledata/color/yellow.obj',
+        'default',
+        'sampledata/color/yellow.sfa',
+        'src/main/assets/yellow')
+
+sceneform.asset('sampledata/color/orange.obj',
+        'default',
+        'sampledata/color/orange.sfa',
+        'src/main/assets/orange')
