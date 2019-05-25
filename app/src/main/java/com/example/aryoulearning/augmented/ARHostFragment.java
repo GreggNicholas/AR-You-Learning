@@ -2,15 +2,25 @@ package com.example.aryoulearning.augmented;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.GestureDetector;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.example.aryoulearning.R;
+import com.example.aryoulearning.controller.NavListener;
 import com.example.aryoulearning.model.Model;
 import com.google.ar.core.Anchor;
 import com.google.ar.core.Frame;
@@ -38,8 +48,10 @@ import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
-public class ARHostFragment extends AppCompatActivity {
+public class ARHostFragment extends Fragment {
+
     private static final int RC_PERMISSIONS = 0x123;
+    private NavListener listener;
 
     private GestureDetector gestureDetector;
     private ArFragment arFragment;
@@ -58,15 +70,47 @@ public class ARHostFragment extends AppCompatActivity {
     private String letters = "";
     private String word = "";
 
+    private int roundCounter = 0;
+    private int roundLimit = 5;
+
+    private LinearLayout wordContainer;
+
     private Set<Vector3> collisionSet = new HashSet<>();
 
     Random r = new Random();
+    public static ARHostFragment newInstance(List<Model> modelList) {
+        ARHostFragment fragment = new ARHostFragment();
+        Bundle args = new Bundle();
+        args.putParcelableArrayList("model-list-key", (ArrayList<? extends Parcelable>) modelList);
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_arfragment_host);
-        arFragment = (ArFragment) getSupportFragmentManager().findFragmentById(R.id.ux_fragment);
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof NavListener) {
+            listener = (NavListener) context;
+        }
+
+//        pronunciationUtil = new PronunciationUtil();
+//        ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.activity_arfragment_host, container, false);
+        arFragment = (ArFragment) getChildFragmentManager().findFragmentById(R.id.ux_fragment);
+        return rootView;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        //        setContentView(R.layout.activity_arfragment_host);
+        wordContainer = view.findViewById(R.id.word_container);
+
 //        categoryList = getIntent().getParcelableArrayListExtra(MainActivity.ARLIST);
         categoryList.add(new Model("dog", ""));
 
@@ -78,7 +122,7 @@ public class ARHostFragment extends AppCompatActivity {
 
         gestureDetector =
                 new GestureDetector(
-                        this,
+                        getActivity(),
                         new GestureDetector.SimpleOnGestureListener() {
                             @Override
                             public boolean onSingleTapUp(MotionEvent e) {
@@ -116,9 +160,11 @@ public class ARHostFragment extends AppCompatActivity {
                                 return;
                             }
                         });
-        // Lastly request CAMERA permission which is required by ARCore.
-        requestCameraPermission(this, RC_PERMISSIONS);
+//         Lastly request CAMERA permission which is required by ARCore.
+        requestCameraPermission(getActivity(), RC_PERMISSIONS);
     }
+
+
 
     private Node createGame(Map<String, ModelRenderable> modelMap) {
 
@@ -162,16 +208,6 @@ public class ARHostFragment extends AppCompatActivity {
         // Create the planet and position it relative to the sun.
         trNode.setParent(base);
 
-        trNode.setOnTapListener(new Node.OnTapListener() {
-            @Override
-
-            public void onTap(HitTestResult hitTestResult, MotionEvent motionEvent) {
-                base.getAnchor().detach();
-                letters = letters + letter;
-                checkLetters(letters, word);
-            }
-        });
-
         trNode.setRenderable(renderable);
 //        trNode.setLocalScale(new Vector3(.1f,.1f,.1f));
         Vector3 coordinates = getRandomCoordinates();
@@ -182,14 +218,45 @@ public class ARHostFragment extends AppCompatActivity {
 
         trNode.setLocalPosition(coordinates);
 
+        trNode.setOnTapListener(new Node.OnTapListener() {
+            @Override
+
+            public void onTap(HitTestResult hitTestResult, MotionEvent motionEvent) {
+                base.getAnchor().detach();
+                letters += letter;
+                addLetterToWordContainer(letter);
+
+                if(letters.length() == word.length()) {
+                    roundCounter++;
+                    if(roundCounter < roundLimit && roundCounter < modelMapList.size()) {
+
+                        createGame(modelMapList.get(roundCounter));
+
+                        if (checkLetters(letters, word)) {
+
+                        } else {
+
+                        }
+
+                    }else{
+                        moveToResultsFragment();
+                    }
+                }
+
+            }
+        });
+
         return trNode;
     }
 
-    private void checkLetters(String letters, String word) {
+    private boolean checkLetters(String letters, String word) {
         if(letters.equals(word)){
             Log.d("TAG", letters + " is equal to " + word);
+                return true;
         }else{
             Log.d("TAG", letters + "is not equal to" + word);
+            return false;
+
         }
 
     }
@@ -238,7 +305,7 @@ public class ARHostFragment extends AppCompatActivity {
             HashMap<String, CompletableFuture<ModelRenderable>> futureMap = new HashMap();
             futureMap.put(modelList.get(i).getName(),
                     ModelRenderable.builder().
-                            setSource(this, Uri.parse(categoryList.get(i).getName() + ".sfb")).build());
+                            setSource(getActivity(), Uri.parse(categoryList.get(i).getName() + ".sfb")).build());
             futureModelMapList.add(futureMap);
         }
     }
@@ -248,7 +315,7 @@ public class ARHostFragment extends AppCompatActivity {
             String modelName = futureMapList.get(i).keySet().toString();
             for (int j = 0; j < modelName.length(); j++) {
                 futureLetterMap.put(Character.toString(modelName.charAt(j)), ModelRenderable.builder().
-                        setSource(this, Uri.parse(modelName.charAt(j) + ".sfb")).build());
+                        setSource(getActivity(), Uri.parse(modelName.charAt(j) + ".sfb")).build());
             }
         }
     }
@@ -330,5 +397,19 @@ public class ARHostFragment extends AppCompatActivity {
         return new Vector3(getRandom(5, -5),//x
                 getRandom(1, -4),//y
                 getRandom(-7, -10));//z
+    }
+
+    private void addLetterToWordContainer(String letter){
+        TextView t = new TextView(getActivity());
+        t.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        t.setTextColor(getResources().getColor(R.color.colorBlack));
+        t.setTextSize(50);
+        t.setText(letter);
+        t.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+        wordContainer.addView(t);
+    }
+
+    public void moveToResultsFragment() {
+        listener.moveToResultsFragment();
     }
 }

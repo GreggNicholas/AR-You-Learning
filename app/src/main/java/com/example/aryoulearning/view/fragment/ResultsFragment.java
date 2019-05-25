@@ -28,7 +28,8 @@ public class ResultsFragment extends Fragment {
     private SharedPreferences sharedPreferences;
     private Set<String> rightAnswer = new HashSet<>();
     private HashMap<String, String> map = new HashMap<>();
-    private Set<String> wrongAnswer, correctAnswersStringSet;
+    private Set<String> wrongAnswer = new HashSet();
+    private Set<String> correctAnswersStringSet = new HashSet();
     private int correctAnswer;
     private RatingBar rainbowRatingBar;
     private String userRightAnswersString, userWrongAnswersString, correctAnswerForUserString;
@@ -59,25 +60,31 @@ public class ResultsFragment extends Fragment {
         final StringBuilder rightAnswerBuilder = new StringBuilder();
         final StringBuilder wrongAnswerBuilder = new StringBuilder();
         final StringBuilder correctAnswerBuilder = new StringBuilder();
-        for (String wrong : wrongAnswer) {
-            map.put(wrong, sharedPreferences.getString(wrong, null));
+        if(wrongAnswer != null) {
+            for (String wrong : wrongAnswer) {
+                map.put(wrong, sharedPreferences.getString(wrong, null));
+            }
         }
-        for (String right : rightAnswer) {
-            rightAnswerBuilder.append(right).append(" ");
+        if(rightAnswer != null) {
+            for (String right : rightAnswer) {
+                rightAnswerBuilder.append(right).append(" ");
+            }
         }
-        for (String wrongChoice : wrongAnswer) {
-            wrongAnswerBuilder.append(wrongChoice).append(" ");
+
+        if(wrongAnswer != null) {
+            for (String wrongChoice : wrongAnswer) {
+                wrongAnswerBuilder.append(wrongChoice).append(" ");
+            }
         }
-        for (String correctWay : correctAnswersStringSet) {
-            correctAnswerBuilder.append(correctWay).append(" ");
+        if(correctAnswersStringSet != null) {
+            for (String correctWay : correctAnswersStringSet) {
+                correctAnswerBuilder.append(correctWay).append(" ");
+            }
         }
         userRightAnswersString = " " + getString(R.string.rightanswers) + " " + rightAnswerBuilder.toString();
         userWrongAnswersString = " " + getString(R.string.wronganswers) + " " + wrongAnswerBuilder.toString();
         correctAnswerForUserString = " " + getString(R.string.correctanswers) + " " + correctAnswerBuilder.toString();
-
-
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -99,7 +106,7 @@ public class ResultsFragment extends Fragment {
 
     @SuppressLint("SetJavaScriptEnabled")
     private void allAttemptsCorrectChecker() {
-        if (userWrongAnswersString.isEmpty() || wrongAnswer.isEmpty() || userWrongAnswerTextView.getText().equals(String.valueOf(0))) {
+        if (userWrongAnswersString == null || wrongAnswer == null ||userWrongAnswersString.isEmpty() || wrongAnswer.isEmpty() || userWrongAnswerTextView.getText().equals(String.valueOf(0))) {
             userWrongAnswerTextView.setVisibility(View.INVISIBLE);
             correctAnswerTextView.setVisibility(View.INVISIBLE);
             congratsWebView.setVisibility(View.VISIBLE);
@@ -120,5 +127,11 @@ public class ResultsFragment extends Fragment {
     private void displayCorrectWordAttempts() {
         rainbowRatingBar.setRating(correctAnswer);
         rainbowRatingBar.setIsIndicator(true);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        sharedPreferences.edit().clear().commit();
     }
 }
