@@ -314,10 +314,9 @@ public class ARHostFragment extends AppCompatActivity {
             collisionSet.add(newV3);
             return false;
         }
-
         for (Vector3 v : collisionSet) {
             if ((newV3.x < v.x + 2 && newV3.x > v.x - 2)
-                    && (newV3.y < v.y + 2 && newV3.y > v.y - 2)) {
+                    && (newV3.y < v.y + 3 && newV3.y > v.y - 3)) {
                 return true;
             } else {
                 collisionSet.add(newV3);
@@ -329,7 +328,7 @@ public class ARHostFragment extends AppCompatActivity {
 
     private Vector3 getRandomCoordinates() {
         return new Vector3(getRandom(5, -5),//x
-                getRandom(2, -2),//y
-                getRandom(-7, -9));//z
+                getRandom(1, -4),//y
+                getRandom(-7, -10));//z
     }
 }

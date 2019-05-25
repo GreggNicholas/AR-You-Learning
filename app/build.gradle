@@ -142,7 +142,7 @@ sceneform.asset('sampledata/alphabet/balloona.fbx',
 
 sceneform.asset('sampledata/alphabet/balloono.fbx',
         'default',
-        'sampledata/alphabet/balloono.sfa',
+        'sampledata/alphabet/o.sfa',
         'src/main/assets/o')
 
 sceneform.asset('sampledata/alphabet/z.obj',
