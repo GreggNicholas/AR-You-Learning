@@ -51,10 +51,21 @@ dependencies {
 }
 
 
+
+
+
+sceneform.asset('sampledata/animal/dog.fbx',
+        'default',
+        'sampledata/animal/dog.sfa',
+        'src/main/assets/dog')
+
+
+
 sceneform.asset('sampledata/alphabet/balloonb.obj',
         'default',
         'sampledata/alphabet/b.sfa',
         'src/main/assets/b')
+
 
 sceneform.asset('sampledata/alphabet/balloonc.obj',
         'default',

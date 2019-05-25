@@ -48,8 +48,6 @@ public class ResultsFragment extends Fragment {
         super.onCreate(savedInstanceState);
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
         extractSharedPrefs();
-
-
     }
 
 
@@ -65,17 +63,17 @@ public class ResultsFragment extends Fragment {
             map.put(wrong, sharedPreferences.getString(wrong, null));
         }
         for (String right : rightAnswer) {
-            rightAnswerBuilder.append(right + " ");
+            rightAnswerBuilder.append(right).append(" ");
         }
         for (String wrongChoice : wrongAnswer) {
-            wrongAnswerBuilder.append(wrongChoice + " ");
+            wrongAnswerBuilder.append(wrongChoice).append(" ");
         }
         for (String correctWay : correctAnswersStringSet) {
-            correctAnswerBuilder.append(correctWay + " ");
+            correctAnswerBuilder.append(correctWay).append(" ");
         }
-        userRightAnswersString = getString(R.string.rightanswers) + rightAnswerBuilder.toString();
-        userWrongAnswersString = getString(R.string.wronganswers) + wrongAnswerBuilder.toString();
-        correctAnswerForUserString = getString(R.string.correctanswers) + correctAnswerBuilder.toString();
+        userRightAnswersString = " " + getString(R.string.rightanswers) + " " + rightAnswerBuilder.toString();
+        userWrongAnswersString = " " + getString(R.string.wronganswers) + " " + wrongAnswerBuilder.toString();
+        correctAnswerForUserString = " " + getString(R.string.correctanswers) + " " + correctAnswerBuilder.toString();
 
 
     }
@@ -96,7 +94,6 @@ public class ResultsFragment extends Fragment {
         userWrongAnswerTextView.setText(userWrongAnswersString);
         correctAnswerTextView.setText(correctAnswerForUserString);
         allAttemptsCorrectChecker();
-
     }
 
 

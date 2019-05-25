@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import com.example.aryoulearning.R;
 import com.example.aryoulearning.model.Model;
-import com.example.aryoulearning.view.MainActivity;
 
 import java.util.List;
 
@@ -61,14 +60,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
         public void onBind(final List<Model> categoryList, final String category, final NavListener listener) {
             categoryName.setText(category);
-            categoryName.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    listener.moveToGameFragment(categoryList, MainActivity.AR_SWITCH_STATUS);
-
-                }
-            });
+            categoryName.setOnClickListener(v -> listener.moveToHintFragment(categoryList));
         }
     }
-
 }

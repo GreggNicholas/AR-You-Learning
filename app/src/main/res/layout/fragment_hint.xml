@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".view.fragment.HintFragment">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/hint_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="278dp" />
+
+    <Button
+        android:id="@+id/hint_fragment_button"
+        android:layout_width="142dp"
+        android:layout_height="60dp"
+        android:layout_marginLeft="550dp"
+        android:layout_marginTop="300dp"
+        android:text="@string/hint_frag_start_button_text"
+        android:textSize="30sp" />
+
+    <Switch
+        android:id="@+id/switch_ar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="300dp"
+        android:layout_marginTop="320dp"
+        android:text="@string/switch_button_text"
+        android:textOff="@string/switch_off"
+        android:textOn="@string/switch_on"
+        android:textSize="24sp" />
+
+</RelativeLayout>
