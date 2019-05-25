@@ -4,6 +4,7 @@ package com.example.aryoulearning.view.fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.speech.tts.TextToSpeech;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -17,6 +18,7 @@ import android.widget.Button;
 import android.widget.Switch;
 
 import com.example.aryoulearning.R;
+import com.example.aryoulearning.audio.PronunciationUtil;
 import com.example.aryoulearning.controller.HintAdapter;
 import com.example.aryoulearning.controller.NavListener;
 import com.example.aryoulearning.controller.SwitchListener;
@@ -34,6 +36,8 @@ public class HintFragment extends Fragment {
     private List<Model> modelList;
     private Button startGameButton;
     private RecyclerView hintRecyclerView;
+    private PronunciationUtil pronunciationUtil;
+    private TextToSpeech textToSpeech;
 
     public HintFragment() {
 
@@ -65,6 +69,7 @@ public class HintFragment extends Fragment {
         if (context instanceof SwitchListener) {
             switchlistener = (SwitchListener) context;
         }
+        pronunciationUtil = new PronunciationUtil();
         ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
     }
 
@@ -77,8 +82,9 @@ public class HintFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        textToSpeech = pronunciationUtil.getTTS(requireContext());
         findViewByIds(view);
-        hintRecyclerView.setAdapter(new HintAdapter(modelList));
+        hintRecyclerView.setAdapter(new HintAdapter(modelList, pronunciationUtil, textToSpeech));
         hintRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false));
         setArSwitch();
         startGameButton.setOnClickListener(v -> listener.moveToGameOrARFragment(modelList, MainActivity.AR_SWITCH_STATUS));
