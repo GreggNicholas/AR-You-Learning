@@ -9,8 +9,11 @@
     <TextView
         android:id="@+id/correct_text_ratingbar_title"
         style="@style/correctword_ratingbar_title"
+        android:layout_width="0dp"
         android:text="@string/correct_attempts_made"
-        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/rainbow_correctword_ratingbar"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/rainbow_correctword_ratingbar" />
 
     <RatingBar
@@ -18,7 +21,9 @@
         style="@style/RainbowStarsRatingBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintLeft_toRightOf="@id/correct_text_ratingbar_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/correct_text_ratingbar_title"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -61,12 +66,13 @@
         android:id="@+id/congrats_webview"
         android:layout_width="219dp"
         android:layout_height="157dp"
-        android:layout_marginStart="256dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="32dp"
         android:background="@color/colorWhite"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/result_fragment_user_right_answer_tv"
-        app:layout_constraintVertical_bias="0.407" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 
 </android.support.constraint.ConstraintLayout>

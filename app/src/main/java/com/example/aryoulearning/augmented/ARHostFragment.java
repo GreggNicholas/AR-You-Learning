@@ -402,8 +402,8 @@ public class ARHostFragment extends Fragment {
     private void addLetterToWordContainer(String letter){
         TextView t = new TextView(getActivity());
         t.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-        t.setTextColor(getResources().getColor(R.color.colorBlack));
-        t.setTextSize(50);
+        t.setTextColor(getResources().getColor(R.color.colorWhite));
+        t.setTextSize(80);
         t.setText(letter);
         t.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
         wordContainer.addView(t);

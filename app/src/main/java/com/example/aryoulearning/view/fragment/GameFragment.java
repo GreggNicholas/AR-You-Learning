@@ -256,4 +256,12 @@ public class GameFragment extends Fragment {
             listener.moveToResultsFragment();
         }
     }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        textToSpeech.shutdown();
+        pronunciationUtil = null;
+
+    }
 }
