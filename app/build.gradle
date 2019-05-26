@@ -54,16 +54,12 @@ dependencies {
 }
 
 
-
-
-
 sceneform.asset('sampledata/animal/dog.fbx',
         'default',
         'sampledata/animal/dog.sfa',
         'src/main/assets/dog')
 
-
-
+//letters
 sceneform.asset('sampledata/alphabet/balloonb.obj',
         'default',
         'sampledata/alphabet/b.sfa',
@@ -75,7 +71,7 @@ sceneform.asset('sampledata/alphabet/balloonc.obj',
         'sampledata/alphabet/c.sfa',
         'src/main/assets/c')
 
-sceneform.asset('sampledata/alphabet/balloond.obj',
+sceneform.asset('sampledata/alphabet/d.fbx',
         'default',
         'sampledata/alphabet/d.sfa',
         'src/main/assets/d')
@@ -90,7 +86,7 @@ sceneform.asset('sampledata/alphabet/balloonf.obj',
         'sampledata/alphabet/f.sfa',
         'src/main/assets/f')
 
-sceneform.asset('sampledata/alphabet/balloong.obj',
+sceneform.asset('sampledata/alphabet/g.fbx',
         'default',
         'sampledata/alphabet/g.sfa',
         'src/main/assets/g')
@@ -130,6 +126,11 @@ sceneform.asset('sampledata/alphabet/balloonn.obj',
         'sampledata/alphabet/n.sfa',
         'src/main/assets/n')
 
+sceneform.asset('sampledata/alphabet/o.fbx',
+        'default',
+        'sampledata/alphabet/o.sfa',
+        'src/main/assets/o')
+
 sceneform.asset('sampledata/alphabet/balloonp.obj',
         'default',
         'sampledata/alphabet/p.sfa',
@@ -140,10 +141,6 @@ sceneform.asset('sampledata/alphabet/balloona.fbx',
         'sampledata/alphabet/a.sfa',
         'src/main/assets/a')
 
-sceneform.asset('sampledata/alphabet/balloono.fbx',
-        'default',
-        'sampledata/alphabet/o.sfa',
-        'src/main/assets/o')
 
 sceneform.asset('sampledata/alphabet/z.obj',
         'default',
@@ -194,9 +191,7 @@ sceneform.asset('sampledata/alphabet/y.obj',
         'default',
         'sampledata/alphabet/y.sfa',
         'src/main/assets/y')
-
-
-
+//colors
 
 sceneform.asset('sampledata/color/blue.obj',
         'default',
@@ -227,3 +222,8 @@ sceneform.asset('sampledata/color/orange.obj',
         'default',
         'sampledata/color/orange.sfa',
         'src/main/assets/orange')
+
+
+
+
+
