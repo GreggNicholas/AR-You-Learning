@@ -7,8 +7,10 @@ import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Parcelable;
 import android.speech.tts.TextToSpeech;
+import android.speech.tts.UtteranceProgressListener;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -50,6 +52,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
+import java.util.Timer;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
@@ -243,7 +246,17 @@ public class ARHostFragment extends Fragment {
                 letters += letter;
                 addLetterToWordContainer(letter);
                 textToSpeech.setSpeechRate(0.6f);
-                pronunciationUtil.textToSpeechAnnouncer(letter, textToSpeech);
+                CountDownTimer timer = new CountDownTimer(500, 1) {
+                    @Override
+                    public void onTick(long millisUntilFinished) {
+                    }
+
+                    @Override
+                    public void onFinish() {
+                        pronunciationUtil.textToSpeechAnnouncer(letter, textToSpeech);
+                    }
+                }.start();
+
 
                 if (letters.length() == word.length()) {
                     pronunciationUtil.textToSpeechAnnouncer(word, textToSpeech);
