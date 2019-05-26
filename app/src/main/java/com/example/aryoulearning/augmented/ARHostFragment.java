@@ -8,6 +8,7 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.speech.tts.TextToSpeech;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -83,6 +84,7 @@ public class ARHostFragment extends Fragment {
 
     Random r = new Random();
 
+    private TextToSpeech textToSpeech;
     private PronunciationUtil pronunciationUtil;
 
     public static ARHostFragment newInstance(List<Model> modelList) {
@@ -101,7 +103,7 @@ public class ARHostFragment extends Fragment {
         }
 
         pronunciationUtil = new PronunciationUtil();
-
+        textToSpeech = pronunciationUtil.getTTS(getActivity());
 //        ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
     }
 
@@ -240,8 +242,11 @@ public class ARHostFragment extends Fragment {
                 base.getAnchor().detach();
                 letters += letter;
                 addLetterToWordContainer(letter);
+                textToSpeech.setSpeechRate(0.6f);
+                pronunciationUtil.textToSpeechAnnouncer(letter, textToSpeech);
 
                 if (letters.length() == word.length()) {
+                    pronunciationUtil.textToSpeechAnnouncer(word, textToSpeech);
                     roundCounter++;
                     if (roundCounter < roundLimit && roundCounter < modelMapList.size()) {
 
@@ -250,7 +255,6 @@ public class ARHostFragment extends Fragment {
                         if (checkLetters(letters, word)) {
 
                         } else {
-
                         }
 
                     } else {
@@ -428,5 +432,12 @@ public class ARHostFragment extends Fragment {
 
     public void moveToResultsFragment() {
         listener.moveToResultsFragment();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        textToSpeech.shutdown();
+        pronunciationUtil = null;
     }
 }
