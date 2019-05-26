@@ -159,6 +159,7 @@ public class ResultsFragment extends Fragment {
                 default:
                     break;
         }
+<<<<<<< HEAD
     }
 
     public Bitmap takeScreenshotAndShare(View view) {
@@ -171,6 +172,20 @@ public class ResultsFragment extends Fragment {
         return b;
     }
 
+=======
+    }
+
+    public Bitmap takeScreenshotAndShare(View view) {
+        allowOnFileUriExposed();
+        view.setDrawingCacheEnabled(true);
+        view.buildDrawingCache(true);
+        Bitmap b = Bitmap.createBitmap(view.getDrawingCache());
+        view.setDrawingCacheEnabled(true);
+        saveBitmap(b);
+        return b;
+    }
+
+>>>>>>> 55e5ab189e264ef7a84339fe80523f2bff753e42
     private void shareIt(File imagePath) {
         Uri uri = Uri.fromFile(imagePath);
         Intent intent = new Intent();
