@@ -126,6 +126,21 @@ public class ResultsFragment extends Fragment {
 
     private void displayCorrectWordAttempts() {
         rainbowRatingBar.setRating(correctAnswer);
+
+        if(rightAnswer != null && wrongAnswer != null) {
+            rainbowRatingBar.setNumStars(rightAnswer.size() + wrongAnswer.size());
+        }else{
+            int r = 0;
+            int w = 0;
+            if(rightAnswer != null){
+                r = rightAnswer.size();
+            }
+            if(wrongAnswer != null){
+                w = wrongAnswer.size();
+            }
+            rainbowRatingBar.setNumStars(r + w);
+        }
+
         rainbowRatingBar.setIsIndicator(true);
     }
 

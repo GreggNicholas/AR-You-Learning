@@ -80,13 +80,13 @@ public class MainActivity extends AppCompatActivity implements NavListener, Swit
         if (AR_is_on) {
             getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.fragment_container, ARHostFragment.newInstance(modelList))
+                    .replace(R.id.fragment_container, ARHostFragment.newInstance(modelList),"ar_fragment")
 //                    .addToBackStack(null)
                     .commit();
         } else {
             getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.fragment_container, GameFragment.newInstance(modelList))
+                    .replace(R.id.fragment_container, GameFragment.newInstance(modelList),"game_fragment")
 //                    .addToBackStack(null)
                     .commit();
         }
@@ -96,7 +96,7 @@ public class MainActivity extends AppCompatActivity implements NavListener, Swit
     public void moveToResultsFragment() {
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.fragment_container, ResultsFragment.newInstance())
+                .replace(R.id.fragment_container, ResultsFragment.newInstance(),"result_fragment")
                 .commit();
     }
 
@@ -111,10 +111,6 @@ public class MainActivity extends AppCompatActivity implements NavListener, Swit
 
     @Override
     public void updateSwitchStatus(boolean isOn) {
-        if (isOn) {
-            AR_SWITCH_STATUS = true;
-        } else {
-            AR_SWITCH_STATUS = false;
-        }
+AR_SWITCH_STATUS = isOn;
     }
 }

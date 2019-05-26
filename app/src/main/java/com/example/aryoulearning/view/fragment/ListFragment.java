@@ -68,4 +68,18 @@ public class ListFragment extends Fragment {
         rv.setAdapter(new CategoryAdapter(categoryList, categoryName));
         rv.setLayoutManager(new LinearLayoutManager(requireContext()));
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(getFragmentManager().findFragmentByTag("result_fragment") != null){
+            getFragmentManager().beginTransaction().remove(getFragmentManager().findFragmentByTag("result_fragment")).commit();
+        }
+        if(getFragmentManager().findFragmentByTag("ar_fragment") != null){
+            getFragmentManager().beginTransaction().remove(getFragmentManager().findFragmentByTag("ar_fragment")).commit();
+        }
+        if(getFragmentManager().findFragmentByTag("game_fragment") != null){
+            getFragmentManager().beginTransaction().remove(getFragmentManager().findFragmentByTag("game_fragment")).commit();
+        }
+    }
 }

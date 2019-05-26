@@ -11,7 +11,6 @@
     <style name="RainbowStarsRatingBar" parent="@android:style/Widget.RatingBar">
         <item name="android:progressDrawable">@drawable/ratingbar_star_indicator</item>
         <item name="android:minHeight">52dp</item>
-        <item name="android:numStars">6</item>
         <item name="android:layout_marginTop">2dp</item>
         <item name="android:maxHeight">52dp</item>
         <item name="android:layout_marginStart">4dp</item>
