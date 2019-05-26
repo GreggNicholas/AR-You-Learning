@@ -1,8 +1,6 @@
 package com.example.aryoulearning.view;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 
 import com.example.aryoulearning.R;
@@ -16,12 +14,6 @@ import com.example.aryoulearning.view.fragment.GameFragment;
 import com.example.aryoulearning.view.fragment.HintFragment;
 import com.example.aryoulearning.view.fragment.ListFragment;
 import com.example.aryoulearning.view.fragment.ResultsFragment;
-import com.google.ar.core.Frame;
-import com.google.ar.core.TrackingState;
-import com.google.ar.sceneform.ArSceneView;
-import com.google.ar.sceneform.FrameTime;
-import com.google.ar.sceneform.Scene;
-import com.google.ar.sceneform.ux.ArFragment;
 
 import java.util.ArrayList;
 import java.util.List;
