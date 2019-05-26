@@ -3,6 +3,7 @@ package com.example.aryoulearning.augmented;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.res.ResourcesCompat;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
@@ -413,8 +415,10 @@ public class ARHostFragment extends Fragment {
     }
 
     private void addLetterToWordContainer(String letter) {
+        Typeface ballonTF = ResourcesCompat.getFont(getActivity(), R.font.balloon);
         TextView t = new TextView(getActivity());
         t.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        t.setTypeface(ballonTF);
         t.setTextColor(getResources().getColor(R.color.colorWhite));
         t.setTextSize(80);
         t.setText(letter);
