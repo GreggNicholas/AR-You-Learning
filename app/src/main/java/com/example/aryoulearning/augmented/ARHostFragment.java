@@ -3,14 +3,19 @@ package com.example.aryoulearning.augmented;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Parcelable;
+import android.speech.tts.TextToSpeech;
+import android.speech.tts.UtteranceProgressListener;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.res.ResourcesCompat;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
@@ -47,6 +52,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
+import java.util.Timer;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
@@ -81,6 +87,7 @@ public class ARHostFragment extends Fragment {
 
     Random r = new Random();
 
+    private TextToSpeech textToSpeech;
     private PronunciationUtil pronunciationUtil;
 
     public static ARHostFragment newInstance(List<Model> modelList) {
@@ -99,7 +106,7 @@ public class ARHostFragment extends Fragment {
         }
 
         pronunciationUtil = new PronunciationUtil();
-
+        textToSpeech = pronunciationUtil.getTTS(getActivity());
 //        ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
     }
 
@@ -238,8 +245,21 @@ public class ARHostFragment extends Fragment {
                 base.getAnchor().detach();
                 letters += letter;
                 addLetterToWordContainer(letter);
+                textToSpeech.setSpeechRate(0.6f);
+                CountDownTimer timer = new CountDownTimer(500, 1) {
+                    @Override
+                    public void onTick(long millisUntilFinished) {
+                    }
+
+                    @Override
+                    public void onFinish() {
+                        pronunciationUtil.textToSpeechAnnouncer(letter, textToSpeech);
+                    }
+                }.start();
+
 
                 if (letters.length() == word.length()) {
+                    pronunciationUtil.textToSpeechAnnouncer(word, textToSpeech);
                     roundCounter++;
                     if (roundCounter < roundLimit && roundCounter < modelMapList.size()) {
 
@@ -248,7 +268,6 @@ public class ARHostFragment extends Fragment {
                         if (checkLetters(letters, word)) {
 
                         } else {
-
                         }
 
                     } else {
@@ -413,8 +432,10 @@ public class ARHostFragment extends Fragment {
     }
 
     private void addLetterToWordContainer(String letter) {
+        Typeface ballonTF = ResourcesCompat.getFont(getActivity(), R.font.balloon);
         TextView t = new TextView(getActivity());
         t.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        t.setTypeface(ballonTF);
         t.setTextColor(getResources().getColor(R.color.colorWhite));
         t.setTextSize(80);
         t.setText(letter);
@@ -424,5 +445,12 @@ public class ARHostFragment extends Fragment {
 
     public void moveToResultsFragment() {
         listener.moveToResultsFragment();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        textToSpeech.shutdown();
+        pronunciationUtil = null;
     }
 }
