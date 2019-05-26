@@ -1,30 +1,55 @@
 {
+  animations: [
+    {
+      path: 'sampledata/alphabet/d.fbx',
+    },
+  ],
   materials: [
     {
-      name: 'Ballon_kupfer_01',
+      name: 'Ballon_rot_02',
       parameters: [
         {
-          baseColor: null,
-        },
-        {
-          baseColorTint: [
-            0,
-            0,
-           1,
+          baseColor: [
+            null,
+            2,
+            0.02,
             1,
           ],
         },
         {
-          metallic: 1,
+                  baseColorTint: [
+                    0,
+                    0,
+                   1,
+                    1,
+                  ],
+                },
+        {
+          baseColorMap: null,
         },
         {
-          roughness: 0.14280000000000001,
+          normalMap: null,
         },
         {
-          opacity: null,
+          interpolatedColor: null,
+        },
+        {
+          metallic: 4,
+        },
+        {
+          metallicMap: null,
+        },
+        {
+          roughness: 1,
+        },
+        {
+          roughnessMap: null,
+        },
+        {
+          opacity: 1,
         },
       ],
-      source: 'build/sceneform_sdk/default_materials/obj_material.sfm',
+      source: 'build/sceneform_sdk/default_materials/fbx_material.sfm',
     },
   ],
   model: {
@@ -32,12 +57,14 @@
       'Position',
       'TexCoord',
       'Orientation',
+      'BoneIndices',
+      'BoneWeights',
     ],
     collision: {},
-    file: 'sampledata/alphabet/balloond.obj',
-    name: 'balloond',
+    file: 'sampledata/alphabet/d.fbx',
+    name: 'd',
     recenter: 'root',
-    scale: 0.035536000000000002,
+     scale: 0.09,
   },
   version: '0.54:2',
 }

@@ -1,30 +1,47 @@
 {
+  animations: [
+    {
+      path: 'sampledata/alphabet/g.fbx',
+    },
+  ],
   materials: [
     {
-      name: 'Ballon_kupfer_01',
+      name: 'Ballon_orange_01',
       parameters: [
         {
-          baseColor: null,
+          baseColor: [
+            0,
+            0,
+            1,
+            0,
+          ],
         },
         {
-          baseColorTint: [
-            0,
-                       1,
-                      0,
-                       1,
-          ],
+          baseColorMap: null,
+        },
+        {
+          normalMap: null,
+        },
+        {
+          interpolatedColor: null,
         },
         {
           metallic: 1,
         },
         {
-          roughness: 0.14280000000000001,
+          metallicMap: null,
         },
         {
-          opacity: null,
+          roughness: null,
+        },
+        {
+          roughnessMap: null,
+        },
+        {
+          opacity: 1,
         },
       ],
-      source: 'build/sceneform_sdk/default_materials/obj_material.sfm',
+      source: 'build/sceneform_sdk/default_materials/fbx_material.sfm',
     },
   ],
   model: {
@@ -32,12 +49,14 @@
       'Position',
       'TexCoord',
       'Orientation',
+      'BoneIndices',
+      'BoneWeights',
     ],
     collision: {},
-    file: 'sampledata/alphabet/balloong.obj',
-    name: 'balloong',
+    file: 'sampledata/alphabet/g.fbx',
+    name: 'g',
     recenter: 'root',
-    scale: 0.035227999999999999,
+     scale: 0.1,
   },
   version: '0.54:2',
 }

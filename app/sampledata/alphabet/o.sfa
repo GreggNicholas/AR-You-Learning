@@ -1,19 +1,19 @@
 {
   animations: [
     {
-      path: 'sampledata/alphabet/balloono.fbx',
+      path: 'sampledata/alphabet/o.fbx',
     },
   ],
   materials: [
     {
-      name: 'Ballon_kupfer_01',
+      name: 'Ballon_blaugrau_01',
       parameters: [
         {
           baseColor: [
             1,
-                       0,
-                      0,
-                       1,
+            null,
+            0.5,
+            null,
           ],
         },
         {
@@ -26,7 +26,7 @@
           interpolatedColor: null,
         },
         {
-          metallic: 0,
+          metallic: 8,
         },
         {
           metallicMap: null,
@@ -53,10 +53,10 @@
       'BoneWeights',
     ],
     collision: {},
-    file: 'sampledata/alphabet/balloono.fbx',
-    name: 'balloono',
+    file: 'sampledata/alphabet/o.fbx',
+    name: 'o',
     recenter: 'root',
-    scale: 0.036445000000000002,
+    scale: 0.1,
   },
   version: '0.54:2',
 }

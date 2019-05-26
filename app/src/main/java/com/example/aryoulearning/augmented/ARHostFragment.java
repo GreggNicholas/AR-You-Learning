@@ -3,6 +3,7 @@ package com.example.aryoulearning.augmented;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -20,6 +21,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.aryoulearning.R;
+import com.example.aryoulearning.audio.PronunciationUtil;
 import com.example.aryoulearning.controller.NavListener;
 import com.example.aryoulearning.model.Model;
 import com.google.ar.core.Anchor;
@@ -78,6 +80,9 @@ public class ARHostFragment extends Fragment {
     private Set<Vector3> collisionSet = new HashSet<>();
 
     Random r = new Random();
+
+    private PronunciationUtil pronunciationUtil;
+
     public static ARHostFragment newInstance(List<Model> modelList) {
         ARHostFragment fragment = new ARHostFragment();
         Bundle args = new Bundle();
@@ -93,7 +98,8 @@ public class ARHostFragment extends Fragment {
             listener = (NavListener) context;
         }
 
-//        pronunciationUtil = new PronunciationUtil();
+        pronunciationUtil = new PronunciationUtil();
+
 //        ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
     }
 
@@ -129,6 +135,7 @@ public class ARHostFragment extends Fragment {
                                 onSingleTap(e);
                                 return true;
                             }
+
                             @Override
                             public boolean onDown(MotionEvent e) {
                                 return true;
@@ -165,7 +172,6 @@ public class ARHostFragment extends Fragment {
     }
 
 
-
     private Node createGame(Map<String, ModelRenderable> modelMap) {
 
         Node base = new Node();
@@ -186,8 +192,8 @@ public class ARHostFragment extends Fragment {
     }
 
     private TransformableNode createLetter(String letter, String word,
-            Node parent,
-            ModelRenderable renderable) {
+                                           Node parent,
+                                           ModelRenderable renderable) {
 
         Session session = arFragment.getArSceneView().getSession();
         float[] pos = {0,//x
@@ -220,15 +226,22 @@ public class ARHostFragment extends Fragment {
 
         trNode.setOnTapListener(new Node.OnTapListener() {
             @Override
-
             public void onTap(HitTestResult hitTestResult, MotionEvent motionEvent) {
+                final MediaPlayer playBallonPop = MediaPlayer.create(getContext(), R.raw.balloon_pop);
+                playBallonPop.start();
+                playBallonPop.setOnCompletionListener(mp -> {
+                    playBallonPop.stop();
+                    playBallonPop.reset();
+                    playBallonPop.release();
+                });
+
                 base.getAnchor().detach();
                 letters += letter;
                 addLetterToWordContainer(letter);
 
-                if(letters.length() == word.length()) {
+                if (letters.length() == word.length()) {
                     roundCounter++;
-                    if(roundCounter < roundLimit && roundCounter < modelMapList.size()) {
+                    if (roundCounter < roundLimit && roundCounter < modelMapList.size()) {
 
                         createGame(modelMapList.get(roundCounter));
 
@@ -238,7 +251,7 @@ public class ARHostFragment extends Fragment {
 
                         }
 
-                    }else{
+                    } else {
                         moveToResultsFragment();
                     }
                 }
@@ -250,10 +263,10 @@ public class ARHostFragment extends Fragment {
     }
 
     private boolean checkLetters(String letters, String word) {
-        if(letters.equals(word)){
+        if (letters.equals(word)) {
             Log.d("TAG", letters + " is equal to " + word);
-                return true;
-        }else{
+            return true;
+        } else {
             Log.d("TAG", letters + "is not equal to" + word);
             return false;
 
@@ -399,7 +412,7 @@ public class ARHostFragment extends Fragment {
                 getRandom(-7, -10));//z
     }
 
-    private void addLetterToWordContainer(String letter){
+    private void addLetterToWordContainer(String letter) {
         TextView t = new TextView(getActivity());
         t.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
         t.setTextColor(getResources().getColor(R.color.colorWhite));
