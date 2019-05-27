@@ -16,7 +16,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.res.ResourcesCompat;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -59,6 +58,7 @@ import java.util.concurrent.ExecutionException;
 public class ARHostFragment extends Fragment {
 
     private static final int RC_PERMISSIONS = 0x123;
+    public static final String MODEL_LIST_KEY = "model-list-key";
     private NavListener listener;
 
     private GestureDetector gestureDetector;
@@ -98,7 +98,7 @@ public class ARHostFragment extends Fragment {
     public static ARHostFragment newInstance(List<Model> modelList) {
         ARHostFragment fragment = new ARHostFragment();
         Bundle args = new Bundle();
-        args.putParcelableArrayList("model-list-key", (ArrayList<? extends Parcelable>) modelList);
+        args.putParcelableArrayList(MODEL_LIST_KEY, (ArrayList<? extends Parcelable>) modelList);
         fragment.setArguments(args);
         return fragment;
     }
@@ -126,17 +126,16 @@ public class ARHostFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if(getArguments() != null){
+            categoryList = getArguments().getParcelableArrayList(MODEL_LIST_KEY);
+        }
         prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        //        setContentView(R.layout.activity_arfragment_host);
         wordContainer = view.findViewById(R.id.word_container);
-
-//        categoryList = getIntent().getParcelableArrayListExtra(MainActivity.ARLIST);
-        categoryList.add(new Model("dog", ""));
 
         setListMapsOfFutureModels(categoryList);
         setMapOfFutureLetters(futureModelMapList);
@@ -159,6 +158,7 @@ public class ARHostFragment extends Fragment {
                                 return true;
                             }
                         });
+
 
         arFragment.getArSceneView()
                 .getScene()
@@ -209,7 +209,7 @@ public class ARHostFragment extends Fragment {
         return base;
     }
 
-    private TransformableNode createLetter(String letter, String word,
+    private void createLetter(String letter, String word,
                                            Node parent,
                                            ModelRenderable renderable) {
 
@@ -280,47 +280,17 @@ public class ARHostFragment extends Fragment {
                 if (letters.length() == word.length()) {
                     correctAnswerSet.add(word);
                     if(letters.equals(word)){
-                        answersCorrect++;
                         pronunciationUtil.textToSpeechAnnouncer(word, textToSpeech);
                         rightAnswer.add(letters);
-                        moveToResultsFragment();
                     }else{
                         pronunciationUtil.textToSpeechAnnouncer("Wrong. Please Try Again", textToSpeech);
                         wrongAnswer.add(letters);
-                        moveToResultsFragment();
+                        correctAnswerSet.add(word);
                     }
-//                    if (roundCounter < roundLimit && roundCounter < modelMapList.size()) {
-//                    roundCounter++;
-//
-//                        createGame(modelMapList.get(roundCounter));
-//
-//                        if (checkLetters(letters, word)) {
-//
-//                        } else {
-//                        }
-//
-//                    } else {
-//                        moveToResultsFragment();
-//                    }
                 }
 
             }
         });
-
-        return trNode;
-    }
-
-    private boolean checkLetters(String letters, String word) {
-
-        if (letters.equals(word)) {
-            Log.d("TAG", letters + " is equal to " + word);
-            return true;
-        } else {
-            Log.d("TAG", letters + "is not equal to" + word);
-            return false;
-
-        }
-
     }
 
     public static void requestCameraPermission(Activity activity, int requestCode) {
@@ -348,12 +318,13 @@ public class ARHostFragment extends Fragment {
                 Trackable trackable = hit.getTrackable();
                 if (trackable instanceof Plane && ((Plane) trackable).isPoseInPolygon(hit.getHitPose())) {
                     // Create the Anchor.
-                    Anchor anchor = hit.createAnchor();
-                    AnchorNode anchorNode = new AnchorNode(anchor);
-                    anchorNode.setParent(arFragment.getArSceneView().getScene());
-                    Node gameSystem = createGame(modelMapList.get(0));
-                    anchorNode.addChild(gameSystem);
-                    return true;
+                        Anchor anchor = hit.createAnchor();
+                        AnchorNode anchorNode = new AnchorNode(anchor);
+                        anchorNode.setParent(arFragment.getArSceneView().getScene());
+                        //FIXME:HOW DO WE ITERTATE THROUGH THIS MODELMAPLIST?
+                        Node gameSystem = createGame(modelMapList.get(0));
+                        anchorNode.addChild(gameSystem);
+                        return true;
                 }
             }
         }
@@ -477,7 +448,7 @@ public class ARHostFragment extends Fragment {
         prefs.edit().putStringSet(ResultsFragment.RIGHTANSWERS, rightAnswer).apply();
         prefs.edit().putStringSet(ResultsFragment.WRONGANSWER, wrongAnswer).apply();
         prefs.edit().putStringSet(ResultsFragment.CORRECT_ANSWER_FOR_USER, correctAnswerSet).apply();
-        prefs.edit().putInt(ResultsFragment.ANSWERSCORRECT, answersCorrect).apply();
+        prefs.edit().putInt(ResultsFragment.TOTALSIZE, categoryList.size()).apply();
         listener.moveToResultsFragment();
     }
 

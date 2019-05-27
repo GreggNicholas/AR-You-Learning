@@ -39,6 +39,7 @@ public class ResultsFragment extends Fragment {
     public static final String ANSWERSCORRECT = "ANSWERSCORRECT";
     public static final String ANSWERSWRONG = "ANSWERSWRONG";
     public static final String RIGHTANSWERS = "RIGHTANSWERS";
+    public static final String TOTALSIZE = "TOTALSIZE";
     private static final int REQUEST_CODE = 1;
     public static final String CORRECT_ANSWER_FOR_USER = "correct answer for user";
     private SharedPreferences sharedPreferences;
@@ -47,6 +48,7 @@ public class ResultsFragment extends Fragment {
     private Set<String> wrongAnswer = new HashSet();
     private Set<String> correctAnswersStringSet = new HashSet();
     private int correctAnswer;
+    private int totalSize;
     private RatingBar rainbowRatingBar;
     private String userRightAnswersString, userWrongAnswersString, correctAnswerForUserString;
     public static final String TAG = "ResultsFragment";
@@ -75,6 +77,7 @@ public class ResultsFragment extends Fragment {
         wrongAnswer = sharedPreferences.getStringSet(WRONGANSWER, null);
         correctAnswer = sharedPreferences.getInt(ANSWERSCORRECT, 0);
         correctAnswersStringSet = sharedPreferences.getStringSet(CORRECT_ANSWER_FOR_USER, null);
+        totalSize = sharedPreferences.getInt(TOTALSIZE, 0);
         final StringBuilder rightAnswerBuilder = new StringBuilder();
         final StringBuilder wrongAnswerBuilder = new StringBuilder();
         final StringBuilder correctAnswerBuilder = new StringBuilder();
@@ -230,9 +233,11 @@ public class ResultsFragment extends Fragment {
         congratsWebView.setVisibility(View.INVISIBLE);
     }
 
+
     private void displayRatingBarAttempts() {
-        rainbowRatingBar.setNumStars(correctAnswersStringSet.size());
-        rainbowRatingBar.setRating(correctAnswer);
+        rainbowRatingBar.setNumStars(totalSize);
+        rainbowRatingBar.setStepSize(1);
+        rainbowRatingBar.setRating(totalSize - wrongAnswer.size());
         rainbowRatingBar.setIsIndicator(true);
     }
 
