@@ -227,3 +227,49 @@ sceneform.asset('sampledata/color/orange.obj',
 
 
 
+
+
+sceneform.asset('sampledata/animal/bear.fbx',
+        'default',
+        'sampledata/animal/bear.sfa',
+        'src/main/assets/bear')
+
+sceneform.asset('sampledata/animal/elephant.fbx',
+        'default',
+        'sampledata/animal/elephant.sfa',
+        'src/main/assets/elephant')
+
+sceneform.asset('sampledata/animal/ferret.fbx',
+        'default',
+        'sampledata/animal/ferret.sfa',
+        'src/main/assets/ferret')
+
+sceneform.asset('sampledata/animal/hippopotamus.fbx',
+        'default',
+        'sampledata/animal/hippopotamus.sfa',
+        'src/main/assets/hippopotamus')
+
+sceneform.asset('sampledata/animal/horse.fbx',
+        'default',
+        'sampledata/animal/horse.sfa',
+        'src/main/assets/horse')
+
+sceneform.asset('sampledata/animal/lion.fbx',
+        'default',
+        'sampledata/animal/lion.sfa',
+        'src/main/assets/lion')
+
+sceneform.asset('sampledata/animal/reindeer.fbx',
+        'default',
+        'sampledata/animal/reindeer.sfa',
+        'src/main/assets/reindeer')
+
+sceneform.asset('sampledata/animal/wolverine.fbx',
+        'default',
+        'sampledata/animal/wolverine.sfa',
+        'src/main/assets/wolverine')
+
+sceneform.asset('sampledata/animal/koala.fbx',
+        'default',
+        'sampledata/animal/koala.sfa',
+        'src/main/assets/koala')

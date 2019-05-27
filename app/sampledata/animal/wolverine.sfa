@@ -1,0 +1,74 @@
+{
+  animations: [
+    {
+      path: 'sampledata/animal/wolverine.fbx',
+    },
+  ],
+  materials: [
+    {
+      name: 'Material_44',
+      parameters: [
+        {
+          baseColor: [
+            1,
+            1,
+            1,
+            1,
+          ],
+        },
+        {
+          baseColorMap: '5',
+        },
+        {
+          normalMap: null,
+        },
+        {
+          interpolatedColor: null,
+        },
+        {
+          metallic: 0,
+        },
+        {
+          metallicMap: null,
+        },
+        {
+          roughness: 1,
+        },
+        {
+          roughnessMap: null,
+        },
+        {
+          opacity: null,
+        },
+      ],
+      source: 'build/sceneform_sdk/default_materials/fbx_material.sfm',
+    },
+  ],
+  model: {
+    attributes: [
+      'Position',
+      'TexCoord',
+      'Orientation',
+      'BoneIndices',
+      'BoneWeights',
+    ],
+    collision: {},
+    file: 'sampledata/animal/wolverine.fbx',
+    name: 'wolverine',
+    recenter: 'root',
+    scale: 4.5659270000000003,
+  },
+  samplers: [
+    {
+      file: 'sampledata/animal/wolverine.fbm/7.png',
+      name: '7',
+      pipeline_name: 'wolverine.fbm/7.png',
+    },
+    {
+      file: 'sampledata/animal/wolverine.fbm/5.png',
+      name: '5',
+      pipeline_name: 'wolverine.fbm/5.png',
+    },
+  ],
+  version: '0.54:2',
+}
