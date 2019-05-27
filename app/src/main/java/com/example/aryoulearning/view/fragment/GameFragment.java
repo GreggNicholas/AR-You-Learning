@@ -206,7 +206,7 @@ public class GameFragment extends Fragment {
             return false;
         }
 
-        for (int i = 0; i < mapList.size() - 1; i++) {
+        for (int i = 0; i < mapList.size(); i++) {
 
             if( (testMap.get("x") > mapList.get(i).get("x") - 300 &&
                     testMap.get("x") < mapList.get(i).get("x") + 300) &&

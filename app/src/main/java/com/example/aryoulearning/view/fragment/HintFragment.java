@@ -99,4 +99,10 @@ public class HintFragment extends Fragment {
     private void setArSwitch() {
         arSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> switchlistener.updateSwitchStatus(isChecked));
     }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        switchlistener.updateSwitchStatus(false);
+    }
 }
