@@ -140,7 +140,6 @@ public class GameFragment extends Fragment {
         letter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 checker.append(letter.getText().toString());
                 letter.setVisibility(View.INVISIBLE);
                 pronunciationUtil.textToSpeechAnnouncer(letter, textToSpeech);
@@ -148,14 +147,12 @@ public class GameFragment extends Fragment {
                 if (checker.getText().length() == answer.length()) {
                     if (checker.getText().toString().equals(answer)) {
                         Toast.makeText(getContext(), "right", Toast.LENGTH_SHORT).show();
-                        answersCorrect++;
                         rightAnswer.add(checker.getText().toString());
                         pronunciationUtil.textToSpeechAnnouncer(checker, textToSpeech);
                         loadNext();
                     } else {
                         Toast.makeText(getContext(), "wrong", Toast.LENGTH_SHORT).show();
                         wrongAnswer.add(checker.getText().toString());
-                        answersWrong++;
                         correctAnswerSet.add(answer);
                         pronunciationUtil.textToSpeechAnnouncer("wrong!", textToSpeech);
                         repeatTheSameWordUntilCorrectlySpelled(answer);
@@ -254,6 +251,7 @@ public class GameFragment extends Fragment {
             sharedPreferences.edit().putStringSet(ResultsFragment.RIGHTANSWERS, rightAnswer).apply();
             sharedPreferences.edit().putStringSet(ResultsFragment.WRONGANSWER, wrongAnswer).apply();
             sharedPreferences.edit().putStringSet(ResultsFragment.CORRECT_ANSWER_FOR_USER, correctAnswerSet).apply();
+            sharedPreferences.edit().putInt(ResultsFragment.TOTALSIZE, modelList.size()).apply();
             listener.moveToResultsFragment();
         }
     }
