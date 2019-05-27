@@ -81,7 +81,7 @@ public class ARHostFragment extends Fragment {
     private List<HashMap<String, ModelRenderable>> modelMapList = new ArrayList<>();
     private HashMap<String, ModelRenderable> letterMap = new HashMap<>();
     private String letters = "";
-    private String word = "";
+    private String currentWord = "";
 
     private int roundCounter = 0;
     private int roundLimit = 5;
@@ -94,6 +94,11 @@ public class ARHostFragment extends Fragment {
 
     private TextToSpeech textToSpeech;
     private PronunciationUtil pronunciationUtil;
+
+    Anchor mainAnchor;
+    AnchorNode mainAnchorNode;
+    Frame mainFrame;
+    List<HitResult> mainHits;
 
     public static ARHostFragment newInstance(List<Model> modelList) {
         ARHostFragment fragment = new ARHostFragment();
@@ -205,6 +210,7 @@ public class ARHostFragment extends Fragment {
             for (int i = 0; i < e.getKey().length(); i++) {
                 createLetter(Character.toString(e.getKey().charAt(i)), e.getKey(), base, letterMap.get(Character.toString(e.getKey().charAt(i))));
             }
+            currentWord = e.getKey();
         }
         return base;
     }
@@ -278,14 +284,24 @@ public class ARHostFragment extends Fragment {
 
                 //Compare concatenated letters to actual word
                 if (letters.length() == word.length()) {
+                    roundCounter++;
                     correctAnswerSet.add(word);
+
                     if(letters.equals(word)){
                         pronunciationUtil.textToSpeechAnnouncer(word, textToSpeech);
                         rightAnswer.add(letters);
+
                     }else{
                         pronunciationUtil.textToSpeechAnnouncer("Wrong. Please Try Again", textToSpeech);
                         wrongAnswer.add(letters);
                         correctAnswerSet.add(word);
+                    }
+                    letters = "";
+
+                    if(roundCounter < roundLimit && roundCounter < modelMapList.size()){
+                        createNextGame(modelMapList.get(roundCounter));
+                    }else{
+                        moveToResultsFragment();
                     }
                 }
 
@@ -314,22 +330,45 @@ public class ARHostFragment extends Fragment {
 
     private boolean tryPlaceGame(MotionEvent tap, Frame frame) {
         if (tap != null && frame.getCamera().getTrackingState() == TrackingState.TRACKING) {
+            mainFrame = frame;
+            mainHits= frame.hitTest(tap);
+
             for (HitResult hit : frame.hitTest(tap)) {
                 Trackable trackable = hit.getTrackable();
                 if (trackable instanceof Plane && ((Plane) trackable).isPoseInPolygon(hit.getHitPose())) {
                     // Create the Anchor.
-                        Anchor anchor = hit.createAnchor();
-                        AnchorNode anchorNode = new AnchorNode(anchor);
-                        anchorNode.setParent(arFragment.getArSceneView().getScene());
-                        //FIXME:HOW DO WE ITERTATE THROUGH THIS MODELMAPLIST?
+                        mainAnchor = hit.createAnchor();
+                        mainAnchorNode = new AnchorNode(mainAnchor);
+                        mainAnchorNode.setParent(arFragment.getArSceneView().getScene());
                         Node gameSystem = createGame(modelMapList.get(0));
-                        anchorNode.addChild(gameSystem);
+                        mainAnchorNode.addChild(gameSystem);
                         return true;
                 }
             }
         }
 
         return false;
+    }
+
+    private void createNextGame(Map<String,ModelRenderable> modelMap) {
+        mainAnchorNode.getAnchor().detach();
+        mainAnchor = null;
+        mainAnchorNode = null;
+
+        for (HitResult hit : mainHits) {
+            Trackable trackable = hit.getTrackable();
+            if (trackable instanceof Plane && ((Plane) trackable).isPoseInPolygon(hit.getHitPose())) {
+                // Create the Anchor.
+                mainAnchor = hit.createAnchor();
+                mainAnchorNode = new AnchorNode(mainAnchor);
+                mainAnchorNode.setParent(arFragment.getArSceneView().getScene());
+                Node gameSystem = createGame(modelMap);
+                mainAnchorNode.addChild(gameSystem);
+            }
+        }
+
+        wordContainer.removeAllViews();
+
     }
 
     private void setListMapsOfFutureModels(List<Model> modelList) {
