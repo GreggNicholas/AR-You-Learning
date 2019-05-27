@@ -47,6 +47,7 @@ public class GameFragment extends Fragment {
     private int width;
     private int height;
     private int answersCorrect;
+    private int answersWrong;
     private Set<String> rightAnswer = new HashSet<>();
     private Set<String> wrongAnswer = new HashSet<>();
     private Set<String> correctAnswerSet = new HashSet<>();
@@ -154,7 +155,7 @@ public class GameFragment extends Fragment {
                     } else {
                         Toast.makeText(getContext(), "wrong", Toast.LENGTH_SHORT).show();
                         wrongAnswer.add(checker.getText().toString());
-                        sharedPreferences.edit().putString(checker.getText().toString(), answer).apply();
+                        answersWrong++;
                         correctAnswerSet.add(answer);
                         pronunciationUtil.textToSpeechAnnouncer("wrong!", textToSpeech);
                         repeatTheSameWordUntilCorrectlySpelled(answer);

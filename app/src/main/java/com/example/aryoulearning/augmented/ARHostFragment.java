@@ -3,20 +3,19 @@ package com.example.aryoulearning.augmented;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.os.Parcelable;
+import android.preference.PreferenceManager;
 import android.speech.tts.TextToSpeech;
-import android.speech.tts.UtteranceProgressListener;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.res.ResourcesCompat;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -29,6 +28,7 @@ import com.example.aryoulearning.R;
 import com.example.aryoulearning.audio.PronunciationUtil;
 import com.example.aryoulearning.controller.NavListener;
 import com.example.aryoulearning.model.Model;
+import com.example.aryoulearning.view.fragment.ResultsFragment;
 import com.google.ar.core.Anchor;
 import com.google.ar.core.Frame;
 import com.google.ar.core.HitResult;
@@ -52,7 +52,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
-import java.util.Timer;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
@@ -67,6 +66,11 @@ public class ARHostFragment extends Fragment {
     private boolean hasFinishedLoadingModels = false;
     private boolean hasFinishedLoadingLetters = false;
     private boolean hasPlacedGame = false;
+    private Set<String> rightAnswer = new HashSet<>();
+    private Set<String> wrongAnswer = new HashSet<>();
+    private Set<String> correctAnswerSet = new HashSet<>();
+    private int answersCorrect;
+    private SharedPreferences prefs;
 
     private List<Model> categoryList = new ArrayList<>();
 
@@ -116,6 +120,12 @@ public class ARHostFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.activity_arfragment_host, container, false);
         arFragment = (ArFragment) getChildFragmentManager().findFragmentById(R.id.ux_fragment);
         return rootView;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
     }
 
     @Override
@@ -241,56 +251,51 @@ public class ARHostFragment extends Fragment {
                     playBallonPop.reset();
                     playBallonPop.release();
                 });
-
+                //Make the letter disappear
                 base.getAnchor().detach();
+
+                //Keep track of the letter selected
                 letters += letter;
+
+                //Add letter to container to show to the user.
                 addLetterToWordContainer(letter);
+
+                //Pronunciation of the word.
                 textToSpeech.setSpeechRate(0.6f);
-                CountDownTimer timer = new CountDownTimer(500, 1) {
-                    @Override
-                    public void onTick(long millisUntilFinished) {
-                    }
+                pronunciationUtil.textToSpeechAnnouncer(letter, textToSpeech);
 
-                    @Override
-                    public void onFinish() {
-                        pronunciationUtil.textToSpeechAnnouncer(letter, textToSpeech);
-                    }
-                }.start();
-
-
+                //Compare concatenated letters to actual word
                 if (letters.length() == word.length()) {
-                    pronunciationUtil.textToSpeechAnnouncer(word, textToSpeech);
-                    roundCounter++;
-                    if (roundCounter < roundLimit && roundCounter < modelMapList.size()) {
-
-                        createGame(modelMapList.get(roundCounter));
-
-                        if (checkLetters(letters, word)) {
-
-                        } else {
-                        }
-
-                    } else {
+                    correctAnswerSet.add(word);
+                    if(letters.equals(word)){
+                        answersCorrect++;
+                        pronunciationUtil.textToSpeechAnnouncer(word, textToSpeech);
+                        rightAnswer.add(letters);
+                        moveToResultsFragment();
+                    }else{
+                        pronunciationUtil.textToSpeechAnnouncer("Wrong. Please Try Again", textToSpeech);
+                        wrongAnswer.add(letters);
                         moveToResultsFragment();
                     }
+//                    if (roundCounter < roundLimit && roundCounter < modelMapList.size()) {
+//                    roundCounter++;
+//
+//                        createGame(modelMapList.get(roundCounter));
+//
+//                        if (checkLetters(letters, word)) {
+//
+//                        } else {
+//                        }
+//
+//                    } else {
+//                        moveToResultsFragment();
+//                    }
                 }
 
             }
         });
 
         return trNode;
-    }
-
-    private boolean checkLetters(String letters, String word) {
-        if (letters.equals(word)) {
-            Log.d("TAG", letters + " is equal to " + word);
-            return true;
-        } else {
-            Log.d("TAG", letters + "is not equal to" + word);
-            return false;
-
-        }
-
     }
 
     public static void requestCameraPermission(Activity activity, int requestCode) {
@@ -444,6 +449,10 @@ public class ARHostFragment extends Fragment {
     }
 
     public void moveToResultsFragment() {
+        prefs.edit().putStringSet(ResultsFragment.RIGHTANSWERS, rightAnswer).apply();
+        prefs.edit().putStringSet(ResultsFragment.WRONGANSWER, wrongAnswer).apply();
+        prefs.edit().putStringSet(ResultsFragment.CORRECT_ANSWER_FOR_USER, correctAnswerSet).apply();
+        prefs.edit().putInt(ResultsFragment.ANSWERSCORRECT, answersCorrect).apply();
         listener.moveToResultsFragment();
     }
 

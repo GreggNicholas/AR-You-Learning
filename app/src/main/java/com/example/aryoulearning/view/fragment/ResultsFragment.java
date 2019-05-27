@@ -38,6 +38,7 @@ import java.util.Set;
 public class ResultsFragment extends Fragment {
     public static final String WRONGANSWER = "WRONGANSWER";
     public static final String ANSWERSCORRECT = "ANSWERSCORRECT";
+    public static final String ANSWERSWRONG = "ANSWERSWRONG";
     public static final String RIGHTANSWERS = "RIGHTANSWERS";
     private static final int REQUEST_CODE = 1;
     public static final String CORRECT_ANSWER_FOR_USER = "correct answer for user";
@@ -128,6 +129,7 @@ public class ResultsFragment extends Fragment {
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                v = getActivity().getWindow().getDecorView().getRootView();
                 if (ContextCompat.checkSelfPermission(v.getContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
                         != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(v.getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
                         != PackageManager.PERMISSION_GRANTED ) {
@@ -161,14 +163,13 @@ public class ResultsFragment extends Fragment {
         }
     }
 
-    public Bitmap takeScreenshotAndShare(View view) {
+    public void takeScreenshotAndShare(View view) {
         allowOnFileUriExposed();
         view.setDrawingCacheEnabled(true);
         view.buildDrawingCache(true);
         Bitmap b = Bitmap.createBitmap(view.getDrawingCache());
         view.setDrawingCacheEnabled(true);
         saveBitmap(b);
-        return b;
     }
     private void shareIt(File imagePath) {
         Uri uri = Uri.fromFile(imagePath);
@@ -229,22 +230,8 @@ public class ResultsFragment extends Fragment {
     }
 
     private void displayCorrectWordAttempts() {
+        rainbowRatingBar.setNumStars(correctAnswersStringSet.size());
         rainbowRatingBar.setRating(correctAnswer);
-
-        if(rightAnswer != null && wrongAnswer != null) {
-            rainbowRatingBar.setNumStars(rightAnswer.size() + wrongAnswer.size());
-        }else{
-            int r = 0;
-            int w = 0;
-            if(rightAnswer != null){
-                r = rightAnswer.size();
-            }
-            if(wrongAnswer != null){
-                w = wrongAnswer.size();
-            }
-            rainbowRatingBar.setNumStars(r + w);
-        }
-
         rainbowRatingBar.setIsIndicator(true);
     }
 
