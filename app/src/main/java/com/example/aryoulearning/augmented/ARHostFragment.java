@@ -16,6 +16,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.res.ResourcesCompat;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -264,6 +265,17 @@ public class ARHostFragment extends Fragment {
                 textToSpeech.setSpeechRate(0.6f);
                 pronunciationUtil.textToSpeechAnnouncer(letter, textToSpeech);
 
+//                CountDownTimer timer = new CountDownTimer(500, 1) {
+//                    @Override
+//                    public void onTick(long millisUntilFinished) {
+//                    }
+//
+//                    @Override
+//                    public void onFinish() {
+//                        pronunciationUtil.textToSpeechAnnouncer(letter, textToSpeech);
+//                    }
+//                }.start();
+
                 //Compare concatenated letters to actual word
                 if (letters.length() == word.length()) {
                     correctAnswerSet.add(word);
@@ -296,6 +308,19 @@ public class ARHostFragment extends Fragment {
         });
 
         return trNode;
+    }
+
+    private boolean checkLetters(String letters, String word) {
+
+        if (letters.equals(word)) {
+            Log.d("TAG", letters + " is equal to " + word);
+            return true;
+        } else {
+            Log.d("TAG", letters + "is not equal to" + word);
+            return false;
+
+        }
+
     }
 
     public static void requestCameraPermission(Activity activity, int requestCode) {
