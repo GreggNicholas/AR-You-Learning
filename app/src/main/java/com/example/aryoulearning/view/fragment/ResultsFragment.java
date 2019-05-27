@@ -1,7 +1,6 @@
 package com.example.aryoulearning.view.fragment;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -79,23 +78,23 @@ public class ResultsFragment extends Fragment {
         final StringBuilder rightAnswerBuilder = new StringBuilder();
         final StringBuilder wrongAnswerBuilder = new StringBuilder();
         final StringBuilder correctAnswerBuilder = new StringBuilder();
-        if(wrongAnswer != null) {
+        if (wrongAnswer != null) {
             for (String wrong : wrongAnswer) {
                 map.put(wrong, sharedPreferences.getString(wrong, null));
             }
         }
-        if(rightAnswer != null) {
+        if (rightAnswer != null) {
             for (String right : rightAnswer) {
                 rightAnswerBuilder.append(right).append(" ");
             }
         }
 
-        if(wrongAnswer != null) {
+        if (wrongAnswer != null) {
             for (String wrongChoice : wrongAnswer) {
                 wrongAnswerBuilder.append(wrongChoice).append(" ");
             }
         }
-        if(correctAnswersStringSet != null) {
+        if (correctAnswersStringSet != null) {
             for (String correctWay : correctAnswersStringSet) {
                 correctAnswerBuilder.append(correctWay).append(" ");
             }
@@ -115,7 +114,7 @@ public class ResultsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         findViewByIds(view);
-        displayCorrectWordAttempts();
+        displayRatingBarAttempts();
         userRightAnswerTextView.setText(userRightAnswersString);
         userWrongAnswerTextView.setText(userWrongAnswersString);
         correctAnswerTextView.setText(correctAnswerForUserString);
@@ -125,25 +124,25 @@ public class ResultsFragment extends Fragment {
 
     }
 
-    public void fabClick(){
+    public void fabClick() {
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 v = getActivity().getWindow().getDecorView().getRootView();
                 if (ContextCompat.checkSelfPermission(v.getContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
                         != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(v.getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                        != PackageManager.PERMISSION_GRANTED ) {
+                        != PackageManager.PERMISSION_GRANTED) {
                     ActivityCompat.requestPermissions(getActivity(),
                             new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE);
                     takeScreenshotAndShare(v);
-                }else{
+                } else {
                     takeScreenshotAndShare(v);
                 }
             }
         });
     }
 
-    public void allowOnFileUriExposed(){
+    public void allowOnFileUriExposed() {
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
     }
@@ -152,14 +151,14 @@ public class ResultsFragment extends Fragment {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-        switch(requestCode){
+        switch (requestCode) {
             case REQUEST_CODE:
                 if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     break;
                 }
-                default:
-                    break;
+            default:
+                break;
         }
     }
 
@@ -171,6 +170,7 @@ public class ResultsFragment extends Fragment {
         view.setDrawingCacheEnabled(true);
         saveBitmap(b);
     }
+
     private void shareIt(File imagePath) {
         Uri uri = Uri.fromFile(imagePath);
         Intent intent = new Intent();
@@ -208,9 +208,10 @@ public class ResultsFragment extends Fragment {
         }
     }
 
-    @SuppressLint("SetJavaScriptEnabled")
     private void allAttemptsCorrectChecker() {
-        if (userWrongAnswersString == null || wrongAnswer == null ||userWrongAnswersString.isEmpty() || wrongAnswer.isEmpty() || userWrongAnswerTextView.getText().equals(String.valueOf(0))) {
+        if (userWrongAnswersString == null || wrongAnswer == null || userWrongAnswersString.isEmpty()
+                || wrongAnswer.isEmpty() || userWrongAnswerTextView == null
+                || userWrongAnswerTextView.getText().equals(String.valueOf(0))) {
             userWrongAnswerTextView.setVisibility(View.INVISIBLE);
             correctAnswerTextView.setVisibility(View.INVISIBLE);
             congratsWebView.setVisibility(View.VISIBLE);
@@ -229,7 +230,7 @@ public class ResultsFragment extends Fragment {
         congratsWebView.setVisibility(View.INVISIBLE);
     }
 
-    private void displayCorrectWordAttempts() {
+    private void displayRatingBarAttempts() {
         rainbowRatingBar.setNumStars(correctAnswersStringSet.size());
         rainbowRatingBar.setRating(correctAnswer);
         rainbowRatingBar.setIsIndicator(true);
