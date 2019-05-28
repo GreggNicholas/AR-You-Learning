@@ -15,15 +15,21 @@
           ],
         },
         {
-          metallic: 1,
-        },
-        {
-          roughness: 0.14424899999999999,
-        },
-        {
-          opacity: null,
-        },
-      ],
+         metallic: 0.3,
+                },
+                {
+                  metallicMap: null,
+                },
+                {
+                  roughness: 0,
+                },
+                {
+                  roughnessMap: null,
+                },
+                {
+                  opacity: null,
+                },
+              ],
       source: 'build/sceneform_sdk/default_materials/obj_material.sfm',
     },
   ],
