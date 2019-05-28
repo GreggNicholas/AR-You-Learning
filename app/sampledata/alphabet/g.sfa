@@ -26,21 +26,21 @@
           interpolatedColor: null,
         },
         {
-          metallic: 1,
-        },
-        {
-          metallicMap: null,
-        },
-        {
-          roughness: null,
-        },
-        {
-          roughnessMap: null,
-        },
-        {
-          opacity: 1,
-        },
-      ],
+       metallic: 0.3,
+              },
+              {
+                metallicMap: null,
+              },
+              {
+                roughness: 0,
+              },
+              {
+                roughnessMap: null,
+              },
+              {
+                opacity: null,
+              },
+            ],
       source: 'build/sceneform_sdk/default_materials/fbx_material.sfm',
     },
   ],
