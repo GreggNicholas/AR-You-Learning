@@ -17,5 +17,3 @@ to check the distribution of the tasks.
  
 <img src="https://user-images.githubusercontent.com/44322211/58523255-c3feaf80-8191-11e9-8a1b-776b1d0e84ba.jpg" width="300">
 <img src="https://user-images.githubusercontent.com/44322211/58523260-c7923680-8191-11e9-974c-4b7aaa9c2fad.jpg" width="300">
-![ar](https://user-images.githubusercontent.com/44322211/58523255-c3feaf80-8191-11e9-8a1b-776b1d0e84ba.jpg)
-![staticimage](https://user-images.githubusercontent.com/44322211/58523260-c7923680-8191-11e9-974c-4b7aaa9c2fad.jpg)
