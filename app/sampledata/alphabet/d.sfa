@@ -64,7 +64,7 @@
     file: 'sampledata/alphabet/d.fbx',
     name: 'd',
     recenter: 'root',
-     scale: 0.09,
+     scale: 0.05,
   },
   version: '0.54:2',
 }

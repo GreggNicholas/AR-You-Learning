@@ -43,7 +43,7 @@
     file: 'sampledata/alphabet/v.obj',
     name: 'v',
     recenter: 'root',
-    scale: 0.055881,
+    scale: 0.025,
   },
   version: '0.54:2',
 }

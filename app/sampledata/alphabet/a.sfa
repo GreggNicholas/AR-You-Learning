@@ -56,7 +56,7 @@
     file: 'sampledata/alphabet/balloona.fbx',
     name: 'balloona',
     recenter: 'root',
-    scale: 0.054968000000000003,
+    scale: 0.035,
   },
   version: '0.54:2',
 }

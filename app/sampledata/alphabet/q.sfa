@@ -43,7 +43,7 @@
     file: 'sampledata/alphabet/q.obj',
     name: 'q',
     recenter: 'root',
-    scale: 0.055206999999999999,
+    scale: 0.025,
   },
   version: '0.54:2',
 }
