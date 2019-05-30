@@ -43,7 +43,7 @@
     file: 'sampledata/alphabet/t.obj',
     name: 't',
     recenter: 'root',
-    scale: 0.056346,
+    scale: 0.025,
   },
   version: '0.54:2',
 }

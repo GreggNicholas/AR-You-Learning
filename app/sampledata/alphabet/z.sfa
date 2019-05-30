@@ -43,7 +43,7 @@
     file: 'sampledata/alphabet/z.obj',
     name: 'z',
     recenter: 'root',
-    scale: 0.056808999999999998,
+    scale: 0.05,
   },
   version: '0.54:2',
 }

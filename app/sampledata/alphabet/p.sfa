@@ -43,7 +43,7 @@
     file: 'sampledata/alphabet/balloonp.obj',
     name: 'balloonp',
     recenter: 'root',
-    scale: 0.057325000000000001,
+    scale: 0.025,
   },
   version: '0.54:2',
 }

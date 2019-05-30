@@ -43,7 +43,7 @@
     file: 'sampledata/alphabet/r.obj',
     name: 'r',
     recenter: 'root',
-    scale: 0.055412000000000003,
+    scale: 0.025,
   },
   version: '0.54:2',
 }

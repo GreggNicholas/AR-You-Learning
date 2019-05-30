@@ -43,7 +43,7 @@
     file: 'sampledata/alphabet/w.obj',
     name: 'w',
     recenter: 'root',
-    scale: 0.055164999999999999,
+    scale: 0.025,
   },
   version: '0.54:2',
 }

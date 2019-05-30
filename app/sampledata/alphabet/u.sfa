@@ -43,7 +43,7 @@
     file: 'sampledata/alphabet/u.obj',
     name: 'u',
     recenter: 'root',
-    scale: 0.056128999999999998,
+    scale: 0.025,
   },
   version: '0.54:2',
 }

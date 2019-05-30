@@ -207,7 +207,7 @@ public class ARHostFragment extends Fragment {
             sunVisual.setLookDirection(new Vector3(0, 0, 4));
             sunVisual.setLocalScale(new Vector3(1.0f, 1.0f, 1.0f));
 
-            String randomWord = e.getKey() + "atyrwlsopr";
+            String randomWord = e.getKey() + "abcdefghijklmnopqrstuvwxyz";
 
             for (int i = 0; i < randomWord.length(); i++) {
                 createLetter(Character.toString(randomWord.charAt(i)), e.getKey(), base, letterMap.get(Character.toString(randomWord.charAt(i))));
