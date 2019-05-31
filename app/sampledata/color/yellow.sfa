@@ -63,7 +63,7 @@
     file: 'sampledata/color/yellow.obj',
     name: 'yellow',
     recenter: 'root',
-    scale: 0.35471999999999998,
+    scale: 0.175,
   },
   version: '0.54:2',
 }

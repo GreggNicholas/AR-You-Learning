@@ -49,15 +49,10 @@ dependencies {
     implementation 'com.squareup.picasso:picasso:2.71828'
     //Sceneform
     implementation "com.google.ar.sceneform.ux:sceneform-ux:1.9.0"
+    implementation 'com.google.ar.sceneform:assets:1.8.0'
 
 
 }
-
-
-sceneform.asset('sampledata/animal/dog.fbx',
-        'default',
-        'sampledata/animal/dog.sfa',
-        'src/main/assets/dog')
 
 //letters
 sceneform.asset('sampledata/alphabet/balloonb.obj',
@@ -224,28 +219,47 @@ sceneform.asset('sampledata/color/orange.obj',
         'src/main/assets/orange')
 
 
-
-
-
-
-
-sceneform.asset('sampledata/animal/bear.fbx',
+sceneform.asset('sampledata/animal/Bat_01.obj',
         'default',
-        'sampledata/animal/bear.sfa',
+        'sampledata/animal/Bat_01.sfa',
+        'src/main/assets/bat')
+
+sceneform.asset('sampledata/animal/Bear_01.obj',
+        'default',
+        'sampledata/animal/Bear_01.sfa',
         'src/main/assets/bear')
 
-
-sceneform.asset('sampledata/animal/horse.fbx',
+sceneform.asset('sampledata/animal/Horse_01.obj',
         'default',
-        'sampledata/animal/horse.sfa',
+        'sampledata/animal/Horse_01.sfa',
         'src/main/assets/horse')
 
-sceneform.asset('sampledata/animal/lion.fbx',
+sceneform.asset('sampledata/animal/Koala_01.obj',
         'default',
-        'sampledata/animal/lion.sfa',
+        'sampledata/animal/Koala_01.sfa',
+        'src/main/assets/koala')
+
+sceneform.asset('sampledata/animal/Lion.obj',
+        'default',
+        'sampledata/animal/Lion.sfa',
         'src/main/assets/lion')
 
-sceneform.asset('sampledata/animal/koala.fbx',
+sceneform.asset('sampledata/animal/Mesh_Cat.obj',
         'default',
-        'sampledata/animal/koala.sfa',
-        'src/main/assets/koala')
+        'sampledata/animal/Mesh_Cat.sfa',
+        'src/main/assets/cat')
+
+sceneform.asset('sampledata/animal/Rat_01.obj',
+        'default',
+        'sampledata/animal/Rat_01.sfa',
+        'src/main/assets/rat')
+
+sceneform.asset('sampledata/animal/Mesh_Beagle.obj',
+        'default',
+        'sampledata/animal/Mesh_Beagle.sfa',
+        'src/main/assets/dog')
+
+sceneform.asset('sampledata/animal/Mesh_Cow.obj',
+        'default',
+        'sampledata/animal/Mesh_Cow.sfa',
+        'src/main/assets/cow')

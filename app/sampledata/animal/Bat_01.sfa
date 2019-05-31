@@ -1,16 +1,16 @@
 {
   materials: [
     {
-      name: 'mat20',
+      name: '1A1A1A',
       parameters: [
         {
           baseColor: null,
         },
         {
           baseColorTint: [
-            0.46999999999999997,
-            0.33000000000000002,
-            0.28000000000000003,
+            0.101961,
+            0.101961,
+            0.101961,
             1,
           ],
         },
@@ -27,24 +27,50 @@
       source: 'build/sceneform_sdk/default_materials/obj_material.sfm',
     },
     {
-      name: 'mat21',
+      name: '795548',
       parameters: [
         {
           baseColor: null,
         },
         {
           baseColorTint: [
-            1,
-            0,
-            0,
+            0.47450999999999999,
+            0.33333299999999999,
+            0.28235300000000002,
             1,
           ],
         },
         {
-          metallic: 1,
+          metallic: 0,
         },
         {
-          roughness: 0,
+          roughness: 1,
+        },
+        {
+          opacity: null,
+        },
+      ],
+      source: 'build/sceneform_sdk/default_materials/obj_material.sfm',
+    },
+    {
+      name: 'F06292',
+      parameters: [
+        {
+          baseColor: null,
+        },
+        {
+          baseColorTint: [
+            0.94117600000000001,
+            0.38431399999999999,
+            0.57254899999999997,
+            1,
+          ],
+        },
+        {
+          metallic: 0,
+        },
+        {
+          roughness: 1,
         },
         {
           opacity: null,
@@ -56,14 +82,13 @@
   model: {
     attributes: [
       'Position',
-      'TexCoord',
       'Orientation',
     ],
     collision: {},
-    file: 'sampledata/color/red.obj',
-    name: 'red',
+    file: 'sampledata/animal/Bat_01.obj',
+    name: 'Bat_01',
     recenter: 'root',
-    scale: 0.175,
+    scale: 0.04,
   },
   version: '0.54:2',
 }
