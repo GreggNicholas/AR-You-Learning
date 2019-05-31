@@ -77,9 +77,7 @@ public class ARHostFragment extends Fragment {
     private Set<String> rightAnswer = new HashSet<>();
     private Set<String> wrongAnswer = new HashSet<>();
     private Set<String> correctAnswerSet = new HashSet<>();
-    private int answersCorrect;
     private SharedPreferences prefs;
-    private boolean isRepeat = false;
 
     private List<Model> categoryList = new ArrayList<>();
 
@@ -214,16 +212,18 @@ public class ARHostFragment extends Fragment {
 
         for (Map.Entry<String, ModelRenderable> e : modelMap.entrySet()) {
             sunVisual.setRenderable(e.getValue());
+            sunVisual.setLocalPosition(new Vector3(base.getLocalPosition().x,//x
+                    base.getLocalPosition().y,//y
+                    base.getLocalPosition().z));
             sunVisual.setLookDirection(new Vector3(0, 0, 4));
             sunVisual.setLocalScale(new Vector3(1.0f, 1.0f, 1.0f));
 
-            String randomWord = e.getKey() + "abcdefghijklmnopqrstuvwxyz";
+//            String randomWord = e.getKey() + "abcdefghijklmnopqrstuvwxyz";
 
-            for (int i = 0; i < randomWord.length(); i++) {
-                createLetter(Character.toString(randomWord.charAt(i)), e.getKey(), base, letterMap.get(Character.toString(randomWord.charAt(i))));
+            for (int i = 0; i < e.getKey().length(); i++) {
+                createLetter(Character.toString(e.getKey().charAt(i)), e.getKey(), base, letterMap.get(Character.toString(e.getKey().charAt(i))));
 
             ObjectAnimator rotate = Animations.AR.createAnimator();
-
             rotate.setTarget(sunVisual);
             rotate.setDuration(7000);
             rotate.start();
@@ -309,29 +309,20 @@ public class ARHostFragment extends Fragment {
                         pronunciationUtil.textToSpeechAnnouncer(word, textToSpeech);
                         rightAnswer.add(letters);
                         roundCounter++;
-                        isRepeat = false;
+
                     }else{
                         pronunciationUtil.textToSpeechAnnouncer("Wrong. Please Try Again", textToSpeech);
                         wrongAnswer.add(letters);
-                        correctAnswerSet.add(word);
-                        isRepeat = true;
                     }
-                    letters = "";
 
-                    if(roundCounter < roundLimit && roundCounter < modelMapList.size() && !isRepeat){
-                        createNextGame(modelMapList.get(roundCounter));
-                    }
-                    else if(isRepeat){
+                    if(roundCounter < roundLimit && roundCounter < modelMapList.size()){
                         createNextGame(modelMapList.get(roundCounter));
                     }else{
                         moveToResultsFragment();
                     }
                 }
-
             }
-
         });
-
         Log.d("TAG", "" + roundCounter);
     }
 
@@ -377,6 +368,7 @@ public class ARHostFragment extends Fragment {
     }
 
     private void createNextGame(Map<String,ModelRenderable> modelMap) {
+        letters = "";
         mainAnchorNode.getAnchor().detach();
         mainAnchor = null;
         mainAnchorNode = null;
@@ -493,8 +485,8 @@ new RenderableSource.Builder();
 
     private Vector3 getRandomCoordinates() {
         return new Vector3(getRandom(5, -5),//x
-                getRandom(1, -4),//y
-                getRandom(-7, -10));//z
+                getRandom(1, -2),//y
+                getRandom(-2, -10));//z
     }
 
     private void addLetterToWordContainer(String letter) {

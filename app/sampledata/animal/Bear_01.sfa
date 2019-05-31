@@ -115,7 +115,7 @@
     file: 'sampledata/animal/Bear_01.obj',
     name: 'Bear_01',
     recenter: 'root',
-    scale: 0.004,
+    scale: 0.003,
   },
   version: '0.54:2',
 }
