@@ -1,6 +1,7 @@
 package com.example.aryoulearning.augmented;
 
 import android.Manifest;
+import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -18,14 +19,17 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.res.ResourcesCompat;
 import android.util.Log;
 import android.view.GestureDetector;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.aryoulearning.R;
+import com.example.aryoulearning.animation.Animations;
 import com.example.aryoulearning.audio.PronunciationUtil;
 import com.example.aryoulearning.controller.NavListener;
 import com.example.aryoulearning.model.Model;
@@ -41,8 +45,10 @@ import com.google.ar.core.TrackingState;
 import com.google.ar.sceneform.AnchorNode;
 import com.google.ar.sceneform.HitTestResult;
 import com.google.ar.sceneform.Node;
+import com.google.ar.sceneform.assets.RenderableSource;
 import com.google.ar.sceneform.math.Vector3;
 import com.google.ar.sceneform.rendering.ModelRenderable;
+import com.google.ar.sceneform.rendering.Renderable;
 import com.google.ar.sceneform.ux.ArFragment;
 import com.google.ar.sceneform.ux.TransformableNode;
 
@@ -135,7 +141,9 @@ public class ARHostFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if(getArguments() != null){
             categoryList = getArguments().getParcelableArrayList(MODEL_LIST_KEY);
+            roundLimit = categoryList.size();
         }
+
         prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
     }
 
@@ -213,6 +221,13 @@ public class ARHostFragment extends Fragment {
 
             for (int i = 0; i < randomWord.length(); i++) {
                 createLetter(Character.toString(randomWord.charAt(i)), e.getKey(), base, letterMap.get(Character.toString(randomWord.charAt(i))));
+
+            ObjectAnimator rotate = Animations.AR.createAnimator();
+
+            rotate.setTarget(sunVisual);
+            rotate.setDuration(7000);
+            rotate.start();
+
             }
             currentWord = e.getKey();
         }
@@ -433,7 +448,7 @@ public class ARHostFragment extends Fragment {
     }
 
     private void setLetterRenderables(HashMap<String, CompletableFuture<ModelRenderable>> futureLetterMap) {
-
+new RenderableSource.Builder();
         for (Map.Entry<String, CompletableFuture<ModelRenderable>> e : futureLetterMap.entrySet()) {
 
             CompletableFuture.allOf(e.getValue())

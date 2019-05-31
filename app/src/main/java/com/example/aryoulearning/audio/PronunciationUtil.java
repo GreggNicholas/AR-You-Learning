@@ -5,10 +5,13 @@ import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.widget.TextView;
 
+import com.example.aryoulearning.animation.Animations;
+
 import java.util.Locale;
 
 public final class PronunciationUtil {
     private TextToSpeech textToSpeech;
+
 
     public TextToSpeech getTTS(final Context context) {
         if (textToSpeech == null) {

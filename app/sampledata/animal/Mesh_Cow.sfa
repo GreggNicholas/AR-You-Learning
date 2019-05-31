@@ -1,0 +1,50 @@
+{
+  materials: [
+    {
+      name: 'lambert2SG',
+      parameters: [
+        {
+          baseColor: 'Tex_Cow',
+        },
+        {
+          baseColorTint: [
+            1,
+            1,
+            1,
+            1,
+          ],
+        },
+        {
+          metallic: 0,
+        },
+        {
+          roughness: 1,
+        },
+        {
+          opacity: null,
+        },
+      ],
+      source: 'build/sceneform_sdk/default_materials/obj_material.sfm',
+    },
+  ],
+  model: {
+    attributes: [
+      'Position',
+      'TexCoord',
+      'Orientation',
+    ],
+    collision: {},
+    file: 'sampledata/animal/Mesh_Cow.obj',
+    name: 'Mesh_Cow',
+    recenter: 'root',
+    scale: 0.004,
+  },
+  samplers: [
+    {
+      file: 'sampledata/animal/Tex_Cow.png',
+      name: 'Tex_Cow',
+      pipeline_name: 'Tex_Cow.png',
+    },
+  ],
+  version: '0.54:2',
+}
