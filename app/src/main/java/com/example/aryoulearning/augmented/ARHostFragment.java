@@ -16,6 +16,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.res.ResourcesCompat;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -72,6 +73,7 @@ public class ARHostFragment extends Fragment {
     private Set<String> correctAnswerSet = new HashSet<>();
     private int answersCorrect;
     private SharedPreferences prefs;
+    private boolean isRepeat = false;
 
     private List<Model> categoryList = new ArrayList<>();
 
@@ -286,21 +288,25 @@ public class ARHostFragment extends Fragment {
 
                 //Compare concatenated letters to actual word
                 if (letters.length() == word.length()) {
-                    roundCounter++;
                     correctAnswerSet.add(word);
 
                     if(letters.equals(word)){
                         pronunciationUtil.textToSpeechAnnouncer(word, textToSpeech);
                         rightAnswer.add(letters);
-
+                        roundCounter++;
+                        isRepeat = false;
                     }else{
                         pronunciationUtil.textToSpeechAnnouncer("Wrong. Please Try Again", textToSpeech);
                         wrongAnswer.add(letters);
                         correctAnswerSet.add(word);
+                        isRepeat = true;
                     }
                     letters = "";
 
-                    if(roundCounter < roundLimit && roundCounter < modelMapList.size()){
+                    if(roundCounter < roundLimit && roundCounter < modelMapList.size() && !isRepeat){
+                        createNextGame(modelMapList.get(roundCounter));
+                    }
+                    else if(isRepeat){
                         createNextGame(modelMapList.get(roundCounter));
                     }else{
                         moveToResultsFragment();
@@ -308,7 +314,10 @@ public class ARHostFragment extends Fragment {
                 }
 
             }
+
         });
+
+        Log.d("TAG", "" + roundCounter);
     }
 
     public static void requestCameraPermission(Activity activity, int requestCode) {
