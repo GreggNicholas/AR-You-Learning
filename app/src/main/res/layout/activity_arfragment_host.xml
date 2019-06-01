@@ -13,6 +13,18 @@
         android:layout_height="fill_parent"
         android:layout_gravity="center"/>
 
+    <TextView
+        android:id="@+id/word_validator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|center_horizontal"
+        android:elevation="2dp"
+        android:textSize="50sp"
+        android:textStyle="bold"
+        android:textColor="#fff"
+        android:orientation="horizontal"
+        tools:text="THIS IS A TEST"/>
+
     <LinearLayout
         android:id="@+id/word_container"
         android:layout_width="wrap_content"

@@ -9,6 +9,7 @@ import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Parcelable;
 import android.preference.PreferenceManager;
 import android.speech.tts.TextToSpeech;
@@ -19,14 +20,12 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.res.ResourcesCompat;
 import android.util.Log;
 import android.view.GestureDetector;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.aryoulearning.R;
 import com.example.aryoulearning.animation.Animations;
@@ -45,10 +44,8 @@ import com.google.ar.core.TrackingState;
 import com.google.ar.sceneform.AnchorNode;
 import com.google.ar.sceneform.HitTestResult;
 import com.google.ar.sceneform.Node;
-import com.google.ar.sceneform.assets.RenderableSource;
 import com.google.ar.sceneform.math.Vector3;
 import com.google.ar.sceneform.rendering.ModelRenderable;
-import com.google.ar.sceneform.rendering.Renderable;
 import com.google.ar.sceneform.ux.ArFragment;
 import com.google.ar.sceneform.ux.TransformableNode;
 
@@ -93,6 +90,7 @@ public class ARHostFragment extends Fragment {
     private int roundLimit = 5;
 
     private LinearLayout wordContainer;
+    private TextView wordValidator;
 
     private Set<Vector3> collisionSet = new HashSet<>();
 
@@ -149,6 +147,8 @@ public class ARHostFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         wordContainer = view.findViewById(R.id.word_container);
+        wordValidator = view.findViewById(R.id.word_validator);
+        wordValidator.setVisibility(View.INVISIBLE);
 
         setListMapsOfFutureModels(categoryList);
         setMapOfFutureLetters(futureModelMapList);
@@ -309,13 +309,30 @@ public class ARHostFragment extends Fragment {
                         pronunciationUtil.textToSpeechAnnouncer(word, textToSpeech);
                         rightAnswer.add(letters);
                         roundCounter++;
-
+                        wordValidator.setVisibility(View.VISIBLE);
+                        String validator = "Correct!";
+                        wordValidator.setText(validator);
                     }else{
                         pronunciationUtil.textToSpeechAnnouncer("Wrong. Please Try Again", textToSpeech);
                         wrongAnswer.add(letters);
+                        wordValidator.setVisibility(View.VISIBLE);
+                        String validator = "Wrong. Please Try Again";
+                        wordValidator.setText(validator);
                     }
 
                     if(roundCounter < roundLimit && roundCounter < modelMapList.size()){
+                        CountDownTimer countDownTimer = new CountDownTimer(3500, 1) {
+                            @Override
+                            public void onTick(long millisUntilFinished) {
+
+                            }
+
+                            @Override
+                            public void onFinish() {
+                                wordValidator.setVisibility(View.INVISIBLE);
+                            }
+                        };
+                        countDownTimer.start();
                         createNextGame(modelMapList.get(roundCounter));
                     }else{
                         moveToResultsFragment();
@@ -440,7 +457,6 @@ public class ARHostFragment extends Fragment {
     }
 
     private void setLetterRenderables(HashMap<String, CompletableFuture<ModelRenderable>> futureLetterMap) {
-new RenderableSource.Builder();
         for (Map.Entry<String, CompletableFuture<ModelRenderable>> e : futureLetterMap.entrySet()) {
 
             CompletableFuture.allOf(e.getValue())
