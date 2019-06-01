@@ -18,6 +18,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.res.ResourcesCompat;
+import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
@@ -91,6 +92,7 @@ public class ARHostFragment extends Fragment {
 
     private LinearLayout wordContainer;
     private TextView wordValidator;
+    private CardView wordValidatorCv;
 
     private Set<Vector3> collisionSet = new HashSet<>();
 
@@ -148,7 +150,8 @@ public class ARHostFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         wordContainer = view.findViewById(R.id.word_container);
         wordValidator = view.findViewById(R.id.word_validator);
-        wordValidator.setVisibility(View.INVISIBLE);
+        wordValidatorCv = view.findViewById(R.id.word_validator_cv);
+        wordValidatorCv.setVisibility(View.INVISIBLE);
 
         setListMapsOfFutureModels(categoryList);
         setMapOfFutureLetters(futureModelMapList);
@@ -309,13 +312,13 @@ public class ARHostFragment extends Fragment {
                         pronunciationUtil.textToSpeechAnnouncer(word, textToSpeech);
                         rightAnswer.add(letters);
                         roundCounter++;
-                        wordValidator.setVisibility(View.VISIBLE);
+                        wordValidatorCv.setVisibility(View.VISIBLE);
                         String validator = "Correct!";
                         wordValidator.setText(validator);
                     }else{
                         pronunciationUtil.textToSpeechAnnouncer("Wrong. Please Try Again", textToSpeech);
                         wrongAnswer.add(letters);
-                        wordValidator.setVisibility(View.VISIBLE);
+                        wordValidatorCv.setVisibility(View.VISIBLE);
                         String validator = "Wrong. Please Try Again";
                         wordValidator.setText(validator);
                     }
@@ -329,7 +332,7 @@ public class ARHostFragment extends Fragment {
 
                             @Override
                             public void onFinish() {
-                                wordValidator.setVisibility(View.INVISIBLE);
+                                wordValidatorCv.setVisibility(View.INVISIBLE);
                             }
                         };
                         countDownTimer.start();

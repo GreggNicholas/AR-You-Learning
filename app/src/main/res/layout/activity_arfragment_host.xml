@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
     tools:context=".augmented.ARHostFragment">
 
@@ -13,17 +14,25 @@
         android:layout_height="fill_parent"
         android:layout_gravity="center"/>
 
-    <TextView
-        android:id="@+id/word_validator"
+    <android.support.v7.widget.CardView
+        android:id="@+id/word_validator_cv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="top|center_horizontal"
-        android:elevation="2dp"
-        android:textSize="50sp"
-        android:textStyle="bold"
-        android:textColor="#fff"
         android:orientation="horizontal"
-        tools:text="THIS IS A TEST"/>
+        android:elevation="2dp"
+        app:cardBackgroundColor="#009C27B0">
+
+        <TextView
+            android:id="@+id/word_validator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#fff"
+            android:textSize="50sp"
+            android:textStyle="bold"
+            tools:text="THIS IS A TEST" />
+    </android.support.v7.widget.CardView>
+
 
     <LinearLayout
         android:id="@+id/word_container"
