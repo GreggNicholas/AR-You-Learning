@@ -1,7 +1,6 @@
 package com.example.aryoulearning.augmented;
 
 import android.Manifest;
-import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Context;
@@ -99,6 +98,7 @@ public class ARHostFragment extends Fragment {
 
     Random r = new Random();
 
+    private List<Model> modelList;
     private TextToSpeech textToSpeech;
     private PronunciationUtil pronunciationUtil;
 
@@ -106,9 +106,6 @@ public class ARHostFragment extends Fragment {
     AnchorNode mainAnchorNode;
     Frame mainFrame;
     List<HitResult> mainHits;
-
-    ObjectAnimator fadeIn;
-    ObjectAnimator fadeOut;
 
     public static ARHostFragment newInstance(List<Model> modelList) {
         ARHostFragment fragment = new ARHostFragment();
@@ -141,9 +138,9 @@ public class ARHostFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(getArguments() != null){
+        if (getArguments() != null) {
             categoryList = getArguments().getParcelableArrayList(MODEL_LIST_KEY);
-//            roundLimit = categoryList.size();
+            roundLimit = categoryList.size();
         }
 
         prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
@@ -156,34 +153,6 @@ public class ARHostFragment extends Fragment {
         wordValidator = view.findViewById(R.id.word_validator);
         wordValidatorCv = view.findViewById(R.id.word_validator_cv);
         wordValidatorCv.setVisibility(View.INVISIBLE);
-
-        fadeIn = Animations.Normal.setCardFadeInAnimator(wordValidatorCv);
-        fadeIn.setDuration(1000);
-
-        fadeIn.addListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                wordValidatorCv.setVisibility(View.VISIBLE);
-                fadeOut.start();
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animation) {
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animation) {
-
-            }
-        });
-
-        fadeOut = Animations.Normal.setCardFadeOutAnimator(wordValidatorCv);
-        fadeOut.setDuration(1000);
 
         setListMapsOfFutureModels(categoryList);
         setMapOfFutureLetters(futureModelMapList);
@@ -253,25 +222,25 @@ public class ARHostFragment extends Fragment {
             sunVisual.setLookDirection(new Vector3(0, 0, 4));
             sunVisual.setLocalScale(new Vector3(1.0f, 1.0f, 1.0f));
 
-            ObjectAnimator rotate = Animations.AR.createRotationAnimator();
-            rotate.setTarget(sunVisual);
-            rotate.setDuration(7000);
-            rotate.start();
-
 //            String randomWord = e.getKey() + "abcdefghijklmnopqrstuvwxyz";
 
             for (int i = 0; i < e.getKey().length(); i++) {
                 createLetter(Character.toString(e.getKey().charAt(i)), e.getKey(), base, letterMap.get(Character.toString(e.getKey().charAt(i))));
-            }
 
+                ObjectAnimator rotate = Animations.AR.createRotationAnimator();
+                rotate.setTarget(sunVisual);
+                rotate.setDuration(7000);
+                rotate.start();
+
+            }
             currentWord = e.getKey();
         }
         return base;
     }
 
     private void createLetter(String letter, String word,
-                                           Node parent,
-                                           ModelRenderable renderable) {
+                              Node parent,
+                              ModelRenderable renderable) {
 
         Session session = arFragment.getArSceneView().getSession();
         float[] pos = {0,//x
@@ -339,29 +308,38 @@ public class ARHostFragment extends Fragment {
                 //Compare concatenated letters to actual word
                 if (letters.length() == word.length()) {
                     correctAnswerSet.add(word);
-                    String validator = "";
 
-                    if(letters.equals(word)){
+                    if (letters.equals(word)) {
                         pronunciationUtil.textToSpeechAnnouncer(word, textToSpeech);
                         rightAnswer.add(letters);
                         roundCounter++;
-
-                        validator = "Correct!";
-
-                    }else{
+                        wordValidatorCv.setVisibility(View.VISIBLE);
+                        String validator = "Correct!";
+                        wordValidator.setText(validator);
+                    } else {
                         pronunciationUtil.textToSpeechAnnouncer("Wrong. Please Try Again", textToSpeech);
                         wrongAnswer.add(letters);
-
-                        validator = "Wrong. Please Try Again";
+                        wordValidatorCv.setVisibility(View.VISIBLE);
+                        String validator = "Wrong. Please Try Again";
+                        wordValidator.setText(validator);
                     }
 
-                    wordValidator.setText(validator);
-                    fadeIn.start();
+                    if (roundCounter < roundLimit && roundCounter < modelMapList.size()) {
+                        CountDownTimer countDownTimer = new CountDownTimer(3500, 1) {
+                            @Override
+                            public void onTick(long millisUntilFinished) {
 
-                    if(roundCounter < roundLimit && roundCounter < modelMapList.size()){
+                            }
+
+                            @Override
+                            public void onFinish() {
+                                wordValidatorCv.setVisibility(View.INVISIBLE);
+                            }
+                        };
+                        countDownTimer.start();
                         createNextGame(modelMapList.get(roundCounter));
-                    }else{
-                        moveToResultsFragment();
+                    } else {
+                        moveToResultsFragment(modelList);
                     }
                 }
             }
@@ -391,18 +369,18 @@ public class ARHostFragment extends Fragment {
     private boolean tryPlaceGame(MotionEvent tap, Frame frame) {
         if (tap != null && frame.getCamera().getTrackingState() == TrackingState.TRACKING) {
             mainFrame = frame;
-            mainHits= frame.hitTest(tap);
+            mainHits = frame.hitTest(tap);
 
             for (HitResult hit : frame.hitTest(tap)) {
                 Trackable trackable = hit.getTrackable();
                 if (trackable instanceof Plane && ((Plane) trackable).isPoseInPolygon(hit.getHitPose())) {
                     // Create the Anchor.
-                        mainAnchor = hit.createAnchor();
-                        mainAnchorNode = new AnchorNode(mainAnchor);
-                        mainAnchorNode.setParent(arFragment.getArSceneView().getScene());
-                        Node gameSystem = createGame(modelMapList.get(0));
-                        mainAnchorNode.addChild(gameSystem);
-                        return true;
+                    mainAnchor = hit.createAnchor();
+                    mainAnchorNode = new AnchorNode(mainAnchor);
+                    mainAnchorNode.setParent(arFragment.getArSceneView().getScene());
+                    Node gameSystem = createGame(modelMapList.get(0));
+                    mainAnchorNode.addChild(gameSystem);
+                    return true;
                 }
             }
         }
@@ -410,7 +388,7 @@ public class ARHostFragment extends Fragment {
         return false;
     }
 
-    private void createNextGame(Map<String,ModelRenderable> modelMap) {
+    private void createNextGame(Map<String, ModelRenderable> modelMap) {
         letters = "";
         mainAnchorNode.getAnchor().detach();
         mainAnchor = null;
@@ -543,12 +521,12 @@ public class ARHostFragment extends Fragment {
         wordContainer.addView(t);
     }
 
-    public void moveToResultsFragment() {
+    public void moveToResultsFragment(List<Model> modelList) {
         prefs.edit().putStringSet(ResultsFragment.RIGHTANSWERS, rightAnswer).apply();
         prefs.edit().putStringSet(ResultsFragment.WRONGANSWER, wrongAnswer).apply();
         prefs.edit().putStringSet(ResultsFragment.CORRECT_ANSWER_FOR_USER, correctAnswerSet).apply();
         prefs.edit().putInt(ResultsFragment.TOTALSIZE, categoryList.size()).apply();
-        listener.moveToResultsFragment();
+        listener.moveToResultsFragment(this.modelList);
     }
 
     @Override

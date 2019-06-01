@@ -9,14 +9,18 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Parcelable;
 import android.os.StrictMode;
 import android.preference.PreferenceManager;
+import android.speech.tts.TextToSpeech;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,12 +30,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.aryoulearning.R;
+import com.example.aryoulearning.audio.PronunciationUtil;
+import com.example.aryoulearning.controller.ResultsAdapter;
+import com.example.aryoulearning.model.Model;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class ResultsFragment extends Fragment {
@@ -55,10 +64,18 @@ public class ResultsFragment extends Fragment {
     private TextView userRightAnswerTextView, userWrongAnswerTextView, correctAnswerTextView;
     WebView congratsWebView;
     FloatingActionButton floatingActionButton;
+    private RecyclerView resultRV;
+    private List<Model> modelList;
+    private PronunciationUtil pronunciationUtil;
+    private TextToSpeech textToSpeech;
 
 
-    public static ResultsFragment newInstance() {
-        return new ResultsFragment();
+    public static ResultsFragment newInstance(List<Model> modelList) {
+        ResultsFragment resultsFragment = new ResultsFragment();
+        Bundle args = new Bundle();
+        args.putParcelableArrayList("model_key", (ArrayList<? extends Parcelable>) modelList);
+        resultsFragment.setArguments(args);
+        return resultsFragment;
     }
 
     public ResultsFragment() {
@@ -69,6 +86,9 @@ public class ResultsFragment extends Fragment {
         super.onCreate(savedInstanceState);
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
         extractSharedPrefs();
+        if (getArguments() != null) {
+            modelList = getArguments().getParcelableArrayList("model_key");
+        }
     }
 
 
@@ -118,12 +138,18 @@ public class ResultsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         findViewByIds(view);
         displayRatingBarAttempts();
-        userRightAnswerTextView.setText(userRightAnswersString);
-        userWrongAnswerTextView.setText(userWrongAnswersString);
-        correctAnswerTextView.setText(correctAnswerForUserString);
+//        userRightAnswerTextView.setText(userRightAnswersString);
+//        userWrongAnswerTextView.setText(userWrongAnswersString);
+//        correctAnswerTextView.setText(correctAnswerForUserString);
         allAttemptsCorrectChecker();
         fabClick();
+        setResultRV();
 
+    }
+
+    private void setResultRV() {
+        resultRV.setAdapter(new ResultsAdapter(modelList, pronunciationUtil, textToSpeech));
+        resultRV.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false));
 
     }
 
@@ -231,6 +257,7 @@ public class ResultsFragment extends Fragment {
         congratsWebView = view.findViewById(R.id.congrats_webview);
         floatingActionButton = view.findViewById(R.id.share_info);
         congratsWebView.setVisibility(View.INVISIBLE);
+        resultRV = view.findViewById(R.id.result_recyclerview);
     }
 
 

@@ -252,7 +252,7 @@ public class GameFragment extends Fragment {
             sharedPreferences.edit().putStringSet(ResultsFragment.WRONGANSWER, wrongAnswer).apply();
             sharedPreferences.edit().putStringSet(ResultsFragment.CORRECT_ANSWER_FOR_USER, correctAnswerSet).apply();
             sharedPreferences.edit().putInt(ResultsFragment.TOTALSIZE, modelList.size()).apply();
-            listener.moveToResultsFragment();
+            listener.moveToResultsFragment(this.modelList);
         }
     }
 
