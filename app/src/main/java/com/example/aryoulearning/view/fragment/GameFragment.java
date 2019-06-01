@@ -213,13 +213,18 @@ public class GameFragment extends Fragment {
                         rightAnswer.add(checker.getText().toString());
                         pronunciationUtil.textToSpeechAnnouncer(checker, textToSpeech);
                         validator = "right";
-
+                        modelList.get(counter).setCorrect(true);
+                        loadNext(counter);
                     } else {
 //                        Toast.makeText(getContext(), "wrong", Toast.LENGTH_SHORT).show();
                         wrongAnswer.add(checker.getText().toString());
                         correctAnswerSet.add(answer);
                         pronunciationUtil.textToSpeechAnnouncer("wrong!, please try again", textToSpeech);
                         validator = "wrong";
+//                        repeatTheSameWordUntilCorrectlySpelled(answer);
+                        pronunciationUtil.textToSpeechAnnouncer("wrong!", textToSpeech);
+                        modelList.get(counter).setCorrect(false);
+                        modelList.get(counter).getWrongAnswerSet().add(checker.getText().toString());
 //                        repeatTheSameWordUntilCorrectlySpelled(answer);
                     }
                     cvTextView.setText(validator);
@@ -320,7 +325,7 @@ public class GameFragment extends Fragment {
             sharedPreferences.edit().putStringSet(ResultsFragment.WRONGANSWER, wrongAnswer).apply();
             sharedPreferences.edit().putStringSet(ResultsFragment.CORRECT_ANSWER_FOR_USER, correctAnswerSet).apply();
             sharedPreferences.edit().putInt(ResultsFragment.TOTALSIZE, modelList.size()).apply();
-            listener.moveToResultsFragment(this.modelList);
+            listener.moveToResultsFragment(modelList);
         }
     }
 

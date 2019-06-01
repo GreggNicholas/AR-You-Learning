@@ -19,7 +19,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.CardView;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -99,7 +98,7 @@ public class ARHostFragment extends Fragment {
 
     Random r = new Random();
 
-    private List<Model> modelList;
+    private List<String> wrongAnswerList = new ArrayList<>();
     private TextToSpeech textToSpeech;
     private PronunciationUtil pronunciationUtil;
 
@@ -145,7 +144,6 @@ public class ARHostFragment extends Fragment {
         if (getArguments() != null) {
             categoryList = getArguments().getParcelableArrayList(MODEL_LIST_KEY);
             Collections.shuffle(categoryList);
-//            roundLimit = categoryList.size();
         }
 
         prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
@@ -361,20 +359,26 @@ public class ARHostFragment extends Fragment {
 //                }.start();
 
                 //Compare concatenated letters to actual word
+                String validator;
                 if (letters.length() == word.length()) {
                     correctAnswerSet.add(word);
-                    String validator = "";
+                    validator = "";
                     if (letters.equals(word)) {
                         pronunciationUtil.textToSpeechAnnouncer(word, textToSpeech);
                         rightAnswer.add(letters);
                         roundCounter++;
                         wordValidatorCv.setVisibility(View.VISIBLE);
-                        validator = "Correct!";
-                    } else {
+
+                        wordValidator.setText(validator);
+                        categoryList.get(roundCounter).setCorrect(true);
+                    }else{
                         pronunciationUtil.textToSpeechAnnouncer("Wrong. Please Try Again", textToSpeech);
                         wrongAnswer.add(letters);
                         wordValidatorCv.setVisibility(View.VISIBLE);
                         validator = "Wrong. Please Try Again";
+                        wordValidator.setText(validator);
+                        categoryList.get(roundCounter).setCorrect(false);
+                        wrongAnswerList.add(letters);
                     }
 
                     wordValidator.setText(validator);
@@ -382,7 +386,6 @@ public class ARHostFragment extends Fragment {
                 }
             }
         });
-        Log.d("TAG", "" + roundCounter);
     }
 
     public static void requestCameraPermission(Activity activity, int requestCode) {
@@ -563,8 +566,8 @@ public class ARHostFragment extends Fragment {
         prefs.edit().putStringSet(ResultsFragment.RIGHTANSWERS, rightAnswer).apply();
         prefs.edit().putStringSet(ResultsFragment.WRONGANSWER, wrongAnswer).apply();
         prefs.edit().putStringSet(ResultsFragment.CORRECT_ANSWER_FOR_USER, correctAnswerSet).apply();
-        prefs.edit().putInt(ResultsFragment.TOTALSIZE, categoryList.size()).apply();
-        listener.moveToResultsFragment(modelList);
+        prefs.edit().putInt(ResultsFragment.TOTALSIZE, roundLimit).apply();
+        listener.moveToResultsFragment(categoryList);
     }
 
     @Override
