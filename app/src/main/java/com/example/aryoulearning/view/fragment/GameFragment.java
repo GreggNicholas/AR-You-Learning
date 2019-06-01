@@ -30,6 +30,7 @@ import com.example.aryoulearning.model.Model;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -78,6 +79,7 @@ public class GameFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             modelList = getArguments().getParcelableArrayList("model-list-key");
+            Collections.shuffle(modelList);
         }
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
     }

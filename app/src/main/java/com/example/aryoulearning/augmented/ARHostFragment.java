@@ -1,6 +1,7 @@
 package com.example.aryoulearning.augmented;
 
 import android.Manifest;
+import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Context;
@@ -9,7 +10,6 @@ import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.os.Parcelable;
 import android.preference.PreferenceManager;
 import android.speech.tts.TextToSpeech;
@@ -51,6 +51,7 @@ import com.google.ar.sceneform.ux.ArFragment;
 import com.google.ar.sceneform.ux.TransformableNode;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -107,6 +108,9 @@ public class ARHostFragment extends Fragment {
     Frame mainFrame;
     List<HitResult> mainHits;
 
+    ObjectAnimator fadeIn;
+    ObjectAnimator fadeOut;
+
     public static ARHostFragment newInstance(List<Model> modelList) {
         ARHostFragment fragment = new ARHostFragment();
         Bundle args = new Bundle();
@@ -140,7 +144,8 @@ public class ARHostFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             categoryList = getArguments().getParcelableArrayList(MODEL_LIST_KEY);
-            roundLimit = categoryList.size();
+            Collections.shuffle(categoryList);
+//            roundLimit = categoryList.size();
         }
 
         prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
@@ -153,6 +158,56 @@ public class ARHostFragment extends Fragment {
         wordValidator = view.findViewById(R.id.word_validator);
         wordValidatorCv = view.findViewById(R.id.word_validator_cv);
         wordValidatorCv.setVisibility(View.INVISIBLE);
+
+        fadeIn = Animations.Normal.setCardFadeInAnimator(wordValidatorCv);
+        fadeIn.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                wordValidatorCv.setVisibility(View.VISIBLE);
+                fadeOut.start();
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+
+        fadeOut = Animations.Normal.setCardFadeOutAnimator(wordValidatorCv);
+        fadeOut.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                if (roundCounter < roundLimit && roundCounter < modelMapList.size()) {
+                    createNextGame(modelMapList.get(roundCounter));
+                } else {
+                    moveToResultsFragment(categoryList);
+                }
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
 
         setListMapsOfFutureModels(categoryList);
         setMapOfFutureLetters(futureModelMapList);
@@ -223,7 +278,7 @@ public class ARHostFragment extends Fragment {
             sunVisual.setLocalScale(new Vector3(1.0f, 1.0f, 1.0f));
 
 //            String randomWord = e.getKey() + "abcdefghijklmnopqrstuvwxyz";
-
+            collisionSet.clear();
             for (int i = 0; i < e.getKey().length(); i++) {
                 createLetter(Character.toString(e.getKey().charAt(i)), e.getKey(), base, letterMap.get(Character.toString(e.getKey().charAt(i))));
 
@@ -308,39 +363,22 @@ public class ARHostFragment extends Fragment {
                 //Compare concatenated letters to actual word
                 if (letters.length() == word.length()) {
                     correctAnswerSet.add(word);
-
+                    String validator = "";
                     if (letters.equals(word)) {
                         pronunciationUtil.textToSpeechAnnouncer(word, textToSpeech);
                         rightAnswer.add(letters);
                         roundCounter++;
                         wordValidatorCv.setVisibility(View.VISIBLE);
-                        String validator = "Correct!";
-                        wordValidator.setText(validator);
+                        validator = "Correct!";
                     } else {
                         pronunciationUtil.textToSpeechAnnouncer("Wrong. Please Try Again", textToSpeech);
                         wrongAnswer.add(letters);
                         wordValidatorCv.setVisibility(View.VISIBLE);
-                        String validator = "Wrong. Please Try Again";
-                        wordValidator.setText(validator);
+                        validator = "Wrong. Please Try Again";
                     }
 
-                    if (roundCounter < roundLimit && roundCounter < modelMapList.size()) {
-                        CountDownTimer countDownTimer = new CountDownTimer(3500, 1) {
-                            @Override
-                            public void onTick(long millisUntilFinished) {
-
-                            }
-
-                            @Override
-                            public void onFinish() {
-                                wordValidatorCv.setVisibility(View.INVISIBLE);
-                            }
-                        };
-                        countDownTimer.start();
-                        createNextGame(modelMapList.get(roundCounter));
-                    } else {
-                        moveToResultsFragment(modelList);
-                    }
+                    wordValidator.setText(validator);
+                    fadeIn.start();
                 }
             }
         });
