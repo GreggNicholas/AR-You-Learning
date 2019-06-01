@@ -564,7 +564,7 @@ public class ARHostFragment extends Fragment {
         prefs.edit().putStringSet(ResultsFragment.WRONGANSWER, wrongAnswer).apply();
         prefs.edit().putStringSet(ResultsFragment.CORRECT_ANSWER_FOR_USER, correctAnswerSet).apply();
         prefs.edit().putInt(ResultsFragment.TOTALSIZE, categoryList.size()).apply();
-        listener.moveToResultsFragment(this.modelList);
+        listener.moveToResultsFragment(modelList);
     }
 
     @Override
