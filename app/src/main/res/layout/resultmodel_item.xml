@@ -5,14 +5,34 @@
     android:layout_height="match_parent"
     app:cardCornerRadius="8dp">
 
-    <TextView
-        android:id="@+id/correctmodel_name"
+    <android.support.constraint.ConstraintLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content">
 
-    <ImageView
-        android:id="@+id/correctmodel_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/correctmodel_name"
+            android:layout_width="138dp"
+            android:layout_height="22dp"
+            android:layout_marginStart="172dp"
+            android:layout_marginTop="16dp"
+            android:text="meow"
+            app:layout_constraintStart_toStartOf="@id/vert_guideline"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/correctmodel_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@id/vert_guideline"
+            app:layout_constraintTop_toBottomOf="@id/correctmodel_name" />
+
+        <android.support.constraint.Guideline
+            android:id="@+id/vert_guideline"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="107dp" />
+
+    </android.support.constraint.ConstraintLayout>
 
 </android.support.v7.widget.CardView>
