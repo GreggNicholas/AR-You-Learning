@@ -2,6 +2,7 @@ package com.example.aryoulearning.controller;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -52,18 +53,20 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
     }
 
     class CategoryViewHolder extends RecyclerView.ViewHolder {
+        private CardView categoryCard;
         private TextView categoryName;
         private ImageView categoryImage;
 
         public CategoryViewHolder(@NonNull View itemView) {
             super(itemView);
+            categoryCard = itemView.findViewById(R.id.category_card);
             categoryName = itemView.findViewById(R.id.category_name);
             categoryImage = itemView.findViewById(R.id.category_image);
         }
 
         public void onBind(final List<Model> categoryList, final String category, final NavListener listener) {
             categoryName.setText(category);
-            categoryName.setOnClickListener(v -> listener.moveToHintFragment(categoryList));
+            categoryCard.setOnClickListener(v -> listener.moveToHintFragment(categoryList));
         }
     }
 }
