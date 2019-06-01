@@ -46,6 +46,7 @@ public class Animations {
             cv.setVisibility(View.VISIBLE);
             ObjectAnimator fadeAnimation = ObjectAnimator.ofFloat(cv,"alpha",0f,1.0f);
             fadeAnimation.setDuration(1000);
+            fadeAnimation.setStartDelay(500);
             return fadeAnimation;
         }
 

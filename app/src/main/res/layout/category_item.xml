@@ -23,6 +23,7 @@
 
         <TextView
             android:id="@+id/category_name"
+            android:fontFamily="@font/balloon"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAlignment="center"

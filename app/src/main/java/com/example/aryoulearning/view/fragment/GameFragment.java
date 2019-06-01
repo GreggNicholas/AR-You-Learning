@@ -1,8 +1,11 @@
 package com.example.aryoulearning.view.fragment;
 
+import android.animation.Animator;
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Point;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
@@ -11,7 +14,9 @@ import android.speech.tts.TextToSpeech;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,12 +29,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.aryoulearning.R;
+import com.example.aryoulearning.animation.Animations;
 import com.example.aryoulearning.audio.PronunciationUtil;
 import com.example.aryoulearning.controller.NavListener;
 import com.example.aryoulearning.model.Model;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -44,6 +51,7 @@ public class GameFragment extends Fragment {
     private TextView checker;
     private String answer;
     private int counter;
+    private int limit = 5;
     private int width;
     private int height;
     private int answersCorrect;
@@ -54,6 +62,10 @@ public class GameFragment extends Fragment {
     private SharedPreferences sharedPreferences;
     private PronunciationUtil pronunciationUtil;
     private TextToSpeech textToSpeech;
+    CardView cv;
+    TextView cvTextView;
+    ObjectAnimator fadeIn;
+    ObjectAnimator fadeOut;
 
     public static GameFragment newInstance(List<Model> modelList) {
         GameFragment fragment = new GameFragment();
@@ -78,6 +90,7 @@ public class GameFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             modelList = getArguments().getParcelableArrayList("model-list-key");
+            Collections.shuffle(modelList);
         }
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
     }
@@ -98,6 +111,52 @@ public class GameFragment extends Fragment {
         setMaxWidthAndHeight();
         answer = modelList.get(0).getName();
         Picasso.get().load(modelList.get(0).getImage()).into(imageView);
+        cv = view.findViewById(R.id.static_card);
+        cvTextView = view.findViewById(R.id.static_card_text);
+        fadeIn = Animations.Normal.setCardFadeInAnimator(cv);
+        fadeIn.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                fadeOut.start();
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+        fadeOut = Animations.Normal.setCardFadeOutAnimator(cv);
+        fadeOut.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                loadNext(counter);
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
         Handler handler = new Handler();
         handler.post(() -> setWordsOnScreen(answer));
 
@@ -123,6 +182,7 @@ public class GameFragment extends Fragment {
     public void drawLetters(String l, HashMap<String, Integer> map) {
         final TextView letter = new TextView(getContext());
         letter.setTextSize(80);
+        letter.setTypeface(ResourcesCompat.getFont(getActivity(),R.font.balloon));
         letter.setText(l);
         letter.setTextColor(getResources().getColor(R.color.colorBlack));
 
@@ -145,36 +205,44 @@ public class GameFragment extends Fragment {
                 pronunciationUtil.textToSpeechAnnouncer(letter, textToSpeech);
 
                 if (checker.getText().length() == answer.length()) {
+                    String validator = "";
+
                     if (checker.getText().toString().equals(answer)) {
-                        Toast.makeText(getContext(), "right", Toast.LENGTH_SHORT).show();
+                        counter++;
+//                        Toast.makeText(getContext(), "right", Toast.LENGTH_SHORT).show();
                         rightAnswer.add(checker.getText().toString());
                         pronunciationUtil.textToSpeechAnnouncer(checker, textToSpeech);
-                        loadNext();
+                        validator = "right";
+
                     } else {
-                        Toast.makeText(getContext(), "wrong", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getContext(), "wrong", Toast.LENGTH_SHORT).show();
                         wrongAnswer.add(checker.getText().toString());
                         correctAnswerSet.add(answer);
-                        pronunciationUtil.textToSpeechAnnouncer("wrong!", textToSpeech);
-                        repeatTheSameWordUntilCorrectlySpelled(answer);
+                        pronunciationUtil.textToSpeechAnnouncer("wrong!, please try again", textToSpeech);
+                        validator = "wrong";
+//                        repeatTheSameWordUntilCorrectlySpelled(answer);
                     }
+                    cvTextView.setText(validator);
+                    fadeIn.start();
+
                 }
             }
         });
         layout.addView(letter);
     }
-
-    private void repeatTheSameWordUntilCorrectlySpelled(String mistakenWord) {
-        setWordsOnScreen(mistakenWord);
-        if (checker.getText().length() == answer.length()) {
-            if (checker.getText().toString().equals(answer)) {
-                pronunciationUtil.textToSpeechAnnouncer("Correct!", textToSpeech);
-                loadNext();
-            } else {
-                pronunciationUtil.textToSpeechAnnouncer("try again!", textToSpeech);
-                checker.setText("");
-            }
-        }
-    }
+//
+//    private void repeatTheSameWordUntilCorrectlySpelled(String mistakenWord) {
+//        setWordsOnScreen(mistakenWord);
+//        if (checker.getText().length() == answer.length()) {
+//            if (checker.getText().toString().equals(answer)) {
+//                pronunciationUtil.textToSpeechAnnouncer("Correct!", textToSpeech);
+//                loadNext();
+//            } else {
+//                pronunciationUtil.textToSpeechAnnouncer("try again!", textToSpeech);
+//                checker.setText("");
+//            }
+//        }
+//    }
 
     private HashMap<String, Integer> getCoordinates() {
         HashMap<String, Integer> map = new HashMap<>();
@@ -231,9 +299,9 @@ public class GameFragment extends Fragment {
         height = dimens.y - 300;
     }
 
-    private void loadNext() {
-        counter++;
-        if (counter < modelList.size()) {
+    private void loadNext(int counter) {
+
+        if (counter < modelList.size() && counter < limit) {
             checker.setText("");
             answer = modelList.get(counter).getName();
             Picasso.get().load(modelList.get(counter).getImage()).into(imageView);

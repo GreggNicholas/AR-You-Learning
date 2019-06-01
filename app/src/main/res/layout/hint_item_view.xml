@@ -27,6 +27,7 @@
 
         <TextView
             android:id="@+id/hint_fragment_textview"
+            android:fontFamily="@font/balloon"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:gravity="center"
