@@ -149,12 +149,15 @@ public class GameFragment extends Fragment {
                         Toast.makeText(getContext(), "right", Toast.LENGTH_SHORT).show();
                         rightAnswer.add(checker.getText().toString());
                         pronunciationUtil.textToSpeechAnnouncer(checker, textToSpeech);
-                        loadNext();
+                        modelList.get(counter).setCorrect(true);
+                    loadNext();
                     } else {
                         Toast.makeText(getContext(), "wrong", Toast.LENGTH_SHORT).show();
                         wrongAnswer.add(checker.getText().toString());
                         correctAnswerSet.add(answer);
                         pronunciationUtil.textToSpeechAnnouncer("wrong!", textToSpeech);
+                        modelList.get(counter).setCorrect(false);
+                        modelList.get(counter).getWrongAnswerSet().add(checker.getText().toString());
                         repeatTheSameWordUntilCorrectlySpelled(answer);
                     }
                 }
@@ -252,7 +255,7 @@ public class GameFragment extends Fragment {
             sharedPreferences.edit().putStringSet(ResultsFragment.WRONGANSWER, wrongAnswer).apply();
             sharedPreferences.edit().putStringSet(ResultsFragment.CORRECT_ANSWER_FOR_USER, correctAnswerSet).apply();
             sharedPreferences.edit().putInt(ResultsFragment.TOTALSIZE, modelList.size()).apply();
-            listener.moveToResultsFragment();
+            listener.moveToResultsFragment(modelList);
         }
     }
 

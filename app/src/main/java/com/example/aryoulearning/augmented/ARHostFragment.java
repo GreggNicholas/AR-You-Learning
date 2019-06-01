@@ -19,7 +19,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.CardView;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -139,7 +138,6 @@ public class ARHostFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if(getArguments() != null){
             categoryList = getArguments().getParcelableArrayList(MODEL_LIST_KEY);
-            roundLimit = categoryList.size();
         }
 
         prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
@@ -222,7 +220,7 @@ public class ARHostFragment extends Fragment {
             sunVisual.setLocalScale(new Vector3(1.0f, 1.0f, 1.0f));
 
 //            String randomWord = e.getKey() + "abcdefghijklmnopqrstuvwxyz";
-
+            collisionSet.clear();
             for (int i = 0; i < e.getKey().length(); i++) {
                 createLetter(Character.toString(e.getKey().charAt(i)), e.getKey(), base, letterMap.get(Character.toString(e.getKey().charAt(i))));
 
@@ -315,12 +313,15 @@ public class ARHostFragment extends Fragment {
                         wordValidatorCv.setVisibility(View.VISIBLE);
                         String validator = "Correct!";
                         wordValidator.setText(validator);
+                        categoryList.get(roundCounter).setCorrect(true);
                     }else{
                         pronunciationUtil.textToSpeechAnnouncer("Wrong. Please Try Again", textToSpeech);
                         wrongAnswer.add(letters);
                         wordValidatorCv.setVisibility(View.VISIBLE);
                         String validator = "Wrong. Please Try Again";
                         wordValidator.setText(validator);
+                        categoryList.get(roundCounter).setCorrect(false);
+                        categoryList.get(roundCounter).setWrongAnswerSet(letters);
                     }
 
                     if(roundCounter < roundLimit && roundCounter < modelMapList.size()){
@@ -343,7 +344,6 @@ public class ARHostFragment extends Fragment {
                 }
             }
         });
-        Log.d("TAG", "" + roundCounter);
     }
 
     public static void requestCameraPermission(Activity activity, int requestCode) {
@@ -524,8 +524,8 @@ public class ARHostFragment extends Fragment {
         prefs.edit().putStringSet(ResultsFragment.RIGHTANSWERS, rightAnswer).apply();
         prefs.edit().putStringSet(ResultsFragment.WRONGANSWER, wrongAnswer).apply();
         prefs.edit().putStringSet(ResultsFragment.CORRECT_ANSWER_FOR_USER, correctAnswerSet).apply();
-        prefs.edit().putInt(ResultsFragment.TOTALSIZE, categoryList.size()).apply();
-        listener.moveToResultsFragment();
+        prefs.edit().putInt(ResultsFragment.TOTALSIZE, roundLimit).apply();
+        listener.moveToResultsFragment(categoryList);
     }
 
     @Override

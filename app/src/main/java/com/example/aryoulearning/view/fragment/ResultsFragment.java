@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Parcelable;
 import android.os.StrictMode;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
@@ -17,6 +18,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,12 +28,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.aryoulearning.R;
+import com.example.aryoulearning.model.Model;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class ResultsFragment extends Fragment {
@@ -42,6 +47,7 @@ public class ResultsFragment extends Fragment {
     public static final String TOTALSIZE = "TOTALSIZE";
     private static final int REQUEST_CODE = 1;
     public static final String CORRECT_ANSWER_FOR_USER = "correct answer for user";
+    public static final String CATEGORY_LIST = "categoryList";
     private SharedPreferences sharedPreferences;
     private Set<String> rightAnswer = new HashSet<>();
     private HashMap<String, String> map = new HashMap<>();
@@ -53,12 +59,17 @@ public class ResultsFragment extends Fragment {
     private String userRightAnswersString, userWrongAnswersString, correctAnswerForUserString;
     public static final String TAG = "ResultsFragment";
     private TextView userRightAnswerTextView, userWrongAnswerTextView, correctAnswerTextView;
+    private List<Model> categoryList;
     WebView congratsWebView;
     FloatingActionButton floatingActionButton;
 
 
-    public static ResultsFragment newInstance() {
-        return new ResultsFragment();
+    public static ResultsFragment newInstance(List<Model> categoryList) {
+        ResultsFragment resultsFragment = new ResultsFragment();
+        Bundle bundle = new Bundle();
+        bundle.putParcelableArrayList(CATEGORY_LIST, (ArrayList<? extends Parcelable>) categoryList);
+        resultsFragment.setArguments(bundle);
+        return resultsFragment;
     }
 
     public ResultsFragment() {
@@ -67,8 +78,18 @@ public class ResultsFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if(getArguments() != null){
+            categoryList = getArguments().getParcelableArrayList(CATEGORY_LIST);
+        }
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
         extractSharedPrefs();
+
+        for(int i = 0; i < categoryList.size(); i++){
+            Log.d("TAG", "Name: " + categoryList.get(i).getName());
+            Log.d("TAG", "Image: " + categoryList.get(i).getImage());
+            Log.d("TAG", "IsCorrect: " + categoryList.get(i).isCorrect());
+            Log.d("TAG", "WrongAnswerList: " + categoryList.get(i).getWrongAnswerSet().toString());
+        }
     }
 
 

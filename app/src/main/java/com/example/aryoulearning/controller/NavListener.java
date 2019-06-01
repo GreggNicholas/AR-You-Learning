@@ -9,7 +9,7 @@ public interface NavListener {
 
     void moveToGameOrARFragment(List<Model> animalResponseList, boolean isAR_on);
 
-    void moveToResultsFragment();
+    void moveToResultsFragment(List<Model> categoryList);
 
     void moveToHintFragment(List<Model> animalResponseList);
 
