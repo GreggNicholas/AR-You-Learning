@@ -207,25 +207,26 @@ public class GameFragment extends Fragment {
                 if (checker.getText().length() == answer.length()) {
                     String validator;
                     if (checker.getText().toString().equals(answer)) {
-                        counter++;
-                        validator = "You are correct";
-//                        Toast.makeText(getContext(), "right", Toast.LENGTH_SHORT).show();
-                        wrongAnswerList.clear();
+                        //will run once when correct answer is entered. the method will instantiate, and add all from the current list
                         modelList.get(counter).setWrongAnswerSet((ArrayList<String>) wrongAnswerList);
+                        counter++;
+
+                        validator = "You are correct";
+
+                        wrongAnswerList.removeAll(wrongAnswerList);
                         rightAnswer.add(checker.getText().toString());
                         pronunciationUtil.textToSpeechAnnouncer(validator, textToSpeech);
+
                     } else {
                         validator = "Wrong. Please try again";
-//                        Toast.makeText(getContext(), "wrong", Toast.LENGTH_SHORT).show();
                         wrongAnswer.add(checker.getText().toString());
                         correctAnswerSet.add(answer);
                         pronunciationUtil.textToSpeechAnnouncer(validator, textToSpeech);
+
+                        //every wrong answer, until a correct answer will be added here
                         wrongAnswerList.add(checker.getText().toString());
+
                         modelList.get(counter).setCorrect(false);
-                        ArrayList<String> wrongAnswerListContainer = new ArrayList<>();
-                        wrongAnswerListContainer.addAll(wrongAnswerList);
-                        modelList.get(counter).setWrongAnswerSet(wrongAnswerListContainer);
-//                        repeatTheSameWordUntilCorrectlySpelled(answer);
                     }
                     cvTextView.setText(validator);
                     fadeIn.start();
@@ -326,14 +327,11 @@ public class GameFragment extends Fragment {
             sharedPreferences.edit().putStringSet(ResultsFragment.WRONGANSWER, wrongAnswer).apply();
             sharedPreferences.edit().putStringSet(ResultsFragment.CORRECT_ANSWER_FOR_USER, correctAnswerSet).apply();
             sharedPreferences.edit().putInt(ResultsFragment.TOTALSIZE, limit).apply();
-            for(int i = 0; i < limit; i++){
-                if(modelList.get(i).getWrongAnswerSet().size() == 0){
+
+            for (int i = 0; i < limit; i++) {
+                if (modelList.get(i).getWrongAnswerSet() == null || modelList.get(i).getWrongAnswerSet().size() == 0) {
                     modelList.get(i).setCorrect(true);
                 }
-//                Log.d("TAG", "Name: " + modelList.get(i).getName());
-//                Log.d("TAG", "Image: " + modelList.get(i).getImage());
-//                Log.d("TAG", "IsCorrect: " + modelList.get(i).isCorrect());
-//                Log.d("TAG", "WrongAnswerList: " + modelList.get(i).getWrongAnswerSet().toString());
             }
             listener.moveToResultsFragment(modelList);
         }
