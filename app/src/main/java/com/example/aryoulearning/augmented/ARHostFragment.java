@@ -391,6 +391,7 @@ public class ARHostFragment extends Fragment {
 
                 //will run once when correct answer is entered. the method will instantiate, and add all from the current list
                 categoryList.get(roundCounter).setWrongAnswerSet((ArrayList<String>) wrongAnswerList);
+
                 //we will increment once the list is added to correct index
                 roundCounter++;
 
