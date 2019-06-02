@@ -11,8 +11,9 @@ public class Model implements Parcelable {
     private boolean isCorrect;
     private ArrayList<String> wrongAnswerSet;
 
-    public void setWrongAnswerSet(ArrayList<String> wrongAnswerSet) {
-        this.wrongAnswerSet = wrongAnswerSet;
+    public void setWrongAnswerSet(ArrayList<String> wrongAnswerSetEntry) {
+        wrongAnswerSet = new ArrayList<>();
+        this.wrongAnswerSet.addAll(wrongAnswerSetEntry);
     }
 
     protected Model(Parcel in) {
