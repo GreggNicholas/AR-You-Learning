@@ -501,7 +501,7 @@ if(trackable.getTrackingState() == TrackingState.TRACKING) {
             String modelName = futureMapList.get(i).keySet().toString();
             for (int j = 0; j < modelName.length(); j++) {
                 futureLetterMap.put(Character.toString(modelName.charAt(j)), ModelRenderable.builder().
-                        setSource(getActivity(), Uri.parse(modelName.charAt(j) + ".sfb")).build());
+                        setSource(getActivity(), Uri.parse("smaller.sfb")).build());
             }
         }
     }

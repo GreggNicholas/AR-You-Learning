@@ -76,17 +76,6 @@
 
     </android.support.v7.widget.RecyclerView>
 
-    <WebView
-        android:id="@+id/congrats_webview"
-        android:layout_width="219dp"
-        android:layout_height="157dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="32dp"
-        android:background="@color/colorWhite"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/share_info"
