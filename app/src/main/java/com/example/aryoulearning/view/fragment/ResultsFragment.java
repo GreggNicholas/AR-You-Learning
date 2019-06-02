@@ -98,7 +98,9 @@ public class ResultsFragment extends Fragment {
             Log.d("TAG", "Name: " + categoryList.get(i).getName());
             Log.d("TAG", "Image: " + categoryList.get(i).getImage());
             Log.d("TAG", "IsCorrect: " + categoryList.get(i).isCorrect());
-            Log.d("TAG", "WrongAnswerList: " + categoryList.get(i).getWrongAnswerSet().toString());
+            if(categoryList.get(i).getWrongAnswerSet() != null) {
+                Log.d("TAG", "WrongAnswerList: " + categoryList.get(i).getWrongAnswerSet().toString());
+            }
         }
     }
 

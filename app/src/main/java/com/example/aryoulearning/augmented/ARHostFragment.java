@@ -10,6 +10,7 @@ import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Parcelable;
 import android.preference.PreferenceManager;
 import android.speech.tts.TextToSpeech;
@@ -41,6 +42,7 @@ import com.google.ar.core.Pose;
 import com.google.ar.core.Session;
 import com.google.ar.core.Trackable;
 import com.google.ar.core.TrackingState;
+import com.google.ar.core.exceptions.CameraNotAvailableException;
 import com.google.ar.sceneform.AnchorNode;
 import com.google.ar.sceneform.HitTestResult;
 import com.google.ar.sceneform.Node;
@@ -305,6 +307,13 @@ public class ARHostFragment extends Fragment {
         Anchor anchor = null;
 
         if (session != null) {
+
+            try {
+                session.resume();
+
+            } catch (CameraNotAvailableException e) {
+                e.printStackTrace();
+            }
             anchor = session.createAnchor(new Pose(pos, rotation));
         }
 
@@ -360,47 +369,52 @@ public class ARHostFragment extends Fragment {
 //                }.start();
 
                 //Compare concatenated letters to actual word
+                //method was extracted into a handler because i suspected the heavy workload was causing my many AR errors
 
                 if (letters.length() == word.length()) {
-                    correctAnswerSet.add(word);
-                    String validator = "";
-                    if (letters.equals(word)) {
-                        validator = "You are correct";
-                        pronunciationUtil.textToSpeechAnnouncer(validator, textToSpeech);
-                        rightAnswer.add(letters);
-                        roundCounter++;
-
-                        //Clears the wrongAnswerList
-                        wrongAnswerList.clear();
-                        //Sets the empty wrongAnswerList to the Model object it pertains to in order to avoid null object exception
-                        categoryList.get(roundCounter).setWrongAnswerSet((ArrayList<String>) wrongAnswerList);
-
-                        wordValidatorCv.setVisibility(View.VISIBLE);
-                        wordValidator.setText(validator);
-                    }else{
-                        validator = "Wrong. Please Try Again";
-                        pronunciationUtil.textToSpeechAnnouncer(validator, textToSpeech);
-                        wrongAnswer.add(letters);
-                        wordValidatorCv.setVisibility(View.VISIBLE);
-                        wordValidator.setText(validator);
-
-                        //Adds wrong words to the wrongAnswerList
-                        wrongAnswerList.add(letters);
-                        //Create a new ArrayList that contains the reference of the wrongAnswerList because it will get cleared later.
-                        ArrayList<String> wrongAnswerListContainer = new ArrayList<>(wrongAnswerList);
-
-                        //Adds the wrongAnswerList to the current Model object.
-                        categoryList.get(roundCounter).setWrongAnswerSet(wrongAnswerListContainer);
-
-                        //Since the Model object contains a wrongAnswerList that is not empty we will set to false.
-                        categoryList.get(roundCounter).setCorrect(false);
-                    }
-
-                    wordValidator.setText(validator);
-                    fadeIn.start();
+                    Handler handler = new Handler();
+                    handler.post(() -> compareAnswer(letters,word));
                 }
             }
         });
+    }
+
+    public void compareAnswer(String letters, String word) {
+
+            correctAnswerSet.add(word);
+            String validator = "";
+
+            if (letters.equals(word)) {
+                validator = "You are correct";
+                pronunciationUtil.textToSpeechAnnouncer(validator, textToSpeech);
+                rightAnswer.add(letters);
+
+                //will run once when correct answer is entered. the method will instantiate, and add all from the current list
+                categoryList.get(roundCounter).setWrongAnswerSet((ArrayList<String>) wrongAnswerList);
+                //we will increment once the list is added to correct index
+                roundCounter++;
+
+                wordValidatorCv.setVisibility(View.VISIBLE);
+                wordValidator.setText(validator);
+
+                //this will remove all, seemed safer than clear, which nulls the object.
+                wrongAnswerList.removeAll(wrongAnswerList);
+            } else {
+                validator = "Wrong. Please Try Again";
+                pronunciationUtil.textToSpeechAnnouncer(validator, textToSpeech);
+                wrongAnswer.add(letters);
+                wordValidatorCv.setVisibility(View.VISIBLE);
+                wordValidator.setText(validator);
+
+                //every wrong answer, until a correct answer will be added here
+                wrongAnswerList.add(letters);
+
+                categoryList.get(roundCounter).setCorrect(false);
+            }
+
+            wordValidator.setText(validator);
+            fadeIn.start();
+
     }
 
     public static void requestCameraPermission(Activity activity, int requestCode) {
@@ -431,7 +445,9 @@ public class ARHostFragment extends Fragment {
                 Trackable trackable = hit.getTrackable();
                 if (trackable instanceof Plane && ((Plane) trackable).isPoseInPolygon(hit.getHitPose())) {
                     // Create the Anchor.
-                    mainAnchor = hit.createAnchor();
+                    if(trackable.getTrackingState() == TrackingState.TRACKING) {
+                        mainAnchor = hit.createAnchor();
+                    }
                     mainAnchorNode = new AnchorNode(mainAnchor);
                     mainAnchorNode.setParent(arFragment.getArSceneView().getScene());
                     Node gameSystem = createGame(modelMapList.get(0));
@@ -454,7 +470,9 @@ public class ARHostFragment extends Fragment {
             Trackable trackable = hit.getTrackable();
             if (trackable instanceof Plane && ((Plane) trackable).isPoseInPolygon(hit.getHitPose())) {
                 // Create the Anchor.
-                mainAnchor = hit.createAnchor();
+if(trackable.getTrackingState() == TrackingState.TRACKING) {
+    mainAnchor = hit.createAnchor();
+}
                 mainAnchorNode = new AnchorNode(mainAnchor);
                 mainAnchorNode.setParent(arFragment.getArSceneView().getScene());
                 Node gameSystem = createGame(modelMap);
@@ -585,7 +603,7 @@ public class ARHostFragment extends Fragment {
 
         //Checks to see which words have an empty wrongAnswerSet and changes the boolean pertaining to that Model to true.
         for (int i = 0; i < roundLimit; i++) {
-            if (categoryList.get(i).getWrongAnswerSet().size() == 0) {
+            if (categoryList.get(i).getWrongAnswerSet() == null || categoryList.get(i).getWrongAnswerSet().size() == 0) {
                 categoryList.get(i).setCorrect(true);
             }
         }
