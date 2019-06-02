@@ -84,11 +84,13 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/static_game_frag_point_button"
+    <TextView
+        android:id="@+id/static_game_frag_point_textview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="point"
+        android:textSize="25sp"
+        android:background="@drawable/textview_border"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

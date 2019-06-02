@@ -2,13 +2,10 @@ package com.example.aryoulearning.view.fragment;
 
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
-import android.annotation.SuppressLint;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Point;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
@@ -16,7 +13,6 @@ import android.preference.PreferenceManager;
 import android.speech.tts.TextToSpeech;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AlertDialog;
@@ -39,7 +35,6 @@ import com.example.aryoulearning.animation.Animations;
 import com.example.aryoulearning.audio.PronunciationUtil;
 import com.example.aryoulearning.controller.NavListener;
 import com.example.aryoulearning.model.Model;
-import com.example.aryoulearning.view.DialogClass;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -69,6 +64,10 @@ public class GameFragment extends Fragment {
     private SharedPreferences sharedPreferences;
     private PronunciationUtil pronunciationUtil;
     private TextToSpeech textToSpeech;
+    private Button hintButton;
+    private TextView pointTextView;
+    private int point = 60;
+    private String pointText;
     CardView cv;
     TextView cvTextView;
     ObjectAnimator fadeIn;
@@ -112,24 +111,19 @@ public class GameFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        point = 50;
+        pointText = "point: " + point;
         textToSpeech = pronunciationUtil.getTTS(view.getContext());
         checker = view.findViewById(R.id.checker);
         imageView = view.findViewById(R.id.imageView);
-        Button hintButton = view.findViewById(R.id.static_game_frag_hint_button);
-        hintButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setTitle(answer);
-                builder.setPositiveButton("Cancel", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        // User clicked OK button
-                    }
-                });
-                AlertDialog dialog = builder.create();
-                dialog.show();
-            }
-        });
+        hintButton = view.findViewById(R.id.static_game_frag_hint_button);
+        pointTextView = view.findViewById(R.id.static_game_frag_point_textview);
+
+        hintButton.setVisibility(View.GONE);
+
+        pointTextView.setText(pointText);
+
+
         setMaxWidthAndHeight();
         answer = modelList.get(0).getName();
         Picasso.get().load(modelList.get(0).getImage()).into(imageView);
@@ -184,6 +178,17 @@ public class GameFragment extends Fragment {
 
     }
 
+    private void showHintAsAlertDialogue() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle(answer);
+        builder.setPositiveButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
     public void setWordsOnScreen(String word) {
         List<HashMap<String, Integer>> mapList = new ArrayList<>();
 
@@ -231,6 +236,7 @@ public class GameFragment extends Fragment {
 
                     if (checker.getText().toString().equals(answer)) {
                         counter++;
+                        hintButton.setVisibility(View.GONE);
 //                        Toast.makeText(getContext(), "right", Toast.LENGTH_SHORT).show();
                         rightAnswer.add(checker.getText().toString());
                         pronunciationUtil.textToSpeechAnnouncer(checker, textToSpeech);
@@ -242,6 +248,17 @@ public class GameFragment extends Fragment {
                         correctAnswerSet.add(answer);
                         pronunciationUtil.textToSpeechAnnouncer("wrong!, please try again", textToSpeech);
                         validator = "wrong";
+                        hintButton.setVisibility(View.VISIBLE);
+                        hintButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                showHintAsAlertDialogue();
+                                point -= 5;
+                                pointText = "Point: " + point;
+                                pointTextView.setText(pointText);
+                            }
+                        });
+
 //                        repeatTheSameWordUntilCorrectlySpelled(answer);
                     }
                     cvTextView.setText(validator);
@@ -352,26 +369,5 @@ public class GameFragment extends Fragment {
         textToSpeech.shutdown();
         pronunciationUtil = null;
 
-    }
-    @SuppressLint("ValidFragment")
-    public class FireMissilesDialogFragment extends DialogFragment {
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            // Use the Builder class for convenient dialog construction
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            builder.setMessage(answer.charAt(0) + "? " + answer.charAt(answer.length() - 1))
-                    .setPositiveButton("Done", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            // FIRE ZE MISSILES!
-                        }
-                    })
-                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            // User cancelled the dialog
-                        }
-                    });
-            // Create the AlertDialog object and return it
-            return builder.create();
-        }
     }
 }
