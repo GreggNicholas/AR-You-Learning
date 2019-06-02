@@ -5,7 +5,6 @@ import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Point;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
@@ -47,6 +46,7 @@ import java.util.Set;
 public class GameFragment extends Fragment {
     private NavListener listener;
     private List<Model> modelList;
+    private List<String> wrongAnswerList = new ArrayList<>();
     private ImageView imageView;
     private TextView checker;
     private String answer;
@@ -205,36 +205,27 @@ public class GameFragment extends Fragment {
                 pronunciationUtil.textToSpeechAnnouncer(letter, textToSpeech);
 
                 if (checker.getText().length() == answer.length()) {
-                    String validator = "";
-
+                    String validator;
                     if (checker.getText().toString().equals(answer)) {
                         counter++;
+                        validator = "You are correct";
 //                        Toast.makeText(getContext(), "right", Toast.LENGTH_SHORT).show();
+                        wrongAnswerList.clear();
+                        modelList.get(counter).setWrongAnswerSet((ArrayList<String>) wrongAnswerList);
                         rightAnswer.add(checker.getText().toString());
-                        pronunciationUtil.textToSpeechAnnouncer(checker, textToSpeech);
-<<<<<<< HEAD
-                        validator = "right";
-                        modelList.get(counter).setCorrect(true);
-                        loadNext(counter);
-=======
-                        modelList.get(counter).setCorrect(true);
-                    loadNext();
->>>>>>> 76b931957472bf8dd836037096ee55148196fc8a
+                        pronunciationUtil.textToSpeechAnnouncer(validator, textToSpeech);
                     } else {
+                        validator = "Wrong. Please try again";
 //                        Toast.makeText(getContext(), "wrong", Toast.LENGTH_SHORT).show();
                         wrongAnswer.add(checker.getText().toString());
                         correctAnswerSet.add(answer);
-                        pronunciationUtil.textToSpeechAnnouncer("wrong!, please try again", textToSpeech);
-                        validator = "wrong";
-//                        repeatTheSameWordUntilCorrectlySpelled(answer);
-                        pronunciationUtil.textToSpeechAnnouncer("wrong!", textToSpeech);
+                        pronunciationUtil.textToSpeechAnnouncer(validator, textToSpeech);
+                        wrongAnswerList.add(checker.getText().toString());
                         modelList.get(counter).setCorrect(false);
-                        modelList.get(counter).getWrongAnswerSet().add(checker.getText().toString());
-<<<<<<< HEAD
+                        ArrayList<String> wrongAnswerListContainer = new ArrayList<>();
+                        wrongAnswerListContainer.addAll(wrongAnswerList);
+                        modelList.get(counter).setWrongAnswerSet(wrongAnswerListContainer);
 //                        repeatTheSameWordUntilCorrectlySpelled(answer);
-=======
-                        repeatTheSameWordUntilCorrectlySpelled(answer);
->>>>>>> 76b931957472bf8dd836037096ee55148196fc8a
                     }
                     cvTextView.setText(validator);
                     fadeIn.start();
@@ -318,6 +309,7 @@ public class GameFragment extends Fragment {
         if (counter < modelList.size() && counter < limit) {
             checker.setText("");
             answer = modelList.get(counter).getName();
+            pronunciationUtil.textToSpeechAnnouncer(answer, textToSpeech);
             Picasso.get().load(modelList.get(counter).getImage()).into(imageView);
             Handler handler = new Handler();
             handler.post(new Runnable() {
@@ -333,7 +325,16 @@ public class GameFragment extends Fragment {
             sharedPreferences.edit().putStringSet(ResultsFragment.RIGHTANSWERS, rightAnswer).apply();
             sharedPreferences.edit().putStringSet(ResultsFragment.WRONGANSWER, wrongAnswer).apply();
             sharedPreferences.edit().putStringSet(ResultsFragment.CORRECT_ANSWER_FOR_USER, correctAnswerSet).apply();
-            sharedPreferences.edit().putInt(ResultsFragment.TOTALSIZE, modelList.size()).apply();
+            sharedPreferences.edit().putInt(ResultsFragment.TOTALSIZE, limit).apply();
+            for(int i = 0; i < limit; i++){
+                if(modelList.get(i).getWrongAnswerSet().size() == 0){
+                    modelList.get(i).setCorrect(true);
+                }
+//                Log.d("TAG", "Name: " + modelList.get(i).getName());
+//                Log.d("TAG", "Image: " + modelList.get(i).getImage());
+//                Log.d("TAG", "IsCorrect: " + modelList.get(i).isCorrect());
+//                Log.d("TAG", "WrongAnswerList: " + modelList.get(i).getWrongAnswerSet().toString());
+            }
             listener.moveToResultsFragment(modelList);
         }
     }

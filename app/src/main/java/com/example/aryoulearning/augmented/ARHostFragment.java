@@ -368,9 +368,13 @@ public class ARHostFragment extends Fragment {
                         validator = "You are correct";
                         pronunciationUtil.textToSpeechAnnouncer(validator, textToSpeech);
                         rightAnswer.add(letters);
-                        wrongAnswerList.clear();
                         roundCounter++;
+
+                        //Clears the wrongAnswerList
+                        wrongAnswerList.clear();
+                        //Sets the empty wrongAnswerList to the Model object it pertains to in order to avoid null object exception
                         categoryList.get(roundCounter).setWrongAnswerSet((ArrayList<String>) wrongAnswerList);
+
                         wordValidatorCv.setVisibility(View.VISIBLE);
                         wordValidator.setText(validator);
                     }else{
@@ -379,9 +383,16 @@ public class ARHostFragment extends Fragment {
                         wrongAnswer.add(letters);
                         wordValidatorCv.setVisibility(View.VISIBLE);
                         wordValidator.setText(validator);
+
+                        //Adds wrong words to the wrongAnswerList
                         wrongAnswerList.add(letters);
+                        //Create a new ArrayList that contains the reference of the wrongAnswerList because it will get cleared later.
                         ArrayList<String> wrongAnswerListContainer = new ArrayList<>(wrongAnswerList);
+
+                        //Adds the wrongAnswerList to the current Model object.
                         categoryList.get(roundCounter).setWrongAnswerSet(wrongAnswerListContainer);
+
+                        //Since the Model object contains a wrongAnswerList that is not empty we will set to false.
                         categoryList.get(roundCounter).setCorrect(false);
                     }
 
@@ -571,11 +582,14 @@ public class ARHostFragment extends Fragment {
         prefs.edit().putStringSet(ResultsFragment.WRONGANSWER, wrongAnswer).apply();
         prefs.edit().putStringSet(ResultsFragment.CORRECT_ANSWER_FOR_USER, correctAnswerSet).apply();
         prefs.edit().putInt(ResultsFragment.TOTALSIZE, roundLimit).apply();
+
+        //Checks to see which words have an empty wrongAnswerSet and changes the boolean pertaining to that Model to true.
         for (int i = 0; i < roundLimit; i++) {
             if (categoryList.get(i).getWrongAnswerSet().size() == 0) {
                 categoryList.get(i).setCorrect(true);
             }
         }
+
         listener.moveToResultsFragment(categoryList);
     }
 
