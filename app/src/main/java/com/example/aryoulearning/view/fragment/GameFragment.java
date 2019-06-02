@@ -2,7 +2,10 @@ package com.example.aryoulearning.view.fragment;
 
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
+import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.graphics.Typeface;
@@ -13,8 +16,10 @@ import android.preference.PreferenceManager;
 import android.speech.tts.TextToSpeech;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.res.ResourcesCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.util.DisplayMetrics;
@@ -24,6 +29,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AbsoluteLayout;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,6 +39,7 @@ import com.example.aryoulearning.animation.Animations;
 import com.example.aryoulearning.audio.PronunciationUtil;
 import com.example.aryoulearning.controller.NavListener;
 import com.example.aryoulearning.model.Model;
+import com.example.aryoulearning.view.DialogClass;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -108,6 +115,21 @@ public class GameFragment extends Fragment {
         textToSpeech = pronunciationUtil.getTTS(view.getContext());
         checker = view.findViewById(R.id.checker);
         imageView = view.findViewById(R.id.imageView);
+        Button hintButton = view.findViewById(R.id.static_game_frag_hint_button);
+        hintButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle(answer);
+                builder.setPositiveButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // User clicked OK button
+                    }
+                });
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            }
+        });
         setMaxWidthAndHeight();
         answer = modelList.get(0).getName();
         Picasso.get().load(modelList.get(0).getImage()).into(imageView);
@@ -205,7 +227,7 @@ public class GameFragment extends Fragment {
                 pronunciationUtil.textToSpeechAnnouncer(letter, textToSpeech);
 
                 if (checker.getText().length() == answer.length()) {
-                    String validator = "";
+                    String   validator = "";
 
                     if (checker.getText().toString().equals(answer)) {
                         counter++;
@@ -330,5 +352,26 @@ public class GameFragment extends Fragment {
         textToSpeech.shutdown();
         pronunciationUtil = null;
 
+    }
+    @SuppressLint("ValidFragment")
+    public class FireMissilesDialogFragment extends DialogFragment {
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            // Use the Builder class for convenient dialog construction
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setMessage(answer.charAt(0) + "? " + answer.charAt(answer.length() - 1))
+                    .setPositiveButton("Done", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            // FIRE ZE MISSILES!
+                        }
+                    })
+                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            // User cancelled the dialog
+                        }
+                    });
+            // Create the AlertDialog object and return it
+            return builder.create();
+        }
     }
 }
