@@ -21,6 +21,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,6 +44,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+
 public class ResultsFragment extends Fragment {
     public static final String WRONGANSWER = "WRONGANSWER";
     public static final String ANSWERSCORRECT = "ANSWERSCORRECT";
@@ -51,6 +53,7 @@ public class ResultsFragment extends Fragment {
     public static final String TOTALSIZE = "TOTALSIZE";
     private static final int REQUEST_CODE = 1;
     public static final String CORRECT_ANSWER_FOR_USER = "correct answer for user";
+    public static final String CATEGORY_LIST = "categoryList";
     private SharedPreferences sharedPreferences;
     private Set<String> rightAnswer = new HashSet<>();
     private HashMap<String, String> map = new HashMap<>();
@@ -62,18 +65,19 @@ public class ResultsFragment extends Fragment {
     private String userRightAnswersString, userWrongAnswersString, correctAnswerForUserString;
     public static final String TAG = "ResultsFragment";
     private TextView userRightAnswerTextView, userWrongAnswerTextView, correctAnswerTextView;
+    private List<Model> categoryList;
     WebView congratsWebView;
     FloatingActionButton floatingActionButton;
     private RecyclerView resultRV;
-    private List<Model> modelList;
     private PronunciationUtil pronunciationUtil;
     private TextToSpeech textToSpeech;
 
 
     public static ResultsFragment newInstance(List<Model> modelList) {
+        Log.d("TAG", "IncomingCategoryListSize: " + modelList.size());
         ResultsFragment resultsFragment = new ResultsFragment();
         Bundle args = new Bundle();
-        args.putParcelableArrayList("model_key", (ArrayList<? extends Parcelable>) modelList);
+        args.putParcelableArrayList(CATEGORY_LIST, (ArrayList<? extends Parcelable>) modelList);
         resultsFragment.setArguments(args);
         return resultsFragment;
     }
@@ -84,10 +88,17 @@ public class ResultsFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if(getArguments() != null){
+            categoryList = getArguments().getParcelableArrayList(CATEGORY_LIST);
+        }
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
         extractSharedPrefs();
-        if (getArguments() != null) {
-            modelList = getArguments().getParcelableArrayList("model_key");
+
+        for(int i = 0; i < totalSize; i++){
+            Log.d("TAG", "Name: " + categoryList.get(i).getName());
+            Log.d("TAG", "Image: " + categoryList.get(i).getImage());
+            Log.d("TAG", "IsCorrect: " + categoryList.get(i).isCorrect());
+            Log.d("TAG", "WrongAnswerList: " + categoryList.get(i).getWrongAnswerSet().toString());
         }
     }
 
@@ -148,7 +159,7 @@ public class ResultsFragment extends Fragment {
     }
 
     private void setResultRV() {
-        resultRV.setAdapter(new ResultsAdapter(modelList, pronunciationUtil, textToSpeech));
+        resultRV.setAdapter(new ResultsAdapter(categoryList, pronunciationUtil, textToSpeech));
         resultRV.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false));
 
     }

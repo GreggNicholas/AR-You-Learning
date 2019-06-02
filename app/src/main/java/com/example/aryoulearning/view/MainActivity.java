@@ -85,10 +85,10 @@ public class MainActivity extends AppCompatActivity implements NavListener, Swit
     }
 
     @Override
-    public void moveToResultsFragment(List<Model> modelList) {
+    public void moveToResultsFragment(List<Model> categoryList) {
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.fragment_container, ResultsFragment.newInstance(modelList),"result_fragment")
+                .replace(R.id.fragment_container, ResultsFragment.newInstance(categoryList),"result_fragment")
                 .commit();
     }
 

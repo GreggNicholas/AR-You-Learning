@@ -19,7 +19,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.CardView;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -99,7 +98,7 @@ public class ARHostFragment extends Fragment {
 
     Random r = new Random();
 
-    private List<Model> modelList;
+    private List<String> wrongAnswerList = new ArrayList<>();
     private TextToSpeech textToSpeech;
     private PronunciationUtil pronunciationUtil;
 
@@ -145,7 +144,6 @@ public class ARHostFragment extends Fragment {
         if (getArguments() != null) {
             categoryList = getArguments().getParcelableArrayList(MODEL_LIST_KEY);
             Collections.shuffle(categoryList);
-//            roundLimit = categoryList.size();
         }
 
         prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
@@ -194,7 +192,7 @@ public class ARHostFragment extends Fragment {
                 if (roundCounter < roundLimit && roundCounter < modelMapList.size()) {
                     createNextGame(modelMapList.get(roundCounter));
                 } else {
-                    moveToResultsFragment(categoryList);
+                    moveToResultsFragment();
                 }
             }
 
@@ -279,6 +277,7 @@ public class ARHostFragment extends Fragment {
 
 //            String randomWord = e.getKey() + "abcdefghijklmnopqrstuvwxyz";
             collisionSet.clear();
+            pronunciationUtil.textToSpeechAnnouncer(e.getKey(), textToSpeech);
             for (int i = 0; i < e.getKey().length(); i++) {
                 createLetter(Character.toString(e.getKey().charAt(i)), e.getKey(), base, letterMap.get(Character.toString(e.getKey().charAt(i))));
 
@@ -361,20 +360,29 @@ public class ARHostFragment extends Fragment {
 //                }.start();
 
                 //Compare concatenated letters to actual word
+
                 if (letters.length() == word.length()) {
                     correctAnswerSet.add(word);
                     String validator = "";
                     if (letters.equals(word)) {
-                        pronunciationUtil.textToSpeechAnnouncer(word, textToSpeech);
+                        validator = "You are correct";
+                        pronunciationUtil.textToSpeechAnnouncer(validator, textToSpeech);
                         rightAnswer.add(letters);
+                        wrongAnswerList.clear();
                         roundCounter++;
+                        categoryList.get(roundCounter).setWrongAnswerSet((ArrayList<String>) wrongAnswerList);
                         wordValidatorCv.setVisibility(View.VISIBLE);
-                        validator = "Correct!";
-                    } else {
-                        pronunciationUtil.textToSpeechAnnouncer("Wrong. Please Try Again", textToSpeech);
+                        wordValidator.setText(validator);
+                    }else{
+                        validator = "Wrong. Please Try Again";
+                        pronunciationUtil.textToSpeechAnnouncer(validator, textToSpeech);
                         wrongAnswer.add(letters);
                         wordValidatorCv.setVisibility(View.VISIBLE);
-                        validator = "Wrong. Please Try Again";
+                        wordValidator.setText(validator);
+                        wrongAnswerList.add(letters);
+                        ArrayList<String> wrongAnswerListContainer = new ArrayList<>(wrongAnswerList);
+                        categoryList.get(roundCounter).setWrongAnswerSet(wrongAnswerListContainer);
+                        categoryList.get(roundCounter).setCorrect(false);
                     }
 
                     wordValidator.setText(validator);
@@ -382,7 +390,6 @@ public class ARHostFragment extends Fragment {
                 }
             }
         });
-        Log.d("TAG", "" + roundCounter);
     }
 
     public static void requestCameraPermission(Activity activity, int requestCode) {
@@ -559,12 +566,17 @@ public class ARHostFragment extends Fragment {
         wordContainer.addView(t);
     }
 
-    public void moveToResultsFragment(List<Model> modelList) {
+    public void moveToResultsFragment() {
         prefs.edit().putStringSet(ResultsFragment.RIGHTANSWERS, rightAnswer).apply();
         prefs.edit().putStringSet(ResultsFragment.WRONGANSWER, wrongAnswer).apply();
         prefs.edit().putStringSet(ResultsFragment.CORRECT_ANSWER_FOR_USER, correctAnswerSet).apply();
-        prefs.edit().putInt(ResultsFragment.TOTALSIZE, categoryList.size()).apply();
-        listener.moveToResultsFragment(modelList);
+        prefs.edit().putInt(ResultsFragment.TOTALSIZE, roundLimit).apply();
+        for (int i = 0; i < roundLimit; i++) {
+            if (categoryList.get(i).getWrongAnswerSet().size() == 0) {
+                categoryList.get(i).setCorrect(true);
+            }
+        }
+        listener.moveToResultsFragment(categoryList);
     }
 
     @Override
