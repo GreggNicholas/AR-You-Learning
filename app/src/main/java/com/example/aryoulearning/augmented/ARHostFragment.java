@@ -382,6 +382,7 @@ public class ARHostFragment extends Fragment {
                         wrongAnswerList.add(letters);
                         ArrayList<String> wrongAnswerListContainer = new ArrayList<>(wrongAnswerList);
                         categoryList.get(roundCounter).setWrongAnswerSet(wrongAnswerListContainer);
+                        categoryList.get(roundCounter).setCorrect(false);
                     }
 
                     wordValidator.setText(validator);
