@@ -192,7 +192,7 @@ public class ARHostFragment extends Fragment {
                 if (roundCounter < roundLimit && roundCounter < modelMapList.size()) {
                     createNextGame(modelMapList.get(roundCounter));
                 } else {
-                    moveToResultsFragment(categoryList);
+                    moveToResultsFragment();
                 }
             }
 
@@ -277,6 +277,7 @@ public class ARHostFragment extends Fragment {
 
 //            String randomWord = e.getKey() + "abcdefghijklmnopqrstuvwxyz";
             collisionSet.clear();
+            pronunciationUtil.textToSpeechAnnouncer(e.getKey(), textToSpeech);
             for (int i = 0; i < e.getKey().length(); i++) {
                 createLetter(Character.toString(e.getKey().charAt(i)), e.getKey(), base, letterMap.get(Character.toString(e.getKey().charAt(i))));
 
@@ -359,26 +360,28 @@ public class ARHostFragment extends Fragment {
 //                }.start();
 
                 //Compare concatenated letters to actual word
-                String validator;
+
                 if (letters.length() == word.length()) {
                     correctAnswerSet.add(word);
-                    validator = "";
+                    String validator = "";
                     if (letters.equals(word)) {
-                        pronunciationUtil.textToSpeechAnnouncer(word, textToSpeech);
+                        validator = "You are correct";
+                        pronunciationUtil.textToSpeechAnnouncer(validator, textToSpeech);
                         rightAnswer.add(letters);
+                        wrongAnswerList.clear();
                         roundCounter++;
+                        categoryList.get(roundCounter).setWrongAnswerSet((ArrayList<String>) wrongAnswerList);
                         wordValidatorCv.setVisibility(View.VISIBLE);
-
                         wordValidator.setText(validator);
-                        categoryList.get(roundCounter).setCorrect(true);
                     }else{
-                        pronunciationUtil.textToSpeechAnnouncer("Wrong. Please Try Again", textToSpeech);
+                        validator = "Wrong. Please Try Again";
+                        pronunciationUtil.textToSpeechAnnouncer(validator, textToSpeech);
                         wrongAnswer.add(letters);
                         wordValidatorCv.setVisibility(View.VISIBLE);
-                        validator = "Wrong. Please Try Again";
                         wordValidator.setText(validator);
-                        categoryList.get(roundCounter).setCorrect(false);
                         wrongAnswerList.add(letters);
+                        ArrayList<String> wrongAnswerListContainer = new ArrayList<>(wrongAnswerList);
+                        categoryList.get(roundCounter).setWrongAnswerSet(wrongAnswerListContainer);
                     }
 
                     wordValidator.setText(validator);
@@ -562,11 +565,16 @@ public class ARHostFragment extends Fragment {
         wordContainer.addView(t);
     }
 
-    public void moveToResultsFragment(List<Model> modelList) {
+    public void moveToResultsFragment() {
         prefs.edit().putStringSet(ResultsFragment.RIGHTANSWERS, rightAnswer).apply();
         prefs.edit().putStringSet(ResultsFragment.WRONGANSWER, wrongAnswer).apply();
         prefs.edit().putStringSet(ResultsFragment.CORRECT_ANSWER_FOR_USER, correctAnswerSet).apply();
         prefs.edit().putInt(ResultsFragment.TOTALSIZE, roundLimit).apply();
+        for (int i = 0; i < roundLimit; i++) {
+            if (categoryList.get(i).getWrongAnswerSet().size() == 0) {
+                categoryList.get(i).setCorrect(true);
+            }
+        }
         listener.moveToResultsFragment(categoryList);
     }
 

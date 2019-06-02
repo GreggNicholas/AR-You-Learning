@@ -68,15 +68,15 @@ public class ResultsFragment extends Fragment {
     WebView congratsWebView;
     FloatingActionButton floatingActionButton;
     private RecyclerView resultRV;
-    private List<Model> modelList;
     private PronunciationUtil pronunciationUtil;
     private TextToSpeech textToSpeech;
 
 
     public static ResultsFragment newInstance(List<Model> modelList) {
+        Log.d("TAG", "IncomingCategoryListSize: " + modelList.size());
         ResultsFragment resultsFragment = new ResultsFragment();
         Bundle args = new Bundle();
-        args.putParcelableArrayList("model_key", (ArrayList<? extends Parcelable>) modelList);
+        args.putParcelableArrayList(CATEGORY_LIST, (ArrayList<? extends Parcelable>) modelList);
         resultsFragment.setArguments(args);
         return resultsFragment;
     }
@@ -93,12 +93,11 @@ public class ResultsFragment extends Fragment {
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
         extractSharedPrefs();
 
-        for(int i = 0; i < categoryList.size(); i++){
+        for(int i = 0; i < totalSize; i++){
             Log.d("TAG", "Name: " + categoryList.get(i).getName());
             Log.d("TAG", "Image: " + categoryList.get(i).getImage());
             Log.d("TAG", "IsCorrect: " + categoryList.get(i).isCorrect());
             Log.d("TAG", "WrongAnswerList: " + categoryList.get(i).getWrongAnswerSet().toString());
-
         }
     }
 
@@ -159,7 +158,7 @@ public class ResultsFragment extends Fragment {
     }
 
     private void setResultRV() {
-        resultRV.setAdapter(new ResultsAdapter(modelList, pronunciationUtil, textToSpeech));
+        resultRV.setAdapter(new ResultsAdapter(categoryList, pronunciationUtil, textToSpeech));
         resultRV.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false));
 
     }

@@ -9,7 +9,7 @@ public class Model implements Parcelable {
     private String name;
     private String image;
     private boolean isCorrect;
-    private ArrayList<String> wrongAnswerSet = new ArrayList<>();
+    private ArrayList<String> wrongAnswerSet;
 
     public void setWrongAnswerSet(ArrayList<String> wrongAnswerSet) {
         this.wrongAnswerSet = wrongAnswerSet;
