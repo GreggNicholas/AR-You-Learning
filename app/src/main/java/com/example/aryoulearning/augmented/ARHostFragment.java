@@ -77,9 +77,6 @@ public class ARHostFragment extends Fragment {
 
     FrameLayout f;
 
-    boolean xTouched = false;
-    boolean yTouched = false;
-
     private boolean hasFinishedLoadingModels = false;
     private boolean hasFinishedLoadingLetters = false;
     private boolean hasPlacedGame = false;
@@ -106,9 +103,6 @@ public class ARHostFragment extends Fragment {
     private CardView wordValidatorCv;
 
     private Set<Vector3> collisionSet = new HashSet<>();
-    Set<Float> xs = new HashSet<>();
-    Set<Float> ys = new HashSet<>();
-
 
     Random r = new Random();
 
@@ -175,33 +169,22 @@ public class ARHostFragment extends Fragment {
         fadeIn = Animations.Normal.setCardFadeInAnimator(wordValidatorCv);
         fadeIn.addListener(new Animator.AnimatorListener() {
             @Override
-            public void onAnimationStart(Animator animation) {
-
-            }
-
+            public void onAnimationStart(Animator animation) {}
             @Override
             public void onAnimationEnd(Animator animation) {
                 wordValidatorCv.setVisibility(View.VISIBLE);
                 fadeOut.start();
             }
-
             @Override
-            public void onAnimationCancel(Animator animation) {
-            }
-
+            public void onAnimationCancel(Animator animation) {}
             @Override
-            public void onAnimationRepeat(Animator animation) {
-
-            }
+            public void onAnimationRepeat(Animator animation) {}
         });
 
         fadeOut = Animations.Normal.setCardFadeOutAnimator(wordValidatorCv);
         fadeOut.addListener(new Animator.AnimatorListener() {
             @Override
-            public void onAnimationStart(Animator animation) {
-
-            }
-
+            public void onAnimationStart(Animator animation) {}
             @Override
             public void onAnimationEnd(Animator animation) {
                 if (roundCounter < roundLimit && roundCounter < modelMapList.size()) {
@@ -210,16 +193,10 @@ public class ARHostFragment extends Fragment {
                     moveToResultsFragment();
                 }
             }
-
             @Override
-            public void onAnimationCancel(Animator animation) {
-
-            }
-
+            public void onAnimationCancel(Animator animation) {}
             @Override
-            public void onAnimationRepeat(Animator animation) {
-
-            }
+            public void onAnimationRepeat(Animator animation) {}
         });
 
         setListMapsOfFutureModels(categoryList);
@@ -237,13 +214,11 @@ public class ARHostFragment extends Fragment {
                                 onSingleTap(e);
                                 return true;
                             }
-
                             @Override
                             public boolean onDown(MotionEvent e) {
                                 return true;
                             }
                         });
-
 
         arFragment.getArSceneView()
                 .getScene()
@@ -254,9 +229,7 @@ public class ARHostFragment extends Fragment {
                             if (!hasPlacedGame) {
                                 return gestureDetector.onTouchEvent(event);
                             }
-
                             // Otherwise return false so that the touch event can propagate to the scene.
-
                             return false;
                         });
 
@@ -272,7 +245,6 @@ public class ARHostFragment extends Fragment {
                                 return;
                             }
                         });
-
 //         Lastly request CAMERA permission which is required by ARCore.
         requestCameraPermission(getActivity(), RC_PERMISSIONS);
     }
@@ -602,12 +574,12 @@ if(trackable.getTrackingState() == TrackingState.TRACKING) {
                 getRandom(1, -2),//y
                 getRandom(-2, -10));//z
     }
-
+//instantiates a lottie view
     private LottieAnimationView getSparklingAnimationView(){
         LottieAnimationView lav = new LottieAnimationView(getContext());
         return lav;
     }
-
+//adds a lottie view to the corresposnding x and y coordinates
     private void addAnimationViewOnTopOfLetter(LottieAnimationView lav, int x, int y){ ;
         lav.setElevation(1000);
         lav.setVisibility(View.VISIBLE);
