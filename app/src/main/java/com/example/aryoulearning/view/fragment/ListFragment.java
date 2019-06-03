@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.example.aryoulearning.R;
 import com.example.aryoulearning.controller.CategoryAdapter;
@@ -73,7 +74,7 @@ public class ListFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         rv = view.findViewById(R.id.category_rv);
         rv.setAdapter(new CategoryAdapter(categoryList, categoryName, categoryImages));
-        rv.setLayoutManager(new LinearLayoutManager(requireContext()));
+        rv.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayout.HORIZONTAL,false));
     }
 
     @Override
