@@ -13,6 +13,7 @@ import com.example.aryoulearning.network.RetrofitSingleton;
 import com.example.aryoulearning.view.fragment.GameFragment;
 import com.example.aryoulearning.view.fragment.HintFragment;
 import com.example.aryoulearning.view.fragment.ListFragment;
+import com.example.aryoulearning.view.fragment.ReplayFragment;
 import com.example.aryoulearning.view.fragment.ResultsFragment;
 
 import java.util.ArrayList;
@@ -72,13 +73,13 @@ public class MainActivity extends AppCompatActivity implements NavListener, Swit
         if (AR_is_on) {
             getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.fragment_container, ARHostFragment.newInstance(modelList),"ar_fragment")
+                    .replace(R.id.fragment_container, ARHostFragment.newInstance(modelList), "ar_fragment")
 //                    .addToBackStack(null)
                     .commit();
         } else {
             getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.fragment_container, GameFragment.newInstance(modelList),"game_fragment")
+                    .replace(R.id.fragment_container, GameFragment.newInstance(modelList), "game_fragment")
 //                    .addToBackStack(null)
                     .commit();
         }
@@ -88,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements NavListener, Swit
     public void moveToResultsFragment(List<Model> categoryList) {
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.fragment_container, ResultsFragment.newInstance(categoryList),"result_fragment")
+                .replace(R.id.fragment_container, ResultsFragment.newInstance(categoryList), "result_fragment")
                 .commit();
     }
 
@@ -102,7 +103,15 @@ public class MainActivity extends AppCompatActivity implements NavListener, Swit
     }
 
     @Override
+    public void moveToReplayFragment(List<Model> modelList) {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .add(R.id.fragment_container, ReplayFragment.newInstance(modelList))
+                .commit();
+    }
+
+    @Override
     public void updateSwitchStatus(boolean isOn) {
-AR_SWITCH_STATUS = isOn;
+        AR_SWITCH_STATUS = isOn;
     }
 }

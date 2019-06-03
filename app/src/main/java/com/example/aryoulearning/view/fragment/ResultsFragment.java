@@ -154,7 +154,6 @@ public class ResultsFragment extends Fragment {
 //        userRightAnswerTextView.setText(userRightAnswersString);
 //        userWrongAnswerTextView.setText(userWrongAnswersString);
 //        correctAnswerTextView.setText(correctAnswerForUserString);
-        allAttemptsCorrectChecker();
         fabClick();
         setResultRV();
 
@@ -250,26 +249,12 @@ public class ResultsFragment extends Fragment {
         }
     }
 
-    private void allAttemptsCorrectChecker() {
-        if (userWrongAnswersString == null || wrongAnswer == null || userWrongAnswersString.isEmpty()
-                || wrongAnswer.isEmpty() || userWrongAnswerTextView == null
-                || userWrongAnswerTextView.getText().equals(String.valueOf(0))) {
-            userWrongAnswerTextView.setVisibility(View.INVISIBLE);
-            correctAnswerTextView.setVisibility(View.INVISIBLE);
-            congratsWebView.setVisibility(View.VISIBLE);
-            String congratsImage = getString(R.string.congratsgif);
-            congratsWebView.loadUrl(congratsImage);
-        }
-    }
-
     private void findViewByIds(@NonNull View view) {
         userRightAnswerTextView = view.findViewById(R.id.result_fragment_user_right_answer_tv);
         userWrongAnswerTextView = view.findViewById(R.id.result_fragment_user_wrong_answer_tv);
         correctAnswerTextView = view.findViewById(R.id.result_fragment_correct_answer_tv);
         rainbowRatingBar = view.findViewById(R.id.rainbow_correctword_ratingbar);
-        congratsWebView = view.findViewById(R.id.congrats_webview);
         floatingActionButton = view.findViewById(R.id.share_info);
-        congratsWebView.setVisibility(View.INVISIBLE);
         resultRV = view.findViewById(R.id.result_recyclerview);
     }
 

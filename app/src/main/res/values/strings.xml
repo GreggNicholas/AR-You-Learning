@@ -16,5 +16,8 @@
     <string name="switch_off">OFF</string>
     <string name="switch_on">ON</string>
     <string name="hint_frag_start_button_text">start</string>
+    <string name="play_again">Play Again?</string>
+    <string name="home">Home</string>
+    <string name="results">Results</string>
 
 </resources>
