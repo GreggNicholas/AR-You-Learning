@@ -20,14 +20,18 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.CardView;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsoluteLayout;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.example.aryoulearning.R;
 import com.example.aryoulearning.animation.Animations;
 import com.example.aryoulearning.audio.PronunciationUtil;
@@ -70,6 +74,8 @@ public class ARHostFragment extends Fragment {
 
     private GestureDetector gestureDetector;
     private ArFragment arFragment;
+
+    FrameLayout f;
 
     private boolean hasFinishedLoadingModels = false;
     private boolean hasFinishedLoadingLetters = false;
@@ -154,6 +160,7 @@ public class ARHostFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        f = view.findViewById(R.id.frame_layout);
         wordContainer = view.findViewById(R.id.word_container);
         wordValidator = view.findViewById(R.id.word_validator);
         wordValidatorCv = view.findViewById(R.id.word_validator_cv);
@@ -162,33 +169,22 @@ public class ARHostFragment extends Fragment {
         fadeIn = Animations.Normal.setCardFadeInAnimator(wordValidatorCv);
         fadeIn.addListener(new Animator.AnimatorListener() {
             @Override
-            public void onAnimationStart(Animator animation) {
-
-            }
-
+            public void onAnimationStart(Animator animation) {}
             @Override
             public void onAnimationEnd(Animator animation) {
                 wordValidatorCv.setVisibility(View.VISIBLE);
                 fadeOut.start();
             }
-
             @Override
-            public void onAnimationCancel(Animator animation) {
-            }
-
+            public void onAnimationCancel(Animator animation) {}
             @Override
-            public void onAnimationRepeat(Animator animation) {
-
-            }
+            public void onAnimationRepeat(Animator animation) {}
         });
 
         fadeOut = Animations.Normal.setCardFadeOutAnimator(wordValidatorCv);
         fadeOut.addListener(new Animator.AnimatorListener() {
             @Override
-            public void onAnimationStart(Animator animation) {
-
-            }
-
+            public void onAnimationStart(Animator animation) {}
             @Override
             public void onAnimationEnd(Animator animation) {
                 if (roundCounter < roundLimit && roundCounter < modelMapList.size()) {
@@ -197,16 +193,10 @@ public class ARHostFragment extends Fragment {
                     moveToResultsFragment();
                 }
             }
-
             @Override
-            public void onAnimationCancel(Animator animation) {
-
-            }
-
+            public void onAnimationCancel(Animator animation) {}
             @Override
-            public void onAnimationRepeat(Animator animation) {
-
-            }
+            public void onAnimationRepeat(Animator animation) {}
         });
 
         setListMapsOfFutureModels(categoryList);
@@ -224,13 +214,11 @@ public class ARHostFragment extends Fragment {
                                 onSingleTap(e);
                                 return true;
                             }
-
                             @Override
                             public boolean onDown(MotionEvent e) {
                                 return true;
                             }
                         });
-
 
         arFragment.getArSceneView()
                 .getScene()
@@ -332,6 +320,13 @@ public class ARHostFragment extends Fragment {
             coordinates = getRandomCoordinates();
         }
 
+        while( (coordinates.x < parent.getLocalPosition().x + 2) && (coordinates.x > parent.getLocalPosition().x - 2)
+            && (coordinates.y < parent.getLocalPosition().y + 2) && (coordinates.y > parent.getLocalPosition().y - 2)
+            && (coordinates.z < parent.getLocalPosition().z + 2) && (coordinates.z > parent.getLocalPosition().z - 4)) {
+
+            coordinates = getRandomCoordinates();
+        }
+
         trNode.setLocalPosition(coordinates);
 
         trNode.setOnTapListener(new Node.OnTapListener() {
@@ -344,8 +339,15 @@ public class ARHostFragment extends Fragment {
                     playBallonPop.reset();
                     playBallonPop.release();
                 });
+
                 //Make the letter disappear
                 base.getAnchor().detach();
+
+                Log.d("motioneventxy",motionEvent.getX() + " " + motionEvent.getY());
+
+                addAnimationViewOnTopOfLetter(getSparklingAnimationView(),
+                        Math.round(motionEvent.getX()) - 1 ,
+                        Math.round(motionEvent.getY()) - 1);
 
                 //Keep track of the letter selected
                 letters += letter;
@@ -356,17 +358,6 @@ public class ARHostFragment extends Fragment {
                 //Pronunciation of the word.
                 textToSpeech.setSpeechRate(0.6f);
                 pronunciationUtil.textToSpeechAnnouncer(letter, textToSpeech);
-
-//                CountDownTimer timer = new CountDownTimer(500, 1) {
-//                    @Override
-//                    public void onTick(long millisUntilFinished) {
-//                    }
-//
-//                    @Override
-//                    public void onFinish() {
-//                        pronunciationUtil.textToSpeechAnnouncer(letter, textToSpeech);
-//                    }
-//                }.start();
 
                 //Compare concatenated letters to actual word
                 //method was extracted into a handler because i suspected the heavy workload was causing my many AR errors
@@ -460,7 +451,6 @@ public class ARHostFragment extends Fragment {
                 }
             }
         }
-
         return false;
     }
 
@@ -483,9 +473,7 @@ if(trackable.getTrackingState() == TrackingState.TRACKING) {
                 mainAnchorNode.addChild(gameSystem);
             }
         }
-
         wordContainer.removeAllViews();
-
     }
 
     private void setListMapsOfFutureModels(List<Model> modelList) {
@@ -586,6 +574,36 @@ if(trackable.getTrackingState() == TrackingState.TRACKING) {
                 getRandom(1, -2),//y
                 getRandom(-2, -10));//z
     }
+//instantiates a lottie view
+    private LottieAnimationView getSparklingAnimationView(){
+        LottieAnimationView lav = new LottieAnimationView(getContext());
+        return lav;
+    }
+//adds a lottie view to the corresposnding x and y coordinates
+    private void addAnimationViewOnTopOfLetter(LottieAnimationView lav, int x, int y){ ;
+        lav.setElevation(1000);
+        lav.setVisibility(View.VISIBLE);
+        lav.loop(false);
+        f.addView(lav,300,300);
+        lav.setX(x);
+        lav.setY(y);
+        lav.setAnimation("explosionA.json");
+        lav.setScale(1);
+        lav.setSpeed(.8f);
+        lav.playAnimation();
+        lav.addAnimatorListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {}
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                f.removeView(lav);
+            }
+            @Override
+            public void onAnimationCancel(Animator animation) {}
+            @Override
+            public void onAnimationRepeat(Animator animation) {}
+        });
+    }
 
     private void addLetterToWordContainer(String letter) {
         Typeface ballonTF = ResourcesCompat.getFont(getActivity(), R.font.balloon);
@@ -611,7 +629,6 @@ if(trackable.getTrackingState() == TrackingState.TRACKING) {
                 categoryList.get(i).setCorrect(true);
             }
         }
-
         listener.moveToReplayFragment(categoryList);
     }
 
