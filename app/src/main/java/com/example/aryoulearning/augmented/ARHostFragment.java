@@ -373,15 +373,18 @@ public class ARHostFragment extends Fragment {
 
                 if (letters.length() == word.length()) {
                     Handler handler = new Handler();
-                    handler.post(() -> compareAnswer(letters,word));
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            compareAnswer(letters, word);
+                        }
+                    });
                 }
             }
         });
     }
 
     public void compareAnswer(String letters, String word) {
-
-            correctAnswerSet.add(word);
             String validator = "";
 
             if (letters.equals(word)) {
@@ -406,7 +409,7 @@ public class ARHostFragment extends Fragment {
                 wrongAnswer.add(letters);
                 wordValidatorCv.setVisibility(View.VISIBLE);
                 wordValidator.setText(validator);
-
+                correctAnswerSet.add(word);
                 //every wrong answer, until a correct answer will be added here
                 wrongAnswerList.add(letters);
 
@@ -501,7 +504,7 @@ if(trackable.getTrackingState() == TrackingState.TRACKING) {
             String modelName = futureMapList.get(i).keySet().toString();
             for (int j = 0; j < modelName.length(); j++) {
                 futureLetterMap.put(Character.toString(modelName.charAt(j)), ModelRenderable.builder().
-                        setSource(getActivity(), Uri.parse("smaller.sfb")).build());
+                        setSource(getActivity(), Uri.parse(modelName.charAt(j) + ".sfb")).build());
             }
         }
     }
