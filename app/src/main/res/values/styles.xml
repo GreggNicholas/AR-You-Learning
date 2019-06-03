@@ -32,4 +32,76 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="playagain_image_style">
+        <item name="android:layout_width">134dp</item>
+        <item name="android:layout_height">117dp</item>
+        <item name="android:layout_marginStart">8dp</item>
+        <item name="android:layout_marginTop">75dp</item>
+        <item name="android:layout_marginEnd">12dp</item>
+    </style>
+
+    <style name="home_image_style">
+        <item name="android:layout_width">118dp</item>
+        <item name="android:layout_height">91dp</item>
+        <item name="android:layout_marginTop">96dp</item>
+        <item name="android:layout_marginEnd">80dp</item>
+    </style>
+
+    <style name="playagain_text_style">
+        <item name="android:layout_width">177dp</item>
+        <item name="android:layout_height">77dp</item>
+        <item name="android:elevation">14dp</item>
+        <item name="android:fontFamily">@font/balloon</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">32sp</item>
+    </style>
+
+    <style name="home_text_style">
+        <item name="android:layout_width">171dp</item>
+        <item name="android:layout_height">72dp</item>
+        <item name="android:layout_marginEnd">12dp</item>
+        <item name="android:elevation">8dp</item>
+        <item name="android:fontFamily">@font/balloon</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">32sp</item>
+    </style>
+
+    <style name="results_text_style">
+        <item name="android:layout_width">178dp</item>
+        <item name="android:layout_height">84dp</item>
+        <item name="android:layout_marginStart">8dp</item>
+        <item name="android:elevation">8dp</item>
+        <item name="android:fontFamily">@font/balloon</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:textSize">32sp</item>
+    </style>
+
+    <style name="results_imgbutton_style">
+        <item name="android:layout_width">180dp</item>
+        <item name="android:layout_height">86dp</item>
+        <item name="android:layout_marginStart">8dp</item>
+        <item name="android:elevation">6dp</item>
+    </style>
+
+    <style name="home_imgbutton_style" parent="results_imgbutton_style">
+        <item name="android:layout_marginEnd">8dp</item>
+        <item name="android:foreground">@color/colorPrimaryDark</item>
+    </style>
+
+    <style name="play_imgbutton_style">
+        <item name="android:layout_width">180dp</item>
+        <item name="android:layout_height">86dp</item>
+        <item name="android:layout_marginStart">8dp</item>
+        <item name="android:elevation">12dp</item>
+        <item name="android:foreground">@color/design_default_color_primary_dark</item>
+    </style>
+
+    <style name="results_image_style">
+        <item name="android:layout_width">107dp</item>
+        <item name="android:layout_height">82dp</item>
+        <item name="android:layout_marginStart">88dp</item>
+        <item name="android:layout_marginTop">96dp</item>
+    </style>
+
 </resources>
