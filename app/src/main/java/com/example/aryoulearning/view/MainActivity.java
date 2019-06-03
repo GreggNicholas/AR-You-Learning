@@ -110,7 +110,7 @@ public class MainActivity extends AppCompatActivity implements NavListener, Swit
     public void moveToReplayFragment(List<Model> modelList) {
         getSupportFragmentManager()
                 .beginTransaction()
-                .add(R.id.fragment_container, ReplayFragment.newInstance(modelList))
+                .replace(R.id.fragment_container, ReplayFragment.newInstance(modelList))
                 .commit();
     }
 

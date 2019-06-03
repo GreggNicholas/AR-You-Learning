@@ -26,7 +26,6 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsoluteLayout;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -190,7 +189,7 @@ public class ARHostFragment extends Fragment {
                 if (roundCounter < roundLimit && roundCounter < modelMapList.size()) {
                     createNextGame(modelMapList.get(roundCounter));
                 } else {
-                    moveToResultsFragment();
+                    moveToReplayFragment();
                 }
             }
             @Override
@@ -617,7 +616,7 @@ if(trackable.getTrackingState() == TrackingState.TRACKING) {
         wordContainer.addView(t);
     }
 
-    public void moveToResultsFragment() {
+    public void moveToReplayFragment() {
         prefs.edit().putStringSet(ResultsFragment.RIGHTANSWERS, rightAnswer).apply();
         prefs.edit().putStringSet(ResultsFragment.WRONGANSWER, wrongAnswer).apply();
         prefs.edit().putStringSet(ResultsFragment.CORRECT_ANSWER_FOR_USER, correctAnswerSet).apply();
@@ -629,6 +628,7 @@ if(trackable.getTrackingState() == TrackingState.TRACKING) {
                 categoryList.get(i).setCorrect(true);
             }
         }
+
         listener.moveToReplayFragment(categoryList);
     }
 

@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -32,7 +33,7 @@ public class ReplayFragment extends Fragment {
     private NavListener navListener;
     private SwitchListener switchListener;
 
-    private ImageButton resultsIB, homeIB, playagainIB;
+    private Button resultsIB, homeIB, playagainIB;
     private TextView resultsTV, homeTV, playagainTV;
 
     private List<List<Model>> listOfModelList;
@@ -94,9 +95,9 @@ public class ReplayFragment extends Fragment {
         resultsIB = view.findViewById(R.id.showresults_imagebutton);
         homeIB = view.findViewById(R.id.home_imagebutton);
         playagainIB = view.findViewById(R.id.playagain_imagebutton);
-        resultsTV = view.findViewById(R.id.results_textview);
-        homeTV = view.findViewById(R.id.home_textview);
-        playagainTV = view.findViewById(R.id.playagain_textview);
+//        resultsTV = view.findViewById(R.id.results_textview);
+//        homeTV = view.findViewById(R.id.home_textview);
+//        playagainTV = view.findViewById(R.id.playagain_textview);
 
         resultsIB.setOnClickListener(v -> {
             pronunciationUtil.textToSpeechAnnouncer("Showing progress", textToSpeech);
