@@ -1,6 +1,7 @@
 package com.example.aryoulearning.view.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.speech.tts.TextToSpeech;
@@ -97,10 +98,20 @@ public class ReplayFragment extends Fragment {
         homeTV = view.findViewById(R.id.home_textview);
         playagainTV = view.findViewById(R.id.playagain_textview);
 
-        resultsIB.setOnClickListener(v -> navListener.moveToResultsFragment(modelList));
-        homeIB.setOnClickListener(v -> navListener.moveToListFragment(listOfModelList, categoryList));
-        playagainIB.setOnClickListener(v -> navListener.moveToGameOrARFragment(modelList,
-                MainActivity.AR_SWITCH_STATUS));
+        resultsIB.setOnClickListener(v -> {
+            pronunciationUtil.textToSpeechAnnouncer("Showing progress", textToSpeech);
+            navListener.moveToResultsFragment(modelList);
+        });
+        homeIB.setOnClickListener(v -> {
+            pronunciationUtil.textToSpeechAnnouncer("Lets go home", textToSpeech);
+            Intent homeIntent = new Intent(getContext(), MainActivity.class);
+            startActivity(homeIntent);
+        });
+        playagainIB.setOnClickListener(v -> {
+            pronunciationUtil.textToSpeechAnnouncer("Lets play again!", textToSpeech);
+            navListener.moveToGameOrARFragment(modelList,
+                    MainActivity.AR_SWITCH_STATUS);
+        });
     }
 
     @Override
