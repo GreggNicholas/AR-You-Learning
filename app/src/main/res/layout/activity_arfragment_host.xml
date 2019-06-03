@@ -5,6 +5,8 @@
     android:layout_height="fill_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
+    android:id="@+id/frame_layout"
+    android:elevation="100dp"
     tools:context=".augmented.ARHostFragment">
 
     <fragment
@@ -55,4 +57,5 @@
         android:layout_height="100dp"
         android:layout_gravity="bottom|center_horizontal"
         android:orientation="horizontal" />
+
 </FrameLayout>

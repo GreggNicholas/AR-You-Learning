@@ -49,7 +49,7 @@ dependencies {
     implementation 'com.squareup.picasso:picasso:2.71828'
     //Sceneform
     implementation "com.google.ar.sceneform.ux:sceneform-ux:1.9.0"
-    implementation 'com.google.ar.sceneform:assets:1.8.0'
+    implementation 'com.airbnb.android:lottie:2.7.0'
 
 
 }
