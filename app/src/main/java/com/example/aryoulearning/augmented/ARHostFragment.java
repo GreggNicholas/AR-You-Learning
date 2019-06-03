@@ -629,6 +629,7 @@ if(trackable.getTrackingState() == TrackingState.TRACKING) {
                 categoryList.get(i).setCorrect(true);
             }
         }
+
         listener.moveToReplayFragment(categoryList);
     }
 
