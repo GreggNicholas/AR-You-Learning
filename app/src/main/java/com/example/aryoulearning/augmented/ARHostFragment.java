@@ -315,16 +315,16 @@ public class ARHostFragment extends Fragment {
 //        trNode.setLocalScale(new Vector3(.1f,.1f,.1f));
         Vector3 coordinates = getRandomCoordinates();
 
-        while (checkDoesLetterCollide(coordinates)) {
+        while (checkDoesLetterCollide(coordinates, base.getLocalPosition())) {
             coordinates = getRandomCoordinates();
         }
 
-        while( (coordinates.x < parent.getLocalPosition().x + 2) && (coordinates.x > parent.getLocalPosition().x - 2)
-            && (coordinates.y < parent.getLocalPosition().y + 2) && (coordinates.y > parent.getLocalPosition().y - 2)
-            && (coordinates.z < parent.getLocalPosition().z + 2) && (coordinates.z > parent.getLocalPosition().z - 4)) {
-
-            coordinates = getRandomCoordinates();
-        }
+//        while( (coordinates.x < parent.getLocalPosition().x + 2) && (coordinates.x > parent.getLocalPosition().x - 2)
+//            && (coordinates.y < parent.getLocalPosition().y + 2) && (coordinates.y > parent.getLocalPosition().y - 2)
+//            && (coordinates.z < parent.getLocalPosition().z + 2) && (coordinates.z > parent.getLocalPosition().z - 6)) {
+//
+//            coordinates = getRandomCoordinates();
+//        }
 
         trNode.setLocalPosition(coordinates);
 
@@ -345,8 +345,8 @@ public class ARHostFragment extends Fragment {
                 Log.d("motioneventxy",motionEvent.getX() + " " + motionEvent.getY());
 
                 addAnimationViewOnTopOfLetter(getSparklingAnimationView(),
-                        Math.round(motionEvent.getX()) - 1 ,
-                        Math.round(motionEvent.getY()) - 1);
+                        Math.round(motionEvent.getX()-7) ,
+                        Math.round(motionEvent.getY()+7));
 
                 //Keep track of the letter selected
                 letters += letter;
@@ -551,20 +551,31 @@ if(trackable.getTrackingState() == TrackingState.TRACKING) {
         return r.nextInt((max - min)) + min;
     }
 
-    private boolean checkDoesLetterCollide(Vector3 newV3) {
+    private boolean checkDoesLetterCollide(Vector3 newV3, Vector3 parentModel) {
         if (collisionSet.isEmpty()) {
             collisionSet.add(newV3);
             return false;
         }
+
+        if ((newV3.x < parentModel.x + 2) && (newV3.x > parentModel.x - 2)
+                && (newV3.y < parentModel.y + 2) && (newV3.y > parentModel.y - 2)
+                && (newV3.z < parentModel.z + 2) && (newV3.z > parentModel.z - 10)){
+            return true;
+        }
+
+
         for (Vector3 v : collisionSet) {
-            if ((newV3.x < v.x + 2 && newV3.x > v.x - 2)
-                    && (newV3.y < v.y + 3 && newV3.y > v.y - 3)) {
+            //if the coordinates are within a range of any exisiting coordinates
+            if ( ((newV3.x < v.x + 2 && newV3.x > v.x - 2)
+                    && (newV3.y < v.y + 3 && newV3.y > v.y - 3))){
                 return true;
             } else {
                 collisionSet.add(newV3);
                 return false;
             }
         }
+
+
         return false;
     }
 
