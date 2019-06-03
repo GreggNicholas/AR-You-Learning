@@ -252,7 +252,7 @@ public class ResultsFragment extends Fragment {
     private void displayRatingBarAttempts() {
         rainbowRatingBar.setNumStars(totalSize);
         rainbowRatingBar.setStepSize(1);
-        rainbowRatingBar.setRating(totalSize - wrongAnswer.size());
+        rainbowRatingBar.setRating(totalSize - correctAnswersStringSet.size());
         rainbowRatingBar.setIsIndicator(true);
     }
 
