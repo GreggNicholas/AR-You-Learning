@@ -48,7 +48,6 @@ import java.util.Set;
 public class ResultsFragment extends Fragment {
     public static final String WRONGANSWER = "WRONGANSWER";
     public static final String ANSWERSCORRECT = "ANSWERSCORRECT";
-    public static final String ANSWERSWRONG = "ANSWERSWRONG";
     public static final String RIGHTANSWERS = "RIGHTANSWERS";
     public static final String TOTALSIZE = "TOTALSIZE";
     private static final int REQUEST_CODE = 1;
@@ -93,15 +92,6 @@ public class ResultsFragment extends Fragment {
         }
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
         extractSharedPrefs();
-
-        for(int i = 0; i < totalSize; i++){
-            Log.d("TAG", "Name: " + categoryList.get(i).getName());
-            Log.d("TAG", "Image: " + categoryList.get(i).getImage());
-            Log.d("TAG", "IsCorrect: " + categoryList.get(i).isCorrect());
-            if(categoryList.get(i).getWrongAnswerSet() != null) {
-                Log.d("TAG", "WrongAnswerList: " + categoryList.get(i).getWrongAnswerSet().toString());
-            }
-        }
     }
 
 
@@ -160,7 +150,7 @@ public class ResultsFragment extends Fragment {
     }
 
     private void setResultRV() {
-        resultRV.setAdapter(new ResultsAdapter(categoryList, pronunciationUtil, textToSpeech));
+        resultRV.setAdapter(new ResultsAdapter(categoryList, pronunciationUtil, textToSpeech, totalSize));
         resultRV.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false));
 
     }
@@ -250,9 +240,9 @@ public class ResultsFragment extends Fragment {
     }
 
     private void findViewByIds(@NonNull View view) {
-        userRightAnswerTextView = view.findViewById(R.id.result_fragment_user_right_answer_tv);
-        userWrongAnswerTextView = view.findViewById(R.id.result_fragment_user_wrong_answer_tv);
-        correctAnswerTextView = view.findViewById(R.id.result_fragment_correct_answer_tv);
+//        userRightAnswerTextView = view.findViewById(R.id.result_fragment_user_right_answer_tv);
+//        userWrongAnswerTextView = view.findViewById(R.id.result_fragment_user_wrong_answer_tv);
+//        correctAnswerTextView = view.findViewById(R.id.result_fragment_correct_answer_tv);
         rainbowRatingBar = view.findViewById(R.id.rainbow_correctword_ratingbar);
         floatingActionButton = view.findViewById(R.id.share_info);
         resultRV = view.findViewById(R.id.result_recyclerview);

@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
     app:cardCornerRadius="8dp">
 
     <android.support.constraint.ConstraintLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <TextView
@@ -15,16 +17,30 @@
             android:layout_height="22dp"
             android:layout_marginStart="172dp"
             android:layout_marginTop="16dp"
-            android:text="meow"
+            android:textStyle="bold"
+            android:textSize="18sp"
             app:layout_constraintStart_toStartOf="@id/vert_guideline"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/correctmodel_image"
+            tools:text="CAT"/>
 
+        <TextView
+            android:id="@+id/correctmodel_answer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/correctmodel_name"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Wrong Answer List = {tac, cta, atc}"/>
         <ImageView
             android:id="@+id/correctmodel_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="@id/vert_guideline"
-            app:layout_constraintTop_toBottomOf="@id/correctmodel_name" />
+            app:layout_constraintTop_toBottomOf="@id/correctmodel_name"
+            tools:background="@drawable/ic_launcher_background"/>
 
         <android.support.constraint.Guideline
             android:id="@+id/vert_guideline"

@@ -20,21 +20,27 @@ import java.util.List;
 
 public class ListFragment extends Fragment {
 
+    public static final String CATEGORY_NAME = "category-name";
+    public static final String CATEGORY_IMAGE = "category-image";
+    public static final String CATEGORY_KEY = "category-key";
+    public static final String SIZE = "SIZE";
     private RecyclerView rv;
     private List<List<Model>> categoryList = new ArrayList<>();
     private List<String> categoryName;
+    private List<String> categoryImages;
     private int size;
 
     private static final String TAG = "Main";
 
-    public static ListFragment newInstance(List<List<Model>> categoryList, List<String> categoryName) {
+    public static ListFragment newInstance(List<List<Model>> categoryList, List<String> categoryName, List<String> categoryImages) {
         ListFragment fragment = new ListFragment();
         Bundle args = new Bundle();
-        args.putStringArrayList("category-name", (ArrayList<String>) categoryName);
+        args.putStringArrayList(CATEGORY_NAME, (ArrayList<String>) categoryName);
+        args.putStringArrayList(CATEGORY_IMAGE, (ArrayList<String>) categoryImages);
 
         for (int i = 0; i < categoryList.size(); i++) {
-            args.putParcelableArrayList("category-key" + i, (ArrayList<? extends Parcelable>) categoryList.get(i));
-            args.putInt("SIZE", categoryList.size());
+            args.putParcelableArrayList(CATEGORY_KEY + i, (ArrayList<? extends Parcelable>) categoryList.get(i));
+            args.putInt(SIZE, categoryList.size());
         }
 
         fragment.setArguments(args);
@@ -48,9 +54,10 @@ public class ListFragment extends Fragment {
             size = getArguments().getInt("SIZE");
 
             for (int i = 0; i < size; i++) {
-                categoryList.add(getArguments().<Model>getParcelableArrayList("category-key" + i));
+                categoryList.add(getArguments().<Model>getParcelableArrayList(CATEGORY_KEY+ i));
             }
-            categoryName = getArguments().getStringArrayList("category-name");
+            categoryName = getArguments().getStringArrayList(CATEGORY_NAME);
+            categoryImages = getArguments().getStringArrayList(CATEGORY_IMAGE);
         }
     }
 
@@ -65,7 +72,7 @@ public class ListFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         rv = view.findViewById(R.id.category_rv);
-        rv.setAdapter(new CategoryAdapter(categoryList, categoryName));
+        rv.setAdapter(new CategoryAdapter(categoryList, categoryName, categoryImages));
         rv.setLayoutManager(new LinearLayoutManager(requireContext()));
     }
 
