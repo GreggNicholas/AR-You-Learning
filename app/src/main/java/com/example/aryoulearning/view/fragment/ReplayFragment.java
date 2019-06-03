@@ -90,9 +90,9 @@ public class ReplayFragment extends Fragment {
     }
 
     private void initViews(View view) {
-        resultsIB = view.findViewById(R.id.playagain_imagebutton);
+        resultsIB = view.findViewById(R.id.showresults_imagebutton);
         homeIB = view.findViewById(R.id.home_imagebutton);
-        playagainIB = view.findViewById(R.id.showresults_imagebutton);
+        playagainIB = view.findViewById(R.id.playagain_imagebutton);
         resultsTV = view.findViewById(R.id.results_textview);
         homeTV = view.findViewById(R.id.home_textview);
         playagainTV = view.findViewById(R.id.playagain_textview);

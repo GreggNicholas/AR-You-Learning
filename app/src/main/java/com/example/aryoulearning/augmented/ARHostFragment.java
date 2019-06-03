@@ -609,7 +609,7 @@ if(trackable.getTrackingState() == TrackingState.TRACKING) {
             }
         }
 
-        listener.moveToResultsFragment(categoryList);
+        listener.moveToReplayFragment(categoryList);
     }
 
     @Override

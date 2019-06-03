@@ -333,7 +333,7 @@ public class GameFragment extends Fragment {
                     modelList.get(i).setCorrect(true);
                 }
             }
-            listener.moveToResultsFragment(modelList);
+            listener.moveToReplayFragment(modelList);
         }
     }
 
