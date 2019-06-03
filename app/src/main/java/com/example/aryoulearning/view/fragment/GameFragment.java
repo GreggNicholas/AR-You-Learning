@@ -25,7 +25,6 @@ import android.view.WindowManager;
 import android.widget.AbsoluteLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.aryoulearning.R;
 import com.example.aryoulearning.animation.Animations;
@@ -321,7 +320,6 @@ public class GameFragment extends Fragment {
             });
 
         } else {
-            Toast.makeText(getContext(), "DONE", Toast.LENGTH_SHORT).show();
             sharedPreferences.edit().putInt(ResultsFragment.ANSWERSCORRECT, answersCorrect).apply();
             sharedPreferences.edit().putStringSet(ResultsFragment.RIGHTANSWERS, rightAnswer).apply();
             sharedPreferences.edit().putStringSet(ResultsFragment.WRONGANSWER, wrongAnswer).apply();

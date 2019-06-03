@@ -2,6 +2,7 @@ package com.example.aryoulearning.view;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 import com.example.aryoulearning.R;
 import com.example.aryoulearning.augmented.ARHostFragment;
@@ -28,6 +29,7 @@ public class MainActivity extends AppCompatActivity implements NavListener, Swit
     public static final String ARLIST = "ARLIST";
     private List<String> categoryList = new ArrayList<>();
     private List<List<Model>> animalModelList = new ArrayList<>();
+    private List<String> backgroundList = new ArrayList<>();
     public static boolean AR_SWITCH_STATUS;
 
 //    ArFragment arFragment = (ArFragment) getSupportFragmentManager().findFragmentById(R.id.ux_fragment);
@@ -48,8 +50,10 @@ public class MainActivity extends AppCompatActivity implements NavListener, Swit
                         for (int i = 0; i < response.body().size(); i++) {
                             animalModelList.add(response.body().get(i).getList());
                             categoryList.add(response.body().get(i).getCategory());
+                            backgroundList.add(response.body().get(i).getBackground());
                         }
-                        moveToListFragment(animalModelList, categoryList);
+                        Log.d("TAG", backgroundList.toString());
+                        moveToListFragment(animalModelList, categoryList, backgroundList);
                     }
 
                     @Override
@@ -60,10 +64,10 @@ public class MainActivity extends AppCompatActivity implements NavListener, Swit
     }
 
     @Override
-    public void moveToListFragment(List<List<Model>> modelResponseList, List<String> categoryName) {
+    public void moveToListFragment(List<List<Model>> modelResponseList, List<String> categoryName, List<String> categoryImages) {
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.fragment_container, ListFragment.newInstance(modelResponseList, categoryName))
+                .replace(R.id.fragment_container, ListFragment.newInstance(modelResponseList, categoryName, categoryImages))
                 .commit();
 
     }

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,18 +13,21 @@ import android.widget.TextView;
 
 import com.example.aryoulearning.R;
 import com.example.aryoulearning.model.Model;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder> {
     private List<List<Model>> categoryList;
     private List<String> categoryName;
+    private List<String> categoryImages;
     private NavListener listener;
 
 
-    public CategoryAdapter(List<List<Model>> categoryList, List<String> categoryName) {
+    public CategoryAdapter(List<List<Model>> categoryList, List<String> categoryName, List<String> categoryImages) {
         this.categoryList = categoryList;
         this.categoryName = categoryName;
+        this.categoryImages = categoryImages;
     }
 
     @NonNull
@@ -44,7 +48,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
     @Override
     public void onBindViewHolder(@NonNull CategoryViewHolder holder, int position) {
-        holder.onBind(categoryList.get(position), categoryName.get(position), listener);
+        holder.onBind(categoryList.get(position), categoryName.get(position), categoryImages.get(position), listener);
     }
 
     @Override
@@ -64,8 +68,13 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
             categoryImage = itemView.findViewById(R.id.category_image);
         }
 
-        public void onBind(final List<Model> categoryList, final String category, final NavListener listener) {
+        public void onBind(final List<Model> categoryList, final String category, final String backgroundImage, final NavListener listener) {
             categoryName.setText(category);
+            Picasso.get()
+                    .load(backgroundImage)
+                    .into(categoryImage);
+
+            Log.d("TAG", backgroundImage);
             categoryCard.setOnClickListener(v -> listener.moveToHintFragment(categoryList));
         }
     }

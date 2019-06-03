@@ -18,14 +18,16 @@ import java.util.List;
 
 public class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.ResultsViewHolder> {
     private List<Model> modelList;
+    private int listSize;
     private PronunciationUtil pronunUtil;
     private TextToSpeech TTS;
 
 
-    public ResultsAdapter(List<Model> modelList, PronunciationUtil pronunciationUtil, TextToSpeech TTS) {
+    public ResultsAdapter(List<Model> modelList, PronunciationUtil pronunciationUtil, TextToSpeech TTS, int listSize) {
         this.modelList = modelList;
         this.pronunUtil = pronunciationUtil;
         this.TTS = TTS;
+        this.listSize = listSize;
     }
 
     @NonNull
@@ -44,25 +46,38 @@ public class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.ResultsV
 
     @Override
     public int getItemCount() {
-        return modelList.size();
+        return listSize;
     }
 
     class ResultsViewHolder extends RecyclerView.ViewHolder {
         private TextView modelTextView;
         private ImageView modelImageview;
+        private TextView modelAnswer;
 
 
         ResultsViewHolder(@NonNull View itemView) {
             super(itemView);
             modelTextView = itemView.findViewById(R.id.correctmodel_name);
             modelImageview = itemView.findViewById(R.id.correctmodel_image);
+            modelAnswer = itemView.findViewById(R.id.correctmodel_answer);
         }
 
         void onBind(final Model model, final PronunciationUtil pronunUtil, final TextToSpeech TTS) {
-            modelTextView = itemView.findViewById(R.id.correctmodel_name);
-            modelImageview = itemView.findViewById(R.id.correctmodel_image);
+            String correct = "Correct";
+            String wrong = "Wrong: " + model.getWrongAnswerSet();
+            String name = model.getName().toUpperCase().charAt(0) + model.getName().toLowerCase().substring(1);
+
+            modelTextView.setText(name);
+
             Picasso.get().load(model.getImage()).into(modelImageview);
-            modelTextView.setText(model.getName());
+
+            if(model.isCorrect()){
+                modelAnswer.setText(correct);
+            }else{
+                modelAnswer.setText(wrong);
+            }
+
+
         }
     }
 }
