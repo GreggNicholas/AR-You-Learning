@@ -19,5 +19,6 @@
     <string name="play_again">Play Again?</string>
     <string name="home">Home</string>
     <string name="results">Results</string>
+    <string name="game_title">AR you learning?</string>
 
 </resources>
