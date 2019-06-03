@@ -19,7 +19,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:cardBackgroundColor="@color/colorteal">
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
@@ -50,6 +51,7 @@
                 android:fontFamily="@font/balloon"
                 android:gravity="center"
                 android:textAlignment="center"
+                android:textColor="#5C3E1D"
                 android:textSize="40sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"

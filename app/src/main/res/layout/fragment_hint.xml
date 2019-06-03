@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".view.fragment.HintFragment">
+    tools:context=".view.fragment.HintFragment"
+    android:background="@color/mainBackground">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/hint_recycler_view"
