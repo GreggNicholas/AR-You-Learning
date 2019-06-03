@@ -53,7 +53,7 @@
         <item name="android:elevation">14dp</item>
         <item name="android:fontFamily">@font/balloon</item>
         <item name="android:gravity">center</item>
-        <item name="android:textSize">32sp</item>
+        <item name="android:textSize">72sp</item>
     </style>
 
     <style name="home_text_style">
@@ -63,7 +63,7 @@
         <item name="android:elevation">8dp</item>
         <item name="android:fontFamily">@font/balloon</item>
         <item name="android:gravity">center</item>
-        <item name="android:textSize">32sp</item>
+        <item name="android:textSize">72sp</item>
     </style>
 
     <style name="results_text_style">
@@ -74,19 +74,20 @@
         <item name="android:fontFamily">@font/balloon</item>
         <item name="android:gravity">center</item>
         <item name="android:textAlignment">center</item>
-        <item name="android:textSize">32sp</item>
+        <item name="android:textSize">62sp</item>
     </style>
 
     <style name="results_imgbutton_style">
         <item name="android:layout_width">180dp</item>
         <item name="android:layout_height">86dp</item>
+        <item name="android:foreground">@color/colorteal</item>
         <item name="android:layout_marginStart">8dp</item>
         <item name="android:elevation">6dp</item>
     </style>
 
     <style name="home_imgbutton_style" parent="results_imgbutton_style">
         <item name="android:layout_marginEnd">8dp</item>
-        <item name="android:foreground">@color/colorPrimaryDark</item>
+        <item name="android:foreground">@color/colorteal</item>
     </style>
 
     <style name="play_imgbutton_style">
@@ -94,7 +95,7 @@
         <item name="android:layout_height">86dp</item>
         <item name="android:layout_marginStart">8dp</item>
         <item name="android:elevation">12dp</item>
-        <item name="android:foreground">@color/design_default_color_primary_dark</item>
+        <item name="android:foreground">@color/colorteal</item>
     </style>
 
     <style name="results_image_style">
@@ -102,6 +103,21 @@
         <item name="android:layout_height">82dp</item>
         <item name="android:layout_marginStart">88dp</item>
         <item name="android:layout_marginTop">96dp</item>
+    </style>
+
+    <style name="game_title_style">
+        <item name="android:layout_width">878dp</item>
+        <item name="android:layout_height">166dp</item>
+        <item name="android:fontFamily">@font/balloon</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/colorpurple</item>
+        <item name="android:textSize">92sp</item>
+    </style>
+
+    <style name="game_title_card_text">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">16dp</item>
     </style>
 
 </resources>

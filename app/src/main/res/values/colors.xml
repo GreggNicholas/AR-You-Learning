@@ -6,5 +6,8 @@
     <color name="colorBlack">#000000</color>
     <color name="colorWhite">#FFFFFF</color>
     <color name="categoryCard">#D3AC73</color>
+    <color name="colorteal">#03A9F4</color>
+    <color name="colorpurple">#8664C4</color>
+
 
 </resources>
