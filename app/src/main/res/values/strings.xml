@@ -2,7 +2,6 @@
     <string name="app_name">AR you learning</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="correct_attempts_made">Correct attempts made :</string>
     <string name="rightanswers">Your Right Answers:</string>
     <string name="rightanswer">Your Right Answer:</string>
     <string name="wronganswers">Your Wrong Answers:</string>

@@ -9,12 +9,10 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.TextView;
 
 import com.example.aryoulearning.R;
 import com.example.aryoulearning.audio.PronunciationUtil;
@@ -33,8 +31,7 @@ public class ReplayFragment extends Fragment {
     private NavListener navListener;
     private SwitchListener switchListener;
 
-    private Button resultsIB, homeIB, playagainIB;
-    private TextView resultsTV, homeTV, playagainTV;
+    private CardView resultsButtonCard, homeButtonCard, playagainButtonCard;
 
     private List<List<Model>> listOfModelList;
     private List<Model> modelList = new ArrayList<>();
@@ -92,23 +89,23 @@ public class ReplayFragment extends Fragment {
     }
 
     private void initViews(View view) {
-        resultsIB = view.findViewById(R.id.showresults_imagebutton);
-        homeIB = view.findViewById(R.id.home_imagebutton);
-        playagainIB = view.findViewById(R.id.playagain_imagebutton);
+        playagainButtonCard = view.findViewById(R.id.cardView_playagain);
+        homeButtonCard = view.findViewById(R.id.cardView_home);
+        resultsButtonCard = view.findViewById(R.id.cardView_results);
 //        resultsTV = view.findViewById(R.id.results_textview);
 //        homeTV = view.findViewById(R.id.home_textview);
 //        playagainTV = view.findViewById(R.id.playagain_textview);
 
-        resultsIB.setOnClickListener(v -> {
+        resultsButtonCard.setOnClickListener(v -> {
             pronunciationUtil.textToSpeechAnnouncer("Showing progress", textToSpeech);
             navListener.moveToResultsFragment(modelList);
         });
-        homeIB.setOnClickListener(v -> {
+        homeButtonCard.setOnClickListener(v -> {
             pronunciationUtil.textToSpeechAnnouncer("Lets go home", textToSpeech);
             Intent homeIntent = new Intent(getContext(), MainActivity.class);
             startActivity(homeIntent);
         });
-        playagainIB.setOnClickListener(v -> {
+        playagainButtonCard.setOnClickListener(v -> {
             pronunciationUtil.textToSpeechAnnouncer("Lets play again!", textToSpeech);
             navListener.moveToGameOrARFragment(modelList,
                     MainActivity.AR_SWITCH_STATUS);
@@ -124,5 +121,11 @@ public class ReplayFragment extends Fragment {
         switchListener = null;
     }
 
-
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(getFragmentManager().findFragmentByTag("result_fragment") != null){
+            getFragmentManager().beginTransaction().remove(getFragmentManager().findFragmentByTag("result_fragment")).commit();
+        }
+    }
 }
