@@ -34,6 +34,7 @@ import com.example.aryoulearning.R;
 import com.example.aryoulearning.audio.PronunciationUtil;
 import com.example.aryoulearning.controller.ResultsAdapter;
 import com.example.aryoulearning.model.Model;
+import com.example.aryoulearning.view.MainActivity;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -63,7 +64,7 @@ public class ResultsFragment extends Fragment {
     private RatingBar rainbowRatingBar;
     private String userRightAnswersString, userWrongAnswersString, correctAnswerForUserString;
     public static final String TAG = "ResultsFragment";
-    private TextView userRightAnswerTextView, userWrongAnswerTextView, correctAnswerTextView;
+    private TextView categoryTextView;
     private List<Model> categoryList;
     WebView congratsWebView;
     FloatingActionButton floatingActionButton;
@@ -141,6 +142,9 @@ public class ResultsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         findViewByIds(view);
         displayRatingBarAttempts();
+        categoryTextView.setText(MainActivity.currentCategory);
+//        categoryTextView.setText("ANIMALS");
+
 //        userRightAnswerTextView.setText(userRightAnswersString);
 //        userWrongAnswerTextView.setText(userWrongAnswersString);
 //        correctAnswerTextView.setText(correctAnswerForUserString);
@@ -151,7 +155,7 @@ public class ResultsFragment extends Fragment {
 
     private void setResultRV() {
         resultRV.setAdapter(new ResultsAdapter(categoryList, pronunciationUtil, textToSpeech, totalSize));
-        resultRV.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false));
+        resultRV.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false));
 
     }
 
@@ -246,6 +250,7 @@ public class ResultsFragment extends Fragment {
         rainbowRatingBar = view.findViewById(R.id.rainbow_correctword_ratingbar);
         floatingActionButton = view.findViewById(R.id.share_info);
         resultRV = view.findViewById(R.id.result_recyclerview);
+        categoryTextView = view.findViewById(R.id.results_category);
     }
 
 

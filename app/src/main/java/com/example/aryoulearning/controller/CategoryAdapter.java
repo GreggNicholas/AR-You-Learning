@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.example.aryoulearning.R;
 import com.example.aryoulearning.model.Model;
+import com.example.aryoulearning.view.MainActivity;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -75,7 +76,10 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
                     .into(categoryImage);
 
             Log.d("TAG", backgroundImage);
-            categoryCard.setOnClickListener(v -> listener.moveToHintFragment(categoryList));
+            categoryCard.setOnClickListener(v -> {
+                MainActivity.currentCategory = category;
+                listener.moveToHintFragment(categoryList);
+            });
         }
     }
 }

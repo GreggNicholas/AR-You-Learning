@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity implements NavListener, Swit
     private List<List<Model>> animalModelList = new ArrayList<>();
     private List<String> backgroundList = new ArrayList<>();
     public static boolean AR_SWITCH_STATUS;
+    public static String currentCategory;
 
 //    ArFragment arFragment = (ArFragment) getSupportFragmentManager().findFragmentById(R.id.ux_fragment);
 
@@ -53,6 +54,22 @@ public class MainActivity extends AppCompatActivity implements NavListener, Swit
                             backgroundList.add(response.body().get(i).getBackground());
                         }
                         Log.d("TAG", backgroundList.toString());
+
+//                        for (int i = 0; i <animalModelList.get(0).size(); i++) {
+//                            Model animal = animalModelList.get(0).get(i);
+//                            if(i % 2 == 0) {
+//                                animal.setCorrect(false);
+//                                ArrayList<String> testWrongAnswers = new ArrayList<>();
+//                                testWrongAnswers.add("this");
+//                                testWrongAnswers.add("is");
+//                                testWrongAnswers.add("test");
+//                                animal.setWrongAnswerSet(testWrongAnswers);
+//                            }else{
+//                                animal.setCorrect(true);
+//                            }
+//                        }
+//                        moveToReplayFragment(animalModelList.get(0));
+
                         moveToListFragment(animalModelList, categoryList, backgroundList);
                     }
 
@@ -94,6 +111,7 @@ public class MainActivity extends AppCompatActivity implements NavListener, Swit
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.fragment_container, ResultsFragment.newInstance(categoryList), "result_fragment")
+                .addToBackStack(null)
                 .commit();
     }
 
@@ -110,7 +128,7 @@ public class MainActivity extends AppCompatActivity implements NavListener, Swit
     public void moveToReplayFragment(List<Model> modelList) {
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.fragment_container, ReplayFragment.newInstance(modelList))
+                .replace(R.id.fragment_container, ReplayFragment.newInstance(modelList),"replay_fragment")
                 .commit();
     }
 
