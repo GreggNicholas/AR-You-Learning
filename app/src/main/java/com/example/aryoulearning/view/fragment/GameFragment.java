@@ -193,7 +193,7 @@ public class GameFragment extends Fragment {
         List<HashMap<String, Integer>> mapList = new ArrayList<>();
 
         for (int i = 0; i < word.length(); i++) {
-            HashMap<String,Integer> newCoordinates = getCoordinates();
+            HashMap<String, Integer> newCoordinates = getCoordinates();
 
             while (checkCollision(mapList, newCoordinates)) {
                 newCoordinates = getCoordinates();
@@ -209,7 +209,7 @@ public class GameFragment extends Fragment {
     public void drawLetters(String l, HashMap<String, Integer> map) {
         final TextView letter = new TextView(getContext());
         letter.setTextSize(80);
-        letter.setTypeface(ResourcesCompat.getFont(getActivity(),R.font.balloon));
+        letter.setTypeface(ResourcesCompat.getFont(getActivity(), R.font.balloon));
         letter.setText(l);
         letter.setTextColor(getResources().getColor(R.color.colorBlack));
 
@@ -232,7 +232,7 @@ public class GameFragment extends Fragment {
                 pronunciationUtil.textToSpeechAnnouncer(letter, textToSpeech);
 
                 if (checker.getText().length() == answer.length()) {
-                    String   validator = "";
+                    String validator = "";
 
                     if (checker.getText().toString().equals(answer)) {
                         counter++;
@@ -244,9 +244,12 @@ public class GameFragment extends Fragment {
 
                     } else {
 //                        Toast.makeText(getContext(), "wrong", Toast.LENGTH_SHORT).show();
-                        point -= 5;
-                        pointText = "Points: " + point;
-                        pointTextView.setText(pointText);
+                        if (point >= 0) {
+                            point -= 5;
+                            pointText = "Points: " + point;
+                            pointTextView.setText(pointText);
+                        }else{
+                        }
                         wrongAnswer.add(checker.getText().toString());
                         correctAnswerSet.add(answer);
                         pronunciationUtil.textToSpeechAnnouncer("wrong!, please try again", textToSpeech);
@@ -293,8 +296,8 @@ public class GameFragment extends Fragment {
         int ranX = r.nextInt(width);
         int ranY = r.nextInt(height);
 
-        while ( ((ranX > (width / 2) - 240 && ranX < (width / 2) + 240))
-            && ((ranY > (height / 2) - 350 && ranY < (height / 2) + 350)) )  {
+        while (((ranX > (width / 2) - 240 && ranX < (width / 2) + 240))
+                && ((ranY > (height / 2) - 350 && ranY < (height / 2) + 350))) {
             ranX = r.nextInt(width);
         }
 //        while ((ranY > (height / 2) - 240 && ranY < (height / 2) + 240)) {
@@ -309,17 +312,17 @@ public class GameFragment extends Fragment {
     private boolean checkCollision(List<HashMap<String, Integer>> mapList,
                                    HashMap<String, Integer> testMap) {
 
-        if(mapList.isEmpty()){
+        if (mapList.isEmpty()) {
             return false;
         }
 
         for (int i = 0; i < mapList.size(); i++) {
 
-            if( (testMap.get("x") > mapList.get(i).get("x") - 300 &&
+            if ((testMap.get("x") > mapList.get(i).get("x") - 300 &&
                     testMap.get("x") < mapList.get(i).get("x") + 300) &&
 
-            (testMap.get("y") > mapList.get(i).get("y") - 300 &&
-                    testMap.get("y") < mapList.get(i).get("y")+ 300) ){
+                    (testMap.get("y") > mapList.get(i).get("y") - 300 &&
+                            testMap.get("y") < mapList.get(i).get("y") + 300)) {
                 return true;
             }
 //            if (mapList.get(i).get("y") > testMap.get("y") - 100 &&
