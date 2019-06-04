@@ -111,7 +111,7 @@ public class GameFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        point = 50;
+        point = 100;
         pointText = "point: " + point;
         textToSpeech = pronunciationUtil.getTTS(view.getContext());
         checker = view.findViewById(R.id.checker);
@@ -244,6 +244,9 @@ public class GameFragment extends Fragment {
 
                     } else {
 //                        Toast.makeText(getContext(), "wrong", Toast.LENGTH_SHORT).show();
+                        point -= 5;
+                        pointText = "Points: " + point;
+                        pointTextView.setText(pointText);
                         wrongAnswer.add(checker.getText().toString());
                         correctAnswerSet.add(answer);
                         pronunciationUtil.textToSpeechAnnouncer("wrong!, please try again", textToSpeech);
@@ -254,7 +257,7 @@ public class GameFragment extends Fragment {
                             public void onClick(View v) {
                                 showHintAsAlertDialogue();
                                 point -= 5;
-                                pointText = "Point: " + point;
+                                pointText = "Points: " + point;
                                 pointTextView.setText(pointText);
                             }
                         });
