@@ -125,10 +125,10 @@ public class MainActivity extends AppCompatActivity implements NavListener, Swit
     }
 
     @Override
-    public void moveToReplayFragment(List<Model> modelList) {
+    public void moveToReplayFragment(List<Model> modelList, boolean wasPreviousGameTypeAR) {
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.fragment_container, ReplayFragment.newInstance(modelList),"replay_fragment")
+                .replace(R.id.fragment_container, ReplayFragment.newInstance(modelList,wasPreviousGameTypeAR),"replay_fragment")
                 .commit();
     }
 
