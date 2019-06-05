@@ -121,6 +121,9 @@ public class ARHostFragment extends Fragment {
 
     private Node base;
     private ImageButton undo;
+    private ImageButton exit;
+
+    private MediaPlayer playBallonPop;
 
     public static ARHostFragment newInstance(List<Model> modelList) {
         ARHostFragment fragment = new ARHostFragment();
@@ -159,6 +162,7 @@ public class ARHostFragment extends Fragment {
         }
 
         prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+        playBallonPop = MediaPlayer.create(getContext(), R.raw.balloon_pop);
     }
 
     @Override
@@ -171,7 +175,6 @@ public class ARHostFragment extends Fragment {
         wordValidatorCv = view.findViewById(R.id.word_validator_cv);
 //        wordValidatorCv.setVisibility(View.INVISIBLE);
         undo = view.findViewById(R.id.button_undo);
-
         undo.setOnClickListener(v -> recreateErasedLetter(eraseLastLetter(letters)));
 
         fadeIn = Animations.Normal.setCardFadeInAnimator(wordValidatorCv);
@@ -183,6 +186,7 @@ public class ARHostFragment extends Fragment {
             @Override
             public void onAnimationEnd(Animator animation) {
                 wordValidatorCv.setVisibility(View.VISIBLE);
+                fadeOut.setStartDelay(1500);
                 fadeOut.start();
             }
 
@@ -203,8 +207,16 @@ public class ARHostFragment extends Fragment {
 
             @Override
             public void onAnimationEnd(Animator animation) {
+
                 if (roundCounter < roundLimit && roundCounter < modelMapList.size()) {
-                    createNextGame(modelMapList.get(roundCounter));
+                    Handler handler = new Handler();
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            createNextGame(modelMapList.get(roundCounter));
+                        }
+                    });
+//                    createNextGame(modelMapList.get(roundCounter));
                 } else {
                     moveToReplayFragment();
                 }
@@ -346,12 +358,10 @@ public class ARHostFragment extends Fragment {
             @Override
             public void onTap(HitTestResult hitTestResult, MotionEvent motionEvent) {
 
-                final MediaPlayer playBallonPop = MediaPlayer.create(getContext(), R.raw.balloon_pop);
+//                final MediaPlayer playBallonPop = MediaPlayer.create(getContext(), R.raw.balloon_pop);
                 playBallonPop.start();
                 playBallonPop.setOnCompletionListener(mp -> {
-                    playBallonPop.stop();
-                    playBallonPop.reset();
-                    playBallonPop.release();
+                    playBallonPop.pause();
                 });
 
                 //Make the letter disappear
@@ -405,7 +415,6 @@ public class ARHostFragment extends Fragment {
 
         if (letters.equals(word)) {
             validator = "You are correct";
-            pronunciationUtil.textToSpeechAnnouncer(validator, textToSpeech);
             rightAnswer.add(letters);
 
             //will run once when correct answer is entered. the method will instantiate, and add all from the current list
@@ -419,9 +428,10 @@ public class ARHostFragment extends Fragment {
 
             //this will remove all, seemed safer than clear, which nulls the object.
             wrongAnswerList.removeAll(wrongAnswerList);
+
+            pronunciationUtil.textToSpeechAnnouncer(validator, textToSpeech);
         } else {
             validator = "Wrong. Please Try Again";
-            pronunciationUtil.textToSpeechAnnouncer(validator, textToSpeech);
             wrongAnswer.add(letters);
             wordValidatorCv.setVisibility(View.VISIBLE);
             wordValidator.setText(validator);
@@ -429,6 +439,7 @@ public class ARHostFragment extends Fragment {
             //every wrong answer, until a correct answer will be added here
             wrongAnswerList.add(letters);
             categoryList.get(roundCounter).setCorrect(false);
+            pronunciationUtil.textToSpeechAnnouncer(validator, textToSpeech);
         }
 
         wordValidator.setText(validator);
@@ -688,6 +699,8 @@ public class ARHostFragment extends Fragment {
         super.onDestroy();
         textToSpeech.shutdown();
         pronunciationUtil = null;
+        playBallonPop.reset();
+        playBallonPop.release();
     }
 
     public String eraseLastLetter(String spelledOutWord) {
