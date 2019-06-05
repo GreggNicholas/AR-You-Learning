@@ -11,8 +11,5 @@
     <color name="colorDarkPurple">#380B80</color>
     <color name="mainBackground">#F1E2A8</color>
     <color name="colorCream">#FCFFDA</color>
-    <color name="colorWordContainer">#7EFBFFD6</color>
-
-
-
+    <color name="colorWordContainer">#43F5F5F5</color>
 </resources>

@@ -337,7 +337,7 @@ public class ARHostFragment extends Fragment {
 //        trNode.setLocalScale(new Vector3(.1f,.1f,.1f));
         Vector3 coordinates = getRandomCoordinates();
 
-        while (checkDoesLetterCollide(coordinates, base.getLocalPosition())) {
+        while (checkDoesLetterCollide(coordinates, parent.getLocalPosition())) {
             coordinates = getRandomCoordinates();
         }
         trNode.setLocalPosition(coordinates);
@@ -600,7 +600,7 @@ public class ARHostFragment extends Fragment {
                 return false;
             }
         }
-        return false;
+        return true;
     }
 
     private Vector3 getRandomCoordinates() {
