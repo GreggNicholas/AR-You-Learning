@@ -34,9 +34,7 @@ public class ReplayFragment extends Fragment {
 
     private CardView resultsButtonCard, homeButtonCard, playagainButtonCard;
 
-    private List<List<Model>> listOfModelList;
     private List<Model> modelList = new ArrayList<>();
-    private List<String> categoryList = new ArrayList<>();
 
     private TextToSpeech textToSpeech;
     private PronunciationUtil pronunciationUtil;

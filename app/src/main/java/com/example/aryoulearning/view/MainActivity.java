@@ -27,9 +27,9 @@ import retrofit2.Response;
 public class MainActivity extends AppCompatActivity implements NavListener, SwitchListener {
     private static final String TAG = "Main";
     public static final String ARLIST = "ARLIST";
-    private List<String> categoryList = new ArrayList<>();
-    private List<List<Model>> animalModelList = new ArrayList<>();
-    private List<String> backgroundList = new ArrayList<>();
+    private static List<String> categoryList = new ArrayList<>();
+    private static List<List<Model>> animalModelList = new ArrayList<>();
+    private static List<String> backgroundList = new ArrayList<>();
     public static boolean AR_SWITCH_STATUS;
     public static String currentCategory;
 
@@ -135,5 +135,17 @@ public class MainActivity extends AppCompatActivity implements NavListener, Swit
     @Override
     public void updateSwitchStatus(boolean isOn) {
         AR_SWITCH_STATUS = isOn;
+    }
+
+    public static List<List<Model>> getAnimalModelList() {
+        return animalModelList;
+    }
+
+    public static List<String> getBackgroundList() {
+        return backgroundList;
+    }
+
+    public static List<String> getCategoryList() {
+        return categoryList;
     }
 }

@@ -26,6 +26,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -37,6 +38,7 @@ import com.example.aryoulearning.animation.Animations;
 import com.example.aryoulearning.audio.PronunciationUtil;
 import com.example.aryoulearning.controller.NavListener;
 import com.example.aryoulearning.model.Model;
+import com.example.aryoulearning.view.MainActivity;
 import com.example.aryoulearning.view.fragment.ResultsFragment;
 import com.google.ar.core.Anchor;
 import com.google.ar.core.Frame;
@@ -105,25 +107,29 @@ public class ARHostFragment extends Fragment {
 
     private Set<Vector3> collisionSet = new HashSet<>();
 
-    Random r = new Random();
+    private Random r = new Random();
 
     private List<String> wrongAnswerList = new ArrayList<>();
     private TextToSpeech textToSpeech;
     private PronunciationUtil pronunciationUtil;
 
-    Anchor mainAnchor;
-    AnchorNode mainAnchorNode;
-    Frame mainFrame;
-    List<HitResult> mainHits;
+    private Anchor mainAnchor;
+    private AnchorNode mainAnchorNode;
+    private Frame mainFrame;
+    private List<HitResult> mainHits;
 
-    ObjectAnimator fadeIn;
-    ObjectAnimator fadeOut;
+    private ObjectAnimator fadeIn;
+    private ObjectAnimator fadeOut;
 
     private Node base;
     private ImageButton undo;
-    private ImageButton exit;
 
-    private MediaPlayer playBallonPop;
+    private View exitMenu;
+    private ImageButton exit;
+    private Button exitYes;
+    private Button exitNo;
+
+    private MediaPlayer playBalloonPop;
 
     public static ARHostFragment newInstance(List<Model> modelList) {
         ARHostFragment fragment = new ARHostFragment();
@@ -162,7 +168,7 @@ public class ARHostFragment extends Fragment {
         }
 
         prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-        playBallonPop = MediaPlayer.create(getContext(), R.raw.balloon_pop);
+        playBalloonPop = MediaPlayer.create(getContext(), R.raw.balloon_pop);
     }
 
     @Override
@@ -174,6 +180,35 @@ public class ARHostFragment extends Fragment {
         wordValidator = view.findViewById(R.id.word_validator);
         wordValidatorCv = view.findViewById(R.id.word_validator_cv);
 //        wordValidatorCv.setVisibility(View.INVISIBLE);
+
+        exitMenu = getLayoutInflater().inflate(R.layout.exit_menu_card,f,false);
+        exit = view.findViewById(R.id.exit_imageButton);
+        exitYes = exitMenu.findViewById(R.id.exit_button_yes);
+        exitNo = exitMenu.findViewById(R.id.exit_button_no);
+
+        exit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                f.addView(exitMenu);
+
+            }
+        });
+        exitYes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.moveToListFragment(MainActivity.getAnimalModelList(),
+                        MainActivity.getCategoryList(),
+                        MainActivity.getBackgroundList());
+            }
+        });
+        exitNo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                f.removeView(exitMenu);
+            }
+        });
+
         undo = view.findViewById(R.id.button_undo);
         undo.setOnClickListener(v -> recreateErasedLetter(eraseLastLetter(letters)));
 
@@ -359,9 +394,9 @@ public class ARHostFragment extends Fragment {
             public void onTap(HitTestResult hitTestResult, MotionEvent motionEvent) {
 
 //                final MediaPlayer playBallonPop = MediaPlayer.create(getContext(), R.raw.balloon_pop);
-                playBallonPop.start();
-                playBallonPop.setOnCompletionListener(mp -> {
-                    playBallonPop.pause();
+                playBalloonPop.start();
+                playBalloonPop.setOnCompletionListener(mp -> {
+                    playBalloonPop.pause();
                 });
 
                 //Make the letter disappear
@@ -699,8 +734,8 @@ public class ARHostFragment extends Fragment {
         super.onDestroy();
         textToSpeech.shutdown();
         pronunciationUtil = null;
-        playBallonPop.reset();
-        playBallonPop.release();
+        playBalloonPop.reset();
+        playBalloonPop.release();
     }
 
     public String eraseLastLetter(String spelledOutWord) {
