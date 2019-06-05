@@ -50,7 +50,7 @@ public class GameFragment extends Fragment {
     private TextView checker;
     private String answer;
     private int counter;
-    private int limit = 5;
+    private int limit = 2;
     private int width;
     private int height;
     private int answersCorrect;
@@ -331,7 +331,7 @@ public class GameFragment extends Fragment {
                     modelList.get(i).setCorrect(true);
                 }
             }
-            listener.moveToReplayFragment(modelList);
+            listener.moveToReplayFragment(modelList,false);
         }
     }
 

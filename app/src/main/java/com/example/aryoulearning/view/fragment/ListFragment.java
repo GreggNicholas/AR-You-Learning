@@ -91,11 +91,15 @@ public class ListFragment extends Fragment {
         if(getFragmentManager().findFragmentByTag("result_fragment") != null){
             getFragmentManager().beginTransaction().remove(getFragmentManager().findFragmentByTag("result_fragment")).commit();
         }
+        if(getChildFragmentManager().findFragmentById(R.id.ux_fragment) != null){
+            getChildFragmentManager().beginTransaction().remove(getChildFragmentManager().findFragmentById(R.id.ux_fragment));
+        }
         if(getFragmentManager().findFragmentByTag("ar_fragment") != null){
             getFragmentManager().beginTransaction().remove(getFragmentManager().findFragmentByTag("ar_fragment")).commit();
         }
         if(getFragmentManager().findFragmentByTag("game_fragment") != null){
             getFragmentManager().beginTransaction().remove(getFragmentManager().findFragmentByTag("game_fragment")).commit();
         }
+
     }
 }

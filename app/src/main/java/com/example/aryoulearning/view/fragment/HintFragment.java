@@ -103,6 +103,6 @@ public class HintFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        switchlistener.updateSwitchStatus(false);
+//        switchlistener.updateSwitchStatus(false);
     }
 }

@@ -22,10 +22,12 @@
         android:layout_height="match_parent"
         android:layout_gravity="center"
         android:layout_margin="30dp"
-        android:elevation="2dp"
+        android:elevation="100dp"
         android:orientation="horizontal"
+        android:visibility="invisible"
+        app:cardBackgroundColor="@color/categoryCard"
         app:cardCornerRadius="20dp"
-        app:cardBackgroundColor="@color/categoryCard">
+        app:cardElevation="10dp">
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
@@ -47,15 +49,57 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="THIS IS A TEST" />
+
         </android.support.constraint.ConstraintLayout>
     </android.support.v7.widget.CardView>
 
-
-    <LinearLayout
-        android:id="@+id/word_container"
+    <android.support.v7.widget.CardView
+        android:id="@+id/card_wordContainer"
         android:layout_width="wrap_content"
-        android:layout_height="100dp"
-        android:layout_gravity="bottom|center_horizontal"
-        android:orientation="horizontal" />
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center"
+        android:layout_marginBottom="32dp"
+        android:visibility="invisible"
+        app:cardBackgroundColor="@color/colorWordContainer"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="8dp">
 
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:id="@+id/word_container"
+                android:layout_width="wrap_content"
+                android:layout_height="100dp"
+                android:layout_gravity="center"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:gravity="center"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/button_undo"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageButton
+                android:id="@+id/button_undo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|center"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:src="@drawable/delete"
+                android:text="undo"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/word_container"
+                app:layout_constraintTop_toTopOf="parent" />
+        </android.support.constraint.ConstraintLayout>
+    </android.support.v7.widget.CardView>
 </FrameLayout>

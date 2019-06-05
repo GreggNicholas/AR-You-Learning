@@ -143,11 +143,7 @@ public class ResultsFragment extends Fragment {
         findViewByIds(view);
         displayRatingBarAttempts();
         categoryTextView.setText(MainActivity.currentCategory);
-//        categoryTextView.setText("ANIMALS");
 
-//        userRightAnswerTextView.setText(userRightAnswersString);
-//        userWrongAnswerTextView.setText(userWrongAnswersString);
-//        correctAnswerTextView.setText(correctAnswerForUserString);
         fabClick();
         setResultRV();
 
@@ -261,9 +257,9 @@ public class ResultsFragment extends Fragment {
         rainbowRatingBar.setIsIndicator(true);
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        sharedPreferences.edit().clear().commit();
-    }
+//    @Override
+//    public void onDestroy() {
+//        super.onDestroy();
+//        sharedPreferences.edit().clear().commit();
+//    }
 }

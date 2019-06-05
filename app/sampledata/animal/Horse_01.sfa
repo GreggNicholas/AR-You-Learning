@@ -115,7 +115,7 @@
     file: 'sampledata/animal/Horse_01.obj',
     name: 'Horse_01',
     recenter: 'root',
-    scale: 0.005,
+    scale: 0.003,
   },
   version: '0.54:2',
 }

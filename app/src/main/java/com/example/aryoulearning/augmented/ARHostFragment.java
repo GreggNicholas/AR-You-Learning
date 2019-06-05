@@ -27,6 +27,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -95,8 +96,9 @@ public class ARHostFragment extends Fragment {
     private String currentWord = "";
 
     private int roundCounter = 0;
-    private int roundLimit = 5;
+    private int roundLimit = 2;
 
+    private CardView wordCardView;
     private LinearLayout wordContainer;
     private TextView wordValidator;
     private CardView wordValidatorCv;
@@ -116,6 +118,9 @@ public class ARHostFragment extends Fragment {
 
     ObjectAnimator fadeIn;
     ObjectAnimator fadeOut;
+
+    private Node base;
+    private ImageButton undo;
 
     public static ARHostFragment newInstance(List<Model> modelList) {
         ARHostFragment fragment = new ARHostFragment();
@@ -161,29 +166,41 @@ public class ARHostFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         f = view.findViewById(R.id.frame_layout);
         wordContainer = view.findViewById(R.id.word_container);
+        wordCardView = view.findViewById(R.id.card_wordContainer);
         wordValidator = view.findViewById(R.id.word_validator);
         wordValidatorCv = view.findViewById(R.id.word_validator_cv);
-        wordValidatorCv.setVisibility(View.INVISIBLE);
+//        wordValidatorCv.setVisibility(View.INVISIBLE);
+        undo = view.findViewById(R.id.button_undo);
+
+        undo.setOnClickListener(v -> recreateErasedLetter(eraseLastLetter(letters)));
 
         fadeIn = Animations.Normal.setCardFadeInAnimator(wordValidatorCv);
         fadeIn.addListener(new Animator.AnimatorListener() {
             @Override
-            public void onAnimationStart(Animator animation) {}
+            public void onAnimationStart(Animator animation) {
+            }
+
             @Override
             public void onAnimationEnd(Animator animation) {
                 wordValidatorCv.setVisibility(View.VISIBLE);
                 fadeOut.start();
             }
+
             @Override
-            public void onAnimationCancel(Animator animation) {}
+            public void onAnimationCancel(Animator animation) {
+            }
+
             @Override
-            public void onAnimationRepeat(Animator animation) {}
+            public void onAnimationRepeat(Animator animation) {
+            }
         });
 
         fadeOut = Animations.Normal.setCardFadeOutAnimator(wordValidatorCv);
         fadeOut.addListener(new Animator.AnimatorListener() {
             @Override
-            public void onAnimationStart(Animator animation) {}
+            public void onAnimationStart(Animator animation) {
+            }
+
             @Override
             public void onAnimationEnd(Animator animation) {
                 if (roundCounter < roundLimit && roundCounter < modelMapList.size()) {
@@ -192,10 +209,14 @@ public class ARHostFragment extends Fragment {
                     moveToReplayFragment();
                 }
             }
+
             @Override
-            public void onAnimationCancel(Animator animation) {}
+            public void onAnimationCancel(Animator animation) {
+            }
+
             @Override
-            public void onAnimationRepeat(Animator animation) {}
+            public void onAnimationRepeat(Animator animation) {
+            }
         });
 
         setListMapsOfFutureModels(categoryList);
@@ -213,6 +234,7 @@ public class ARHostFragment extends Fragment {
                                 onSingleTap(e);
                                 return true;
                             }
+
                             @Override
                             public boolean onDown(MotionEvent e) {
                                 return true;
@@ -251,7 +273,7 @@ public class ARHostFragment extends Fragment {
 
     private Node createGame(Map<String, ModelRenderable> modelMap) {
 
-        Node base = new Node();
+        base = new Node();
 
         Node sunVisual = new Node();
         sunVisual.setParent(base);
@@ -267,14 +289,14 @@ public class ARHostFragment extends Fragment {
 //            String randomWord = e.getKey() + "abcdefghijklmnopqrstuvwxyz";
             collisionSet.clear();
             pronunciationUtil.textToSpeechAnnouncer(e.getKey(), textToSpeech);
+
+            ObjectAnimator rotate = Animations.AR.createRotationAnimator();
+            rotate.setTarget(sunVisual);
+            rotate.setDuration(7000);
+            rotate.start();
+
             for (int i = 0; i < e.getKey().length(); i++) {
                 createLetter(Character.toString(e.getKey().charAt(i)), e.getKey(), base, letterMap.get(Character.toString(e.getKey().charAt(i))));
-
-                ObjectAnimator rotate = Animations.AR.createRotationAnimator();
-                rotate.setTarget(sunVisual);
-                rotate.setDuration(7000);
-                rotate.start();
-
             }
             currentWord = e.getKey();
         }
@@ -315,22 +337,15 @@ public class ARHostFragment extends Fragment {
 //        trNode.setLocalScale(new Vector3(.1f,.1f,.1f));
         Vector3 coordinates = getRandomCoordinates();
 
-        while (checkDoesLetterCollide(coordinates, base.getLocalPosition())) {
+        while (checkDoesLetterCollide(coordinates, parent.getLocalPosition())) {
             coordinates = getRandomCoordinates();
         }
-
-//        while( (coordinates.x < parent.getLocalPosition().x + 2) && (coordinates.x > parent.getLocalPosition().x - 2)
-//            && (coordinates.y < parent.getLocalPosition().y + 2) && (coordinates.y > parent.getLocalPosition().y - 2)
-//            && (coordinates.z < parent.getLocalPosition().z + 2) && (coordinates.z > parent.getLocalPosition().z - 6)) {
-//
-//            coordinates = getRandomCoordinates();
-//        }
-
         trNode.setLocalPosition(coordinates);
 
         trNode.setOnTapListener(new Node.OnTapListener() {
             @Override
             public void onTap(HitTestResult hitTestResult, MotionEvent motionEvent) {
+
                 final MediaPlayer playBallonPop = MediaPlayer.create(getContext(), R.raw.balloon_pop);
                 playBallonPop.start();
                 playBallonPop.setOnCompletionListener(mp -> {
@@ -342,14 +357,30 @@ public class ARHostFragment extends Fragment {
                 //Make the letter disappear
                 base.getAnchor().detach();
 
-                Log.d("motioneventxy",motionEvent.getX() + " " + motionEvent.getY());
+                Log.d("motioneventxy", motionEvent.getX() + " " + motionEvent.getY());
 
-                addAnimationViewOnTopOfLetter(getSparklingAnimationView(),
-                        Math.round(motionEvent.getX()-7) ,
-                        Math.round(motionEvent.getY()+7));
+                LottieAnimationView lav;
+
+                if(letter.equals(Character.toString(word.charAt(letters.length())))) {
+                    lav =getSparklingAnimationView();
+                }else{
+                    lav = getWarningAnimationView();
+                }
+
+                addAnimationViewOnTopOfLetter(lav,
+                        Math.round(motionEvent.getX() - 7),
+                        Math.round(motionEvent.getY() + 7));
 
                 //Keep track of the letter selected
                 letters += letter;
+
+                if(wordCardView.getVisibility() == View.INVISIBLE){
+                    wordCardView.setVisibility(View.VISIBLE);
+                }
+
+                if(undo.getVisibility() == View.INVISIBLE){
+                    undo.setVisibility(View.VISIBLE);
+                }
 
                 //Add letter to container to show to the user.
                 addLetterToWordContainer(letter);
@@ -363,51 +394,45 @@ public class ARHostFragment extends Fragment {
 
                 if (letters.length() == word.length()) {
                     Handler handler = new Handler();
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            compareAnswer(letters, word);
-                        }
-                    });
+                    handler.post(() -> compareAnswer(letters, word));
                 }
             }
         });
     }
 
     public void compareAnswer(String letters, String word) {
-            String validator = "";
+        String validator = "";
 
-            if (letters.equals(word)) {
-                validator = "You are correct";
-                pronunciationUtil.textToSpeechAnnouncer(validator, textToSpeech);
-                rightAnswer.add(letters);
+        if (letters.equals(word)) {
+            validator = "You are correct";
+            pronunciationUtil.textToSpeechAnnouncer(validator, textToSpeech);
+            rightAnswer.add(letters);
 
-                //will run once when correct answer is entered. the method will instantiate, and add all from the current list
-                categoryList.get(roundCounter).setWrongAnswerSet((ArrayList<String>) wrongAnswerList);
+            //will run once when correct answer is entered. the method will instantiate, and add all from the current list
+            categoryList.get(roundCounter).setWrongAnswerSet((ArrayList<String>) wrongAnswerList);
 
-                //we will increment once the list is added to correct index
-                roundCounter++;
+            //we will increment once the list is added to correct index
+            roundCounter++;
 
-                wordValidatorCv.setVisibility(View.VISIBLE);
-                wordValidator.setText(validator);
-
-                //this will remove all, seemed safer than clear, which nulls the object.
-                wrongAnswerList.removeAll(wrongAnswerList);
-            } else {
-                validator = "Wrong. Please Try Again";
-                pronunciationUtil.textToSpeechAnnouncer(validator, textToSpeech);
-                wrongAnswer.add(letters);
-                wordValidatorCv.setVisibility(View.VISIBLE);
-                wordValidator.setText(validator);
-                correctAnswerSet.add(word);
-                //every wrong answer, until a correct answer will be added here
-                wrongAnswerList.add(letters);
-
-                categoryList.get(roundCounter).setCorrect(false);
-            }
-
+            wordValidatorCv.setVisibility(View.VISIBLE);
             wordValidator.setText(validator);
-            fadeIn.start();
+
+            //this will remove all, seemed safer than clear, which nulls the object.
+            wrongAnswerList.removeAll(wrongAnswerList);
+        } else {
+            validator = "Wrong. Please Try Again";
+            pronunciationUtil.textToSpeechAnnouncer(validator, textToSpeech);
+            wrongAnswer.add(letters);
+            wordValidatorCv.setVisibility(View.VISIBLE);
+            wordValidator.setText(validator);
+            correctAnswerSet.add(word);
+            //every wrong answer, until a correct answer will be added here
+            wrongAnswerList.add(letters);
+            categoryList.get(roundCounter).setCorrect(false);
+        }
+
+        wordValidator.setText(validator);
+        fadeIn.start();
 
     }
 
@@ -439,7 +464,7 @@ public class ARHostFragment extends Fragment {
                 Trackable trackable = hit.getTrackable();
                 if (trackable instanceof Plane && ((Plane) trackable).isPoseInPolygon(hit.getHitPose())) {
                     // Create the Anchor.
-                    if(trackable.getTrackingState() == TrackingState.TRACKING) {
+                    if (trackable.getTrackingState() == TrackingState.TRACKING) {
                         mainAnchor = hit.createAnchor();
                     }
                     mainAnchorNode = new AnchorNode(mainAnchor);
@@ -455,6 +480,7 @@ public class ARHostFragment extends Fragment {
 
     private void createNextGame(Map<String, ModelRenderable> modelMap) {
         letters = "";
+        undo.setVisibility(View.INVISIBLE);
         mainAnchorNode.getAnchor().detach();
         mainAnchor = null;
         mainAnchorNode = null;
@@ -463,9 +489,9 @@ public class ARHostFragment extends Fragment {
             Trackable trackable = hit.getTrackable();
             if (trackable instanceof Plane && ((Plane) trackable).isPoseInPolygon(hit.getHitPose())) {
                 // Create the Anchor.
-if(trackable.getTrackingState() == TrackingState.TRACKING) {
-    mainAnchor = hit.createAnchor();
-}
+                if (trackable.getTrackingState() == TrackingState.TRACKING) {
+                    mainAnchor = hit.createAnchor();
+                }
                 mainAnchorNode = new AnchorNode(mainAnchor);
                 mainAnchorNode.setParent(arFragment.getArSceneView().getScene());
                 Node gameSystem = createGame(modelMap);
@@ -559,24 +585,22 @@ if(trackable.getTrackingState() == TrackingState.TRACKING) {
 
         if ((newV3.x < parentModel.x + 2) && (newV3.x > parentModel.x - 2)
                 && (newV3.y < parentModel.y + 2) && (newV3.y > parentModel.y - 2)
-                && (newV3.z < parentModel.z + 2) && (newV3.z > parentModel.z - 10)){
+                && (newV3.z < parentModel.z + 2) && (newV3.z > parentModel.z - 10)) {
             return true;
         }
 
 
         for (Vector3 v : collisionSet) {
             //if the coordinates are within a range of any exisiting coordinates
-            if ( ((newV3.x < v.x + 2 && newV3.x > v.x - 2)
-                    && (newV3.y < v.y + 3 && newV3.y > v.y - 3))){
+            if (((newV3.x < v.x + 2 && newV3.x > v.x - 2)
+                    && (newV3.y < v.y + 3 && newV3.y > v.y - 3))) {
                 return true;
             } else {
                 collisionSet.add(newV3);
                 return false;
             }
         }
-
-
-        return false;
+        return true;
     }
 
     private Vector3 getRandomCoordinates() {
@@ -584,34 +608,51 @@ if(trackable.getTrackingState() == TrackingState.TRACKING) {
                 getRandom(1, -2),//y
                 getRandom(-2, -10));//z
     }
-//instantiates a lottie view
-    private LottieAnimationView getSparklingAnimationView(){
+
+    //instantiates a lottie view
+    private LottieAnimationView getSparklingAnimationView() {
         LottieAnimationView lav = new LottieAnimationView(getContext());
-        return lav;
-    }
-//adds a lottie view to the corresposnding x and y coordinates
-    private void addAnimationViewOnTopOfLetter(LottieAnimationView lav, int x, int y){ ;
-        lav.setElevation(1000);
         lav.setVisibility(View.VISIBLE);
         lav.loop(false);
-        f.addView(lav,300,300);
-        lav.setX(x);
-        lav.setY(y);
         lav.setAnimation("explosionA.json");
         lav.setScale(1);
         lav.setSpeed(.8f);
+        return lav;
+    }
+
+    private LottieAnimationView getWarningAnimationView() {
+        LottieAnimationView lav = new LottieAnimationView(getContext());
+        lav.setVisibility(View.VISIBLE);
+        lav.loop(false);
+        lav.setAnimation("error.json");
+        lav.setScale(1);
+        lav.setSpeed(.8f);
+        return lav;
+    }
+
+    //adds a lottie view to the corresposnding x and y coordinates
+    private void addAnimationViewOnTopOfLetter(LottieAnimationView lav, int x, int y) {
+        lav.setX(x);
+        lav.setY(y);
+        f.addView(lav, 300, 300);
         lav.playAnimation();
         lav.addAnimatorListener(new Animator.AnimatorListener() {
             @Override
-            public void onAnimationStart(Animator animation) {}
+            public void onAnimationStart(Animator animation) {
+            }
+
             @Override
             public void onAnimationEnd(Animator animation) {
                 f.removeView(lav);
             }
+
             @Override
-            public void onAnimationCancel(Animator animation) {}
+            public void onAnimationCancel(Animator animation) {
+            }
+
             @Override
-            public void onAnimationRepeat(Animator animation) {}
+            public void onAnimationRepeat(Animator animation) {
+            }
         });
     }
 
@@ -639,8 +680,7 @@ if(trackable.getTrackingState() == TrackingState.TRACKING) {
                 categoryList.get(i).setCorrect(true);
             }
         }
-
-        listener.moveToReplayFragment(categoryList);
+        listener.moveToReplayFragment(categoryList, true);
     }
 
     @Override
@@ -648,5 +688,22 @@ if(trackable.getTrackingState() == TrackingState.TRACKING) {
         super.onDestroy();
         textToSpeech.shutdown();
         pronunciationUtil = null;
+    }
+
+    public String eraseLastLetter(String spelledOutWord) {
+        if (spelledOutWord.length() < 1) {
+            undo.setVisibility(View.INVISIBLE);
+            return spelledOutWord;
+        } else {
+            letters = letters.substring(0, spelledOutWord.length() - 1);
+            wordContainer.removeViewAt(spelledOutWord.length() - 1);
+            return spelledOutWord.substring(spelledOutWord.length() - 1);
+        }
+    }
+
+    public void recreateErasedLetter(String letterToRecreate) {
+        if (!letterToRecreate.equals("")) {
+            createLetter(letterToRecreate, currentWord, base, letterMap.get(letterToRecreate));
+        }
     }
 }

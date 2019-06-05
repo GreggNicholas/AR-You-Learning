@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.91" />
+        app:layout_constraintGuide_percent="0.9" />
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline9"
@@ -73,11 +73,9 @@
                 android:layout_marginEnd="16dp"
                 app:cardBackgroundColor="@color/colorCream"
                 app:cardCornerRadius="12dp"
-                app:cardElevation="12dp"
                 app:cardPreventCornerOverlap="true"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.6"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/guideline11">
 
@@ -113,7 +111,7 @@
                 android:layout_marginBottom="16dp"
                 app:cardBackgroundColor="@color/colorteal"
                 app:cardCornerRadius="24dp"
-                app:cardElevation="8dp"
+                app:cardElevation="16dp"
                 app:layout_constraintBottom_toTopOf="@id/guideline11"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -169,7 +167,7 @@
                 android:layout_marginBottom="16dp"
                 app:cardBackgroundColor="@color/colorteal"
                 app:cardCornerRadius="24dp"
-                app:cardElevation="8dp"
+                app:cardElevation="16dp"
                 app:layout_constraintBottom_toTopOf="@id/guideline11"
                 app:layout_constraintEnd_toStartOf="@id/cardView_home"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -226,7 +224,7 @@
                 android:layout_marginBottom="16dp"
                 app:cardBackgroundColor="@color/colorteal"
                 app:cardCornerRadius="24dp"
-                app:cardElevation="8dp"
+                app:cardElevation="16dp"
                 app:layout_constraintBottom_toTopOf="@id/guideline11"
                 app:layout_constraintEnd_toStartOf="@id/cardView_playagain"
                 app:layout_constraintHorizontal_bias="0.5"
