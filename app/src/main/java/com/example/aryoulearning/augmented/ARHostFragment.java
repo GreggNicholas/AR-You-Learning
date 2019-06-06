@@ -186,34 +186,18 @@ public class ARHostFragment extends Fragment {
         exitYes = exitMenu.findViewById(R.id.exit_button_yes);
         exitNo = exitMenu.findViewById(R.id.exit_button_no);
 
-        exit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                f.addView(exitMenu);
-
-            }
-        });
-        exitYes.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                listener.moveToListFragment(MainActivity.getAnimalModelList(),
-                        MainActivity.getCategoryList(),
-                        MainActivity.getBackgroundList());
-            }
-        });
-        exitNo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                f.removeView(exitMenu);
-            }
-        });
+        exit.setOnClickListener(v -> f.addView(exitMenu));
+        exitYes.setOnClickListener(v -> listener.moveToListFragment(MainActivity.getAnimalModelList(),
+                MainActivity.getCategoryList(),
+                MainActivity.getBackgroundList()));
+        exitNo.setOnClickListener(v -> f.removeView(exitMenu));
 
         undo = view.findViewById(R.id.button_undo);
         undo.setOnClickListener(v -> recreateErasedLetter(eraseLastLetter(letters)));
 
         fadeIn = Animations.Normal.setCardFadeInAnimator(wordValidatorCv);
         fadeIn.addListener(new Animator.AnimatorListener() {
+
             @Override
             public void onAnimationStart(Animator animation) {
             }
@@ -325,6 +309,11 @@ public class ARHostFragment extends Fragment {
         Node sunVisual = new Node();
         sunVisual.setParent(base);
 
+        ObjectAnimator rotate = Animations.AR.createRotationAnimator();
+        rotate.setTarget(sunVisual);
+        rotate.setDuration(7000);
+        rotate.start();
+
         for (Map.Entry<String, ModelRenderable> e : modelMap.entrySet()) {
             sunVisual.setRenderable(e.getValue());
             sunVisual.setLocalPosition(new Vector3(base.getLocalPosition().x,//x
@@ -336,11 +325,6 @@ public class ARHostFragment extends Fragment {
 //            String randomWord = e.getKey() + "abcdefghijklmnopqrstuvwxyz";
             collisionSet.clear();
             pronunciationUtil.textToSpeechAnnouncer(e.getKey(), textToSpeech);
-
-            ObjectAnimator rotate = Animations.AR.createRotationAnimator();
-            rotate.setTarget(sunVisual);
-            rotate.setDuration(7000);
-            rotate.start();
 
             for (int i = 0; i < e.getKey().length(); i++) {
                 createLetter(Character.toString(e.getKey().charAt(i)), e.getKey(), base, letterMap.get(Character.toString(e.getKey().charAt(i))));
