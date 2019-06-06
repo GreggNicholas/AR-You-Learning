@@ -10,15 +10,18 @@
         android:id="@+id/category_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
         android:fontFamily="@font/balloon"
-        android:textAlignment="center"
         android:text="@string/category_title_text"
+        android:textAlignment="center"
         android:textSize="70sp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:text="Choose a category"
-        tools:textSize="70sp"/>
+        tools:textSize="70sp" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/category_rv"

@@ -12,15 +12,17 @@
         android:id="@+id/hint_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginTop="8dp"
         android:fontFamily="@font/balloon"
-        android:textAlignment="center"
         android:text="@string/hint_title_text"
+        android:textAlignment="center"
         android:textSize="70sp"
+        app:layout_constraintBottom_toTopOf="@id/guideline4"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:text="Preview Screen"
-        tools:textSize="45sp"/>
+        tools:textSize="45sp" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/hint_recycler_view"
@@ -34,16 +36,18 @@
 
     <Button
         android:id="@+id/hint_fragment_button"
-        android:layout_width="142dp"
-        android:layout_height="60dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/hint_recycler_view"
         android:layout_alignEnd="@+id/hint_recycler_view"
         android:layout_alignParentBottom="true"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="8dp"
+        android:background="?android:selectableItemBackgroundBorderless"
+        android:fontFamily="@font/balloon"
         android:text="@string/hint_frag_start_button_text"
-        android:textSize="30sp"
+        android:textSize="48sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline3" />
@@ -60,10 +64,11 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
+        android:fontFamily="@font/balloon"
         android:text="@string/switch_button_text"
         android:textOff="@string/switch_off"
         android:textOn="@string/switch_on"
-        android:textSize="24sp"
+        android:textSize="36sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -74,14 +79,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.8" />
+        app:layout_constraintGuide_percent="0.85" />
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@id/hint_title"
-        app:layout_constraintGuide_percent="0.08" />
+        app:layout_constraintGuide_percent="0.15" />
 
 </android.support.constraint.ConstraintLayout>

@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:elevation="7dp"
+    >
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/word_validator_cv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_margin="30dp"
+        android:elevation="100dp"
+        android:orientation="horizontal"
+        android:visibility="visible"
+        app:cardBackgroundColor="@color/categoryCard"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="7dp">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/word_validator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="8dp"
+                android:elevation="10dp"
+                android:fontFamily="@font/balloon"
+                android:textColor="#fff"
+                android:textSize="65sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="THIS IS A TEST" />
+
+            <android.support.v7.widget.CardView
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="32dp"
+                android:layout_marginBottom="32dp"
+                app:cardBackgroundColor="@color/colorCreamTransparent"
+                app:cardCornerRadius="24dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/word_validator">
+
+                <android.support.constraint.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/validator_imageView"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:elevation="10dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/validator_word"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:src="@tools:sample/avatars" />
+
+                    <TextView
+                        android:id="@+id/validator_word"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:elevation="10dp"
+                        android:fontFamily="@font/balloon"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="65sp"
+                        app:layout_constraintBottom_toTopOf="@+id/validator_wrong_word"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/validator_imageView"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:text="CAT" />
+
+                    <ImageView
+                        android:id="@+id/correct_star_imageView"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:alpha=".75"
+                        android:elevation="0dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:src="@tools:sample/avatars" />
+
+                    <TextView
+                        android:id="@+id/validator_correct_prompt"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginBottom="10dp"
+                        android:elevation="9dp"
+                        android:fontFamily="@font/balloon"
+                        android:text="The word was"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="24sp"
+                        app:layout_constraintBottom_toTopOf="@+id/validator_word"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="@+id/validator_word" />
+
+                    <TextView
+                        android:id="@+id/validator_incorrect_prompt"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginBottom="11dp"
+                        android:elevation="9dp"
+                        android:fontFamily="@font/balloon"
+                        android:text="here is how you spelled it"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="24sp"
+                        android:visibility="invisible"
+                        app:layout_constraintBottom_toTopOf="@+id/validator_wrong_word"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toStartOf="@+id/validator_word" />
+
+                    <TextView
+                        android:id="@+id/validator_wrong_word"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:fontFamily="@font/balloon"
+                        android:textAlignment="center"
+                        android:textColor="#700000"
+                        android:textSize="65sp"
+                        android:visibility="invisible"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toStartOf="@+id/validator_word"
+                        app:layout_constraintTop_toBottomOf="@+id/validator_word"
+                        tools:text="ATC" />
+
+                    <Button
+                        android:id="@+id/button_validator_ok"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginBottom="32dp"
+                        android:fontFamily="@font/balloon"
+                        android:text="@android:string/ok"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="65sp"
+                        android:elevation="100dp"
+                        android:background="?android:selectableItemBackgroundBorderless"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
+
+                </android.support.constraint.ConstraintLayout>
+            </android.support.v7.widget.CardView>
+        </android.support.constraint.ConstraintLayout>
+    </android.support.v7.widget.CardView>
+</android.support.constraint.ConstraintLayout>
