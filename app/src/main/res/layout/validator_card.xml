@@ -152,7 +152,7 @@
                         android:layout_marginBottom="8dp"
                         android:fontFamily="@font/balloon"
                         android:textAlignment="center"
-                        android:textColor="#700000"
+                        android:textColor="#C50000"
                         android:textSize="65sp"
                         android:visibility="invisible"
                         app:layout_constraintBottom_toBottomOf="parent"
