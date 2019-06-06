@@ -29,6 +29,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -56,6 +57,7 @@ import com.google.ar.sceneform.math.Vector3;
 import com.google.ar.sceneform.rendering.ModelRenderable;
 import com.google.ar.sceneform.ux.ArFragment;
 import com.google.ar.sceneform.ux.TransformableNode;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -102,8 +104,17 @@ public class ARHostFragment extends Fragment {
 
     private CardView wordCardView;
     private LinearLayout wordContainer;
+
     private TextView wordValidator;
+    private View wordValidatorLayout;
     private CardView wordValidatorCv;
+    private ImageView validatorImage;
+    private ImageView validatorBackgroudImage;
+    private TextView validatorWord;
+    private TextView validatorWrongWord;
+    private TextView validatorWrongPrompt;
+    private Button validatorOkButton;
+
 
     private Set<Vector3> collisionSet = new HashSet<>();
 
@@ -115,7 +126,6 @@ public class ARHostFragment extends Fragment {
 
     private Anchor mainAnchor;
     private AnchorNode mainAnchorNode;
-    private Frame mainFrame;
     private List<HitResult> mainHits;
 
     private ObjectAnimator fadeIn;
@@ -175,10 +185,21 @@ public class ARHostFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         f = view.findViewById(R.id.frame_layout);
-        wordContainer = view.findViewById(R.id.word_container);
+
         wordCardView = view.findViewById(R.id.card_wordContainer);
-        wordValidator = view.findViewById(R.id.word_validator);
-        wordValidatorCv = view.findViewById(R.id.word_validator_cv);
+        wordContainer = view.findViewById(R.id.word_container);
+
+        wordValidatorLayout = getLayoutInflater().inflate(R.layout.validator_card,f,false);
+        wordValidatorCv = wordValidatorLayout.findViewById(R.id.word_validator_cv);
+        wordValidator = wordValidatorLayout.findViewById(R.id.word_validator);
+
+        validatorImage = wordValidatorLayout.findViewById(R.id.validator_imageView);
+        validatorBackgroudImage = wordValidatorLayout.findViewById(R.id.correct_star_imageView);
+        validatorWord = wordValidatorLayout.findViewById(R.id.validator_word);
+        validatorWrongPrompt = wordValidatorLayout.findViewById(R.id.validator_incorrect_prompt);
+        validatorWrongWord = wordValidatorLayout.findViewById(R.id.validator_wrong_word);
+        validatorOkButton = wordValidatorLayout.findViewById(R.id.button_validator_ok);
+
 //        wordValidatorCv.setVisibility(View.INVISIBLE);
 
         exitMenu = getLayoutInflater().inflate(R.layout.exit_menu_card,f,false);
@@ -200,13 +221,18 @@ public class ARHostFragment extends Fragment {
 
             @Override
             public void onAnimationStart(Animator animation) {
+                f.addView(wordValidatorLayout);
             }
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                wordValidatorCv.setVisibility(View.VISIBLE);
-                fadeOut.setStartDelay(1500);
-                fadeOut.start();
+
+//                wordValidatorCv.setVisibility(View.VISIBLE);
+
+                validatorOkButton.setOnClickListener(v -> {
+                    fadeOut.setStartDelay(500);
+                    fadeOut.start();
+                });
             }
 
             @Override
@@ -226,6 +252,7 @@ public class ARHostFragment extends Fragment {
 
             @Override
             public void onAnimationEnd(Animator animation) {
+                f.removeView(wordValidatorLayout);
 
                 if (roundCounter < roundLimit && roundCounter < modelMapList.size()) {
                     Handler handler = new Handler();
@@ -429,10 +456,30 @@ public class ARHostFragment extends Fragment {
         });
     }
 
-    public void compareAnswer(String letters, String word) {
-        String validator = "";
+    private void setValidatorCardView(boolean isCorrect){
 
+
+        validatorWord.setText(currentWord);
+        validatorWrongWord.setVisibility(View.INVISIBLE);
+        validatorWrongPrompt.setVisibility(View.INVISIBLE);
+
+        if(isCorrect){
+            validatorBackgroudImage.setImageResource(R.drawable.star);
+            Picasso.get().load(categoryList.get(roundCounter - 1).getImage()).into(validatorImage);
+        }else{
+            validatorBackgroudImage.setImageResource(R.drawable.error);
+            Picasso.get().load(categoryList.get(roundCounter).getImage()).into(validatorImage);
+            validatorWrongWord.setVisibility(View.VISIBLE);
+            validatorWrongPrompt.setVisibility(View.VISIBLE);
+        }
+
+    }
+
+    private void compareAnswer(String letters, String word) {
+        String validator = "";
+        boolean isCorrect;
         if (letters.equals(word)) {
+            isCorrect = true;
             validator = "You are correct";
             rightAnswer.add(letters);
 
@@ -442,26 +489,25 @@ public class ARHostFragment extends Fragment {
             //we will increment once the list is added to correct index
             roundCounter++;
 
-            wordValidatorCv.setVisibility(View.VISIBLE);
-            wordValidator.setText(validator);
-
             //this will remove all, seemed safer than clear, which nulls the object.
             wrongAnswerList.removeAll(wrongAnswerList);
 
             pronunciationUtil.textToSpeechAnnouncer(validator, textToSpeech);
         } else {
+            isCorrect = false;
             validator = "Wrong. Please Try Again";
             wrongAnswer.add(letters);
-            wordValidatorCv.setVisibility(View.VISIBLE);
-            wordValidator.setText(validator);
+            validatorWrongWord.setText(letters);
             correctAnswerSet.add(word);
             //every wrong answer, until a correct answer will be added here
             wrongAnswerList.add(letters);
+
             categoryList.get(roundCounter).setCorrect(false);
             pronunciationUtil.textToSpeechAnnouncer(validator, textToSpeech);
         }
 
         wordValidator.setText(validator);
+        setValidatorCardView(isCorrect);
         fadeIn.start();
 
     }
@@ -487,7 +533,6 @@ public class ARHostFragment extends Fragment {
 
     private boolean tryPlaceGame(MotionEvent tap, Frame frame) {
         if (tap != null && frame.getCamera().getTrackingState() == TrackingState.TRACKING) {
-            mainFrame = frame;
             mainHits = frame.hitTest(tap);
 
             for (HitResult hit : frame.hitTest(tap)) {

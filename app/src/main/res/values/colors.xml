@@ -12,4 +12,5 @@
     <color name="mainBackground">#F1E2A8</color>
     <color name="colorCream">#FCFFDA</color>
     <color name="colorWordContainer">#43F5F5F5</color>
+    <color name="colorCreamTransparent">#94FCFFDA</color>
 </resources>

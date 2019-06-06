@@ -6,7 +6,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
     android:id="@+id/frame_layout"
-    android:elevation="100dp"
     tools:context=".augmented.ARHostFragment">
 
     <fragment
@@ -17,43 +16,6 @@
         android:layout_gravity="center"/>
 
     <android.support.v7.widget.CardView
-        android:id="@+id/word_validator_cv"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:layout_margin="30dp"
-        android:elevation="100dp"
-        android:orientation="horizontal"
-        android:visibility="invisible"
-        app:cardBackgroundColor="@color/categoryCard"
-        app:cardCornerRadius="20dp"
-        app:cardElevation="10dp">
-
-        <android.support.constraint.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <TextView
-                android:id="@+id/word_validator"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"
-                android:textColor="#fff"
-                android:textSize="50sp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="THIS IS A TEST" />
-
-        </android.support.constraint.ConstraintLayout>
-    </android.support.v7.widget.CardView>
-
-    <android.support.v7.widget.CardView
         android:id="@+id/card_wordContainer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -62,7 +24,7 @@
         android:visibility="invisible"
         app:cardBackgroundColor="@color/colorWordContainer"
         app:cardCornerRadius="12dp"
-        app:cardElevation="8dp">
+        app:cardElevation="0dp">
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
