@@ -14,7 +14,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.res.ResourcesCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -81,7 +80,6 @@ public class GameFragment extends Fragment {
             listener = (NavListener) context;
         }
         pronunciationUtil = new PronunciationUtil();
-        ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
     }
 
     @Override

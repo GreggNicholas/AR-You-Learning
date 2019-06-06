@@ -8,7 +8,6 @@ import android.speech.tts.TextToSpeech;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -70,7 +69,6 @@ public class HintFragment extends Fragment {
             switchlistener = (SwitchListener) context;
         }
         pronunciationUtil = new PronunciationUtil();
-        ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
     }
 
     @Override
