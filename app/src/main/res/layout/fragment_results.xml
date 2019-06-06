@@ -7,6 +7,21 @@
     android:background="@color/mainBackground"
     tools:context=".view.fragment.ResultsFragment">
 
+
+    <TextView
+        android:id="@+id/results_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:text="@string/results_title_text"
+        android:textAlignment="center"
+        android:fontFamily="@font/balloon"
+        android:textSize="70sp"
+        tools:text="Results Screen"
+        tools:textSize="70sp"/>
+
     <TextView
         android:id="@+id/results_category"
         android:layout_width="wrap_content"
@@ -21,7 +36,7 @@
         app:layout_constraintEnd_toStartOf="@+id/rainbow_correctword_ratingbar"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/results_title"
         tools:text="CATEGORY" />
 
     <RatingBar
@@ -36,7 +51,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/results_category"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/results_title" />
 
     <!--<TextView-->
     <!--android:id="@+id/result_fragment_user_right_answer_tv"-->

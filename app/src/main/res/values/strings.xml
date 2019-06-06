@@ -19,5 +19,8 @@
     <string name="home">Home</string>
     <string name="results">Results</string>
     <string name="game_title">AR you learning?</string>
+    <string name="results_title_text">Results Screen</string>
+    <string name="category_title_text">Choose a category</string>
+    <string name="hint_title_text">Preview Screen</string>
 
 </resources>

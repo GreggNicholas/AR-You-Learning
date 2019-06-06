@@ -9,7 +9,6 @@ import android.speech.tts.TextToSpeech;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,7 +17,6 @@ import android.view.ViewGroup;
 import com.example.aryoulearning.R;
 import com.example.aryoulearning.audio.PronunciationUtil;
 import com.example.aryoulearning.controller.NavListener;
-import com.example.aryoulearning.controller.SwitchListener;
 import com.example.aryoulearning.model.Model;
 import com.example.aryoulearning.view.MainActivity;
 
@@ -77,7 +75,6 @@ public class ReplayFragment extends Fragment {
             navListener = (NavListener) context;
         }
         pronunciationUtil = new PronunciationUtil();
-        ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
     }
 
 
