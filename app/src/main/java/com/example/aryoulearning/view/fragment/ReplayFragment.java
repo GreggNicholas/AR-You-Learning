@@ -96,8 +96,9 @@ public class ReplayFragment extends Fragment {
         });
         homeButtonCard.setOnClickListener(v -> {
             pronunciationUtil.textToSpeechAnnouncer("Lets go home", textToSpeech);
-            Intent homeIntent = new Intent(getContext(), MainActivity.class);
-            startActivity(homeIntent);
+            navListener.moveToListFragment(MainActivity.getAnimalModelList(),
+                    MainActivity.getCategoryList(),
+                    MainActivity.getBackgroundList());
         });
         playagainButtonCard.setOnClickListener(v -> {
             pronunciationUtil.textToSpeechAnnouncer("Lets play again!", textToSpeech);
