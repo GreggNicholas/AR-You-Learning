@@ -62,11 +62,11 @@ public class ResultsFragment extends Fragment {
     private int correctAnswer;
     private int totalSize;
     private RatingBar rainbowRatingBar;
-    private String userRightAnswersString, userWrongAnswersString, correctAnswerForUserString;
+//    private String userRightAnswersString, userWrongAnswersString, correctAnswerForUserString;
     public static final String TAG = "ResultsFragment";
     private TextView categoryTextView;
     private List<Model> categoryList;
-    WebView congratsWebView;
+//    WebView congratsWebView;
     FloatingActionButton floatingActionButton;
     private RecyclerView resultRV;
     private PronunciationUtil pronunciationUtil;
@@ -91,44 +91,46 @@ public class ResultsFragment extends Fragment {
         if(getArguments() != null){
             categoryList = getArguments().getParcelableArrayList(CATEGORY_LIST);
         }
+        pronunciationUtil = new PronunciationUtil();
+        textToSpeech = pronunciationUtil.getTTS(getContext());
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
         extractSharedPrefs();
     }
 
 
     public void extractSharedPrefs() {
-        rightAnswer = sharedPreferences.getStringSet(RIGHTANSWERS, null);
-        wrongAnswer = sharedPreferences.getStringSet(WRONGANSWER, null);
-        correctAnswer = sharedPreferences.getInt(ANSWERSCORRECT, 0);
+//        rightAnswer = sharedPreferences.getStringSet(RIGHTANSWERS, null);
+//        wrongAnswer = sharedPreferences.getStringSet(WRONGANSWER, null);
+//        correctAnswer = sharedPreferences.getInt(ANSWERSCORRECT, 0);
         correctAnswersStringSet = sharedPreferences.getStringSet(CORRECT_ANSWER_FOR_USER, null);
         totalSize = sharedPreferences.getInt(TOTALSIZE, 0);
-        final StringBuilder rightAnswerBuilder = new StringBuilder();
-        final StringBuilder wrongAnswerBuilder = new StringBuilder();
-        final StringBuilder correctAnswerBuilder = new StringBuilder();
-        if (wrongAnswer != null) {
-            for (String wrong : wrongAnswer) {
-                map.put(wrong, sharedPreferences.getString(wrong, null));
-            }
-        }
-        if (rightAnswer != null) {
-            for (String right : rightAnswer) {
-                rightAnswerBuilder.append(right).append(" ");
-            }
-        }
-
-        if (wrongAnswer != null) {
-            for (String wrongChoice : wrongAnswer) {
-                wrongAnswerBuilder.append(wrongChoice).append(" ");
-            }
-        }
-        if (correctAnswersStringSet != null) {
-            for (String correctWay : correctAnswersStringSet) {
-                correctAnswerBuilder.append(correctWay).append(" ");
-            }
-        }
-        userRightAnswersString = " " + getString(R.string.rightanswers) + " " + rightAnswerBuilder.toString();
-        userWrongAnswersString = " " + getString(R.string.wronganswers) + " " + wrongAnswerBuilder.toString();
-        correctAnswerForUserString = " " + getString(R.string.correctanswers) + " " + correctAnswerBuilder.toString();
+//        final StringBuilder rightAnswerBuilder = new StringBuilder();
+//        final StringBuilder wrongAnswerBuilder = new StringBuilder();
+//        final StringBuilder correctAnswerBuilder = new StringBuilder();
+//        if (wrongAnswer != null) {
+//            for (String wrong : wrongAnswer) {
+//                map.put(wrong, sharedPreferences.getString(wrong, null));
+//            }
+//        }
+//        if (rightAnswer != null) {
+//            for (String right : rightAnswer) {
+//                rightAnswerBuilder.append(right).append(" ");
+//            }
+//        }
+//
+//        if (wrongAnswer != null) {
+//            for (String wrongChoice : wrongAnswer) {
+//                wrongAnswerBuilder.append(wrongChoice).append(" ");
+//            }
+//        }
+//        if (correctAnswersStringSet != null) {
+//            for (String correctWay : correctAnswersStringSet) {
+//                correctAnswerBuilder.append(correctWay).append(" ");
+//            }
+//        }
+//        userRightAnswersString = " " + getString(R.string.rightanswers) + " " + rightAnswerBuilder.toString();
+//        userWrongAnswersString = " " + getString(R.string.wronganswers) + " " + wrongAnswerBuilder.toString();
+//        correctAnswerForUserString = " " + getString(R.string.correctanswers) + " " + correctAnswerBuilder.toString();
     }
 
     @Override
@@ -156,19 +158,16 @@ public class ResultsFragment extends Fragment {
     }
 
     public void fabClick() {
-        floatingActionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                v = getActivity().getWindow().getDecorView().getRootView();
-                if (ContextCompat.checkSelfPermission(v.getContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
-                        != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(v.getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                        != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(getActivity(),
-                            new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE);
-                    takeScreenshotAndShare(v);
-                } else {
-                    takeScreenshotAndShare(v);
-                }
+        floatingActionButton.setOnClickListener(v -> {
+            v = getActivity().getWindow().getDecorView().getRootView();
+            if (ContextCompat.checkSelfPermission(v.getContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
+                    != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(v.getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(getActivity(),
+                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE);
+                takeScreenshotAndShare(v);
+            } else {
+                takeScreenshotAndShare(v);
             }
         });
     }

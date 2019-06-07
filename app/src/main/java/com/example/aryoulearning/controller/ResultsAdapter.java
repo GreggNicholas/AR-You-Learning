@@ -56,35 +56,41 @@ public class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.ResultsV
         private TextView modelTextView;
         private ImageView modelImageview;
         private TextView modelAnswer;
-        View view;
-
+        private ImageView resultImage;
 
         ResultsViewHolder(@NonNull View itemView) {
             super(itemView);
             modelTextView = itemView.findViewById(R.id.correctmodel_name);
             modelImageview = itemView.findViewById(R.id.correctmodel_image);
             modelAnswer = itemView.findViewById(R.id.correctmodel_answer);
+            resultImage = itemView.findViewById(R.id.result_imageView);
         }
 
         @SuppressLint("ResourceAsColor")
         void onBind(final Model model, final PronunciationUtil pronunUtil, final TextToSpeech TTS) {
             String correct = "Correct";
-            String wrong = "Wrong: " + model.getWrongAnswerSet();
+
+            String wrong = "";
+            for (String s:model.getWrongAnswerSet()) {
+                wrong += s +", ";
+            }
+
             String name = model.getName().toUpperCase().charAt(0) + model.getName().toLowerCase().substring(1);
-            CardView cardView = (CardView) itemView.findViewById(R.id.cardView4);
+            CardView cardView = itemView.findViewById(R.id.cardView4);
 
             modelTextView.setText(name);
 
             Picasso.get().load(model.getImage()).into(modelImageview);
 
             if (model.isCorrect()) {
+                resultImage.setImageResource(R.drawable.star);
                 modelAnswer.setText(correct);
             } else {
                 cardView.setCardBackgroundColor(Color.parseColor("#D81B60"));
-                modelAnswer.setText(wrong);
+                resultImage.setImageResource(R.drawable.error);
+                modelAnswer.setText("here are your wrong answers:\n" + "\n" + wrong.substring(0,wrong.length()-2));
             }
-
-
+            cardView.setOnClickListener(v -> pronunUtil.textToSpeechAnnouncer(name,TTS));
         }
     }
 }
