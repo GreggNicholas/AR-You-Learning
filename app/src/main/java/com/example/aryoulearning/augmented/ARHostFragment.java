@@ -480,7 +480,7 @@ public class ARHostFragment extends Fragment {
         boolean isCorrect;
         if (letters.equals(word)) {
             isCorrect = true;
-            validator = "You are correct";
+            validator = "correct";
             rightAnswer.add(letters);
 
             //will run once when correct answer is entered. the method will instantiate, and add all from the current list
@@ -495,7 +495,7 @@ public class ARHostFragment extends Fragment {
             pronunciationUtil.textToSpeechAnnouncer(validator, textToSpeech);
         } else {
             isCorrect = false;
-            validator = "Wrong. Please Try Again";
+            validator = "wrong";
             wrongAnswer.add(letters);
             validatorWrongWord.setText(letters);
             correctAnswerSet.add(word);
