@@ -1,7 +1,10 @@
 package com.example.aryoulearning.controller;
 
+import android.annotation.SuppressLint;
+import android.graphics.Color;
 import android.speech.tts.TextToSpeech;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -53,6 +56,7 @@ public class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.ResultsV
         private TextView modelTextView;
         private ImageView modelImageview;
         private TextView modelAnswer;
+        View view;
 
 
         ResultsViewHolder(@NonNull View itemView) {
@@ -62,18 +66,21 @@ public class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.ResultsV
             modelAnswer = itemView.findViewById(R.id.correctmodel_answer);
         }
 
+        @SuppressLint("ResourceAsColor")
         void onBind(final Model model, final PronunciationUtil pronunUtil, final TextToSpeech TTS) {
             String correct = "Correct";
             String wrong = "Wrong: " + model.getWrongAnswerSet();
             String name = model.getName().toUpperCase().charAt(0) + model.getName().toLowerCase().substring(1);
+            CardView cardView = (CardView) itemView.findViewById(R.id.cardView4);
 
             modelTextView.setText(name);
 
             Picasso.get().load(model.getImage()).into(modelImageview);
 
-            if(model.isCorrect()){
+            if (model.isCorrect()) {
                 modelAnswer.setText(correct);
-            }else{
+            } else {
+                cardView.setCardBackgroundColor(Color.parseColor("#D81B60"));
                 modelAnswer.setText(wrong);
             }
 
