@@ -256,9 +256,10 @@ public class ResultsFragment extends Fragment {
         rainbowRatingBar.setIsIndicator(true);
     }
 
-//    @Override
-//    public void onDestroy() {
-//        super.onDestroy();
-//        sharedPreferences.edit().clear().commit();
-//    }
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        textToSpeech.shutdown();
+        pronunciationUtil = null;
+    }
 }
