@@ -310,12 +310,7 @@ public class GameFragment extends Fragment {
             pronunciationUtil.textToSpeechAnnouncer(answer, textToSpeech);
             Picasso.get().load(modelList.get(counter).getImage()).into(imageView);
             Handler handler = new Handler();
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    setWordsOnScreen(answer);
-                }
-            });
+            handler.post(() -> setWordsOnScreen(answer));
 
         } else {
             sharedPreferences.edit().putInt(ResultsFragment.ANSWERSCORRECT, answersCorrect).apply();
