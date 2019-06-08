@@ -1,8 +1,10 @@
 package com.example.aryoulearning.view.fragment;
 
 
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,6 +33,21 @@ public class TutorialScreen extends Fragment {
         args.putParcelableArrayList("model_list_key", (ArrayList<? extends Parcelable>) modelList);
         tutorialScreen.setArguments(args);
         return tutorialScreen;
+    }
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof NavListener) {
+            listener = (NavListener) context;
+        }
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            modelList = getArguments().getParcelableArrayList("model_list_key");
+        }
     }
 
 
