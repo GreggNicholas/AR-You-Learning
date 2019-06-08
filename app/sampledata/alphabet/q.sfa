@@ -4,12 +4,18 @@
       name: 'Ballon_kupfer_01.007',
       parameters: [
         {
-          baseColor: null,
+          baseColor:
+          [
+                          0,
+                           6,
+                           0,
+                           3,
+                           ]
         },
         {
           baseColorTint: [
             0.64000000000000001,
-            0.64000000000000001,
+            4,
             0.64000000000000001,
             1,
           ],
