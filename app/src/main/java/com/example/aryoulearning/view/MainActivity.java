@@ -123,6 +123,13 @@ public class MainActivity extends AppCompatActivity implements NavListener, Swit
                 .addToBackStack(null)
                 .commit();
     }
+    @Override
+    public void backToHintFragment(List<Model> modelList) {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container, HintFragment.newInstance(modelList))
+                .commit();
+    }
 
     @Override
     public void moveToReplayFragment(List<Model> modelList, boolean wasPreviousGameTypeAR) {
