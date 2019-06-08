@@ -82,6 +82,7 @@ public class TutorialScreen extends Fragment {
     private boolean isVideoViewPlaying() {
         return tutorialVideoView.isPlaying();
     }
+
     private void playTutorial() {
         MediaController mediaController = new MediaController(requireContext());
         tutorialVideoView.setMediaController(mediaController);
@@ -101,10 +102,12 @@ public class TutorialScreen extends Fragment {
     }
 
     private void findViewByIds(@NonNull View view) {
+        tutorialVideoView = view.findViewById(R.id.tutorial_videoView);
         backToHintFragmentButton = view.findViewById(R.id.tutorial_frag_back_to_hint_button);
         startGameButton = view.findViewById(R.id.tutorial_frag_start_game_button);
-        startGameButton.setOnClickListener(v -> listener.moveToGameOrARFragment(modelList, true) );
-        backToHintFragmentButton.setOnClickListener(v -> listener.moveToHintFragment(modelList));
+        playVideoButton = view.findViewById(R.id.tutorial_frag_play_video_button);
+        //startGameButton.setOnClickListener(v -> listener.moveToGameOrARFragment(modelList, true) );
+        //backToHintFragmentButton.setOnClickListener(v -> listener.moveToHintFragment(modelList));
     }
 
 }

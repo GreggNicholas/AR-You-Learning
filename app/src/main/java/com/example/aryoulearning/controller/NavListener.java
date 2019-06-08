@@ -16,4 +16,6 @@ public interface NavListener {
     void moveToReplayFragment(List<Model> modelList, boolean wasPreviousGameTypeAR);
 
     void backToHintFragment(List<Model> animalResponseList);
+
+    void moveToTutorialScreen(List<Model> modelList);
 }
