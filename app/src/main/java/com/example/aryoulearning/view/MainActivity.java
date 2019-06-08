@@ -16,6 +16,7 @@ import com.example.aryoulearning.view.fragment.HintFragment;
 import com.example.aryoulearning.view.fragment.ListFragment;
 import com.example.aryoulearning.view.fragment.ReplayFragment;
 import com.example.aryoulearning.view.fragment.ResultsFragment;
+import com.example.aryoulearning.view.fragment.TutorialScreen;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -136,6 +137,14 @@ public class MainActivity extends AppCompatActivity implements NavListener, Swit
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.fragment_container, ReplayFragment.newInstance(modelList,wasPreviousGameTypeAR),"replay_fragment")
+                .commit();
+    }
+    @Override
+    public void moveToTutorialScreen(List<Model> modelList) {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container, TutorialScreen.newInstance(modelList))
+                .addToBackStack(null)
                 .commit();
     }
 
