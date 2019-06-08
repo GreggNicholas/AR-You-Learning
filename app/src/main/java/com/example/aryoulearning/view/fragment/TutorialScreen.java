@@ -7,15 +7,21 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.VideoView;
 
 import com.example.aryoulearning.R;
+import com.example.aryoulearning.controller.NavListener;
 import com.example.aryoulearning.model.Model;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class TutorialScreen extends Fragment {
-
+    private Button backToHintFragmentButton, playVideoButton, startGameButton;
+    private NavListener listener;
+    private List<Model> modelList;
+    private VideoView tutorialVideoView;
 
     public TutorialScreen() {
     }
