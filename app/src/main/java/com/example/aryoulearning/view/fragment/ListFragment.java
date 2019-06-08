@@ -16,6 +16,7 @@ import android.widget.LinearLayout;
 import com.example.aryoulearning.R;
 import com.example.aryoulearning.controller.CategoryAdapter;
 import com.example.aryoulearning.model.Model;
+import com.example.aryoulearning.view.MainActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -86,6 +87,7 @@ public class ListFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        MainActivity.AR_SWITCH_STATUS = false;
         if(getFragmentManager().findFragmentByTag("result_fragment") != null){
             getFragmentManager().beginTransaction().remove(getFragmentManager().findFragmentByTag("result_fragment")).commit();
         }

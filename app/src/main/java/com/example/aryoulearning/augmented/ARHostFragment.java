@@ -138,7 +138,10 @@ public class ARHostFragment extends Fragment {
     private Button exitYes;
     private Button exitNo;
 
+    private LottieAnimationView tapAnimation;
+
     private MediaPlayer playBalloonPop;
+    private boolean placedAnimation;
 
     public static ARHostFragment newInstance(List<Model> modelList) {
         ARHostFragment fragment = new ARHostFragment();
@@ -315,13 +318,25 @@ public class ARHostFragment extends Fragment {
                 .getScene()
                 .addOnUpdateListener(
                         frameTime -> {
+
                             Frame frame = arFragment.getArSceneView().getArFrame();
+
                             if (frame == null) {
                                 return;
                             }
                             if (frame.getCamera().getTrackingState() != TrackingState.TRACKING) {
                                 return;
                             }
+                            if(!hasPlacedGame){
+                            for(Plane plane : frame.getUpdatedTrackables(Plane.class)){
+                                if(!placedAnimation && plane.getTrackingState() == TrackingState.TRACKING){
+                                    placedAnimation = true;
+                                    tapAnimation = getTapAnimationView();
+                                    addTapAnimationToScreen(tapAnimation);
+                                }
+                            }
+                            }
+
                         });
 //         Lastly request CAMERA permission which is required by ARCore.
         requestCameraPermission(getActivity(), RC_PERMISSIONS);
@@ -525,6 +540,7 @@ public class ARHostFragment extends Fragment {
         if (frame != null) {
             if (!hasPlacedGame && tryPlaceGame(tap, frame)) {
                 hasPlacedGame = true;
+                f.removeView(tapAnimation);
             }
         }
     }
@@ -662,7 +678,6 @@ public class ARHostFragment extends Fragment {
             return true;
         }
 
-
         for (Vector3 v : collisionSet) {
             //if the coordinates are within a range of any exisiting coordinates
             if (((newV3.x < v.x + 2 && newV3.x > v.x - 2)
@@ -703,6 +718,16 @@ public class ARHostFragment extends Fragment {
         return lav;
     }
 
+    private LottieAnimationView getTapAnimationView(){
+        LottieAnimationView lav = new LottieAnimationView(getContext());
+        lav.setVisibility(View.VISIBLE);
+        lav.loop(true);
+        lav.setAnimation("tap.json");
+        lav.setScale(1);
+        lav.setSpeed(.8f);
+        return lav;
+    }
+
     //adds a lottie view to the corresposnding x and y coordinates
     private void addAnimationViewOnTopOfLetter(LottieAnimationView lav, int x, int y) {
         lav.setX(x);
@@ -727,6 +752,15 @@ public class ARHostFragment extends Fragment {
             public void onAnimationRepeat(Animator animation) {
             }
         });
+    }
+
+    public void addTapAnimationToScreen(LottieAnimationView lavTap){
+        int width = getActivity().getWindow().getDecorView().getWidth();
+        int height = getActivity().getWindow().getDecorView().getHeight();
+        lavTap.setX(width/2 - 50);
+        lavTap.setY(height/2 - 50);
+        f.addView(lavTap, 500, 500);
+        lavTap.playAnimation();
     }
 
     private void addLetterToWordContainer(String letter) {
