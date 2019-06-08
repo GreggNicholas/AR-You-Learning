@@ -33,7 +33,7 @@ public class HintFragment extends Fragment {
     private Switch arSwitch;
     private SwitchListener switchlistener;
     private List<Model> modelList;
-    private Button startGameButton;
+    private Button startGameButton, goToTutorialButton;
     private RecyclerView hintRecyclerView;
     private PronunciationUtil pronunciationUtil;
     private TextToSpeech textToSpeech;
@@ -86,12 +86,14 @@ public class HintFragment extends Fragment {
         hintRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false));
         setArSwitch();
         startGameButton.setOnClickListener(v -> listener.moveToGameOrARFragment(modelList, MainActivity.AR_SWITCH_STATUS));
+        goToTutorialButton.setOnClickListener(v -> listener.moveToTutorialScreen(modelList));
     }
 
     private void findViewByIds(@NonNull View view) {
         startGameButton = view.findViewById(R.id.hint_fragment_button);
         arSwitch = view.findViewById(R.id.switch_ar);
         hintRecyclerView = view.findViewById(R.id.hint_recycler_view);
+        goToTutorialButton = view.findViewById(R.id.hint_frag_tutorial_button);
     }
 
     private void setArSwitch() {
