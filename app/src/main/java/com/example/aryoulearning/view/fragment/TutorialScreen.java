@@ -2,6 +2,7 @@ package com.example.aryoulearning.view.fragment;
 
 
 import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
@@ -11,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.MediaController;
 import android.widget.VideoView;
 
 import com.example.aryoulearning.R;
@@ -19,6 +21,7 @@ import com.example.aryoulearning.model.Model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class TutorialScreen extends Fragment {
     private Button backToHintFragmentButton, playVideoButton, startGameButton;
@@ -79,6 +82,29 @@ public class TutorialScreen extends Fragment {
     private boolean isVideoViewPlaying() {
         return tutorialVideoView.isPlaying();
     }
+    private void playTutorial() {
+        MediaController mediaController = new MediaController(requireContext());
+        tutorialVideoView.setMediaController(mediaController);
+        String pathToTutorial = "android.resource://" + Objects.requireNonNull(getActivity()).getPackageName() + "/" + R.raw.tutorial;
+        Uri tutorialUri = Uri.parse(pathToTutorial);
+        tutorialVideoView.setVideoURI(tutorialUri);
+        playVideoButton.setOnClickListener(v -> {
+            tutorialVideoView.start();
+            tutorialVideoView.setMediaController(new MediaController(requireContext()) {
+                @Override
+                public void hide() {
+                    mediaController.show(0);
+                }
+            });
+            tutorialVideoView.setMediaController(mediaController);
+        });
+    }
 
+    private void findViewByIds(@NonNull View view) {
+        backToHintFragmentButton = view.findViewById(R.id.tutorial_frag_back_to_hint_button);
+        startGameButton = view.findViewById(R.id.tutorial_frag_start_game_button);
+        startGameButton.setOnClickListener(v -> listener.moveToGameOrARFragment(modelList, true) );
+        backToHintFragmentButton.setOnClickListener(v -> listener.moveToHintFragment(modelList));
+    }
 
 }
