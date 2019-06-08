@@ -106,8 +106,6 @@ public class TutorialScreen extends Fragment {
         backToHintFragmentButton = view.findViewById(R.id.tutorial_frag_back_to_hint_button);
         startGameButton = view.findViewById(R.id.tutorial_frag_start_game_button);
         playVideoButton = view.findViewById(R.id.tutorial_frag_play_video_button);
-        //startGameButton.setOnClickListener(v -> listener.moveToGameOrARFragment(modelList, true) );
-        //backToHintFragmentButton.setOnClickListener(v -> listener.moveToHintFragment(modelList));
     }
 
 }
