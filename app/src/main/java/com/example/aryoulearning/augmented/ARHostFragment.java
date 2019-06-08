@@ -115,7 +115,6 @@ public class ARHostFragment extends Fragment {
     private TextView validatorWrongPrompt;
     private Button validatorOkButton;
 
-
     private Set<Vector3> collisionSet = new HashSet<>();
 
     private Random r = new Random();
@@ -495,15 +494,14 @@ public class ARHostFragment extends Fragment {
             pronunciationUtil.textToSpeechAnnouncer(validator, textToSpeech);
         } else {
             isCorrect = false;
-            validator = "wrong";
+            validator = "try again!";
             wrongAnswer.add(letters);
             validatorWrongWord.setText(letters);
             correctAnswerSet.add(word);
             //every wrong answer, until a correct answer will be added here
             wrongAnswerList.add(letters);
-
             categoryList.get(roundCounter).setCorrect(false);
-            pronunciationUtil.textToSpeechAnnouncer(validator, textToSpeech);
+            pronunciationUtil.textToSpeechAnnouncer("wrong. please try again", textToSpeech);
         }
 
         wordValidator.setText(validator);

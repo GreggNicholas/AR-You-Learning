@@ -15,13 +15,13 @@
         android:fontFamily="@font/balloon"
         android:text="@string/category_title_text"
         android:textAlignment="center"
-        android:textSize="48sp"
+        android:textSize="70sp"
         app:layout_constraintBottom_toTopOf="@+id/guideline"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Choose a category"
-        tools:textSize="48sp" />
+        tools:textSize="70sp" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/category_rv"
@@ -50,8 +50,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.9"
-        app:layout_constraintTop_toBottomOf="@id/category_title" />
+        app:layout_constraintTop_toBottomOf="@id/category_title"
+        app:layout_constraintGuide_percent="0.85" />
 
 
 </android.support.constraint.ConstraintLayout>

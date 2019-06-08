@@ -57,10 +57,12 @@ public class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.ResultsV
         private ImageView modelImageview;
         private TextView modelAnswer;
         private ImageView resultImage;
+        private TextView promptText;
 
         ResultsViewHolder(@NonNull View itemView) {
             super(itemView);
             modelTextView = itemView.findViewById(R.id.correctmodel_name);
+            promptText = itemView.findViewById(R.id.result_prompt_textView);
             modelImageview = itemView.findViewById(R.id.correctmodel_image);
             modelAnswer = itemView.findViewById(R.id.correctmodel_answer);
             resultImage = itemView.findViewById(R.id.result_imageView);
@@ -85,10 +87,11 @@ public class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.ResultsV
             if (model.isCorrect()) {
                 resultImage.setImageResource(R.drawable.star);
                 modelAnswer.setText(correct);
+                promptText.setVisibility(View.INVISIBLE);
             } else {
                 cardView.setCardBackgroundColor(Color.parseColor("#D81B60"));
                 resultImage.setImageResource(R.drawable.error);
-                modelAnswer.setText("here are your wrong answers:\n" + "\n" + wrong.substring(0,wrong.length()-2));
+                modelAnswer.setText(wrong.substring(0,wrong.length()-2));
             }
             cardView.setOnClickListener(v -> pronunUtil.textToSpeechAnnouncer(name,TTS));
         }
