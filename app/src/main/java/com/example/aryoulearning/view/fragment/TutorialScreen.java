@@ -4,6 +4,7 @@ package com.example.aryoulearning.view.fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -56,5 +57,28 @@ public class TutorialScreen extends Fragment {
                              Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_tutorial_screen, container, false);
     }
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        findViewByIds(view);
+        startGameButton.setOnClickListener(v -> {
+            if (isVideoViewPlaying()) {
+                tutorialVideoView.pause();
+            }
+            listener.moveToGameOrARFragment(modelList, true);
+        });
+        backToHintFragmentButton.setOnClickListener(v -> {
+            if (isVideoViewPlaying()) {
+                tutorialVideoView.pause();
+            }
+            listener.backToHintFragment(modelList);
+        });
+        playTutorial();
+    }
+
+    private boolean isVideoViewPlaying() {
+        return tutorialVideoView.isPlaying();
+    }
+
 
 }
