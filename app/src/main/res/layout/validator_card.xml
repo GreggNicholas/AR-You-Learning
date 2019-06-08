@@ -172,7 +172,7 @@
                         android:elevation="100dp"
                         android:fontFamily="@font/balloon"
                         android:text="@android:string/ok"
-                        android:textColor="@color/colorBlack"
+                        android:textColor="@color/colorOkBlue"
                         android:textSize="48sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"

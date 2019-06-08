@@ -47,6 +47,7 @@
         android:background="?android:selectableItemBackgroundBorderless"
         android:fontFamily="@font/balloon"
         android:text="@string/hint_frag_start_button_text"
+        android:textColor="@color/colorStartGreen"
         android:textSize="48sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
