@@ -16,13 +16,13 @@
         android:fontFamily="@font/balloon"
         android:text="@string/hint_title_text"
         android:textAlignment="center"
-        android:textSize="48sp"
+        android:textSize="70sp"
         app:layout_constraintBottom_toTopOf="@id/guideline4"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Preview Screen"
-        tools:textSize="48sp" />
+        tools:textSize="45sp" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/hint_recycler_view"

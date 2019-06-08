@@ -52,10 +52,10 @@
                 android:id="@+id/result_info_cardview"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
                 app:cardBackgroundColor="@color/colorCreamTransparent"
                 app:cardCornerRadius="24dp"
                 app:cardElevation="8dp"
@@ -66,7 +66,8 @@
 
                 <android.support.constraint.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:paddingRight="16dp">
 
 
                     <android.support.constraint.Guideline
@@ -92,7 +93,7 @@
 
                     <TextView
                         android:id="@+id/correctmodel_answer"
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:layout_marginEnd="8dp"
@@ -101,7 +102,7 @@
                         android:fontFamily="@font/balloon"
                         android:textAlignment="center"
                         android:textColor="@color/colorBlack"
-                        android:textSize="30sp"
+                        android:textSize="60sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.5"
@@ -136,8 +137,10 @@
                         android:elevation="0dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/guideline13"
+                        app:layout_constraintHorizontal_bias="0.0"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.0"
                         tools:srcCompat="@tools:sample/avatars" />
 
                     <TextView
@@ -147,8 +150,10 @@
                         android:layout_marginBottom="8dp"
                         android:fontFamily="@font/balloon"
                         android:text="Here is how you spelled it:"
+                        android:textAlignment="center"
+                        android:textSize="20sp"
                         app:layout_constraintBottom_toTopOf="@+id/correctmodel_answer"
-                        app:layout_constraintEnd_toEndOf="@+id/result_imageView"
+                        app:layout_constraintEnd_toEndOf="@+id/correctmodel_answer"
                         app:layout_constraintStart_toStartOf="@+id/correctmodel_answer" />
 
                 </android.support.constraint.ConstraintLayout>

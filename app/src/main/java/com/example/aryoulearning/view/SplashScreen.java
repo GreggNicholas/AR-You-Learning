@@ -2,6 +2,7 @@ package com.example.aryoulearning.view;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Window;
 import android.view.WindowManager;
@@ -21,16 +22,19 @@ public class SplashScreen extends AppCompatActivity {
     }
 
     private class LogoLauncher extends Thread {
-        public void run() {
-
-            try {
-                sleep(2000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+        CountDownTimer timer = new CountDownTimer(3000,1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {}
+            @Override
+            public void onFinish() {
+                Intent intent = new Intent(SplashScreen.this, MainActivity.class);
+                startActivity(intent);
+                SplashScreen.this.finish();
             }
-            Intent intent = new Intent(SplashScreen.this, MainActivity.class);
-            startActivity(intent);
-            SplashScreen.this.finish();
+        };
+
+        public void run() {
+            timer.start();
         }
     }
 }
