@@ -33,7 +33,7 @@
             <LinearLayout
                 android:id="@+id/word_container"
                 android:layout_width="wrap_content"
-                android:layout_height="100dp"
+                android:layout_height="140dp"
                 android:layout_gravity="center"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
@@ -55,6 +55,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="8dp"
+                android:background="@android:color/holo_red_light"
                 android:src="@drawable/delete"
                 android:text="undo"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -67,8 +68,8 @@
 
     <ImageButton
         android:id="@+id/exit_imageButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:layout_gravity="right"
         android:layout_marginTop="8dp"
         android:layout_marginRight="8dp"

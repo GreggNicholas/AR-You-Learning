@@ -516,7 +516,7 @@ public class ARHostFragment extends Fragment {
             //every wrong answer, until a correct answer will be added here
             wrongAnswerList.add(letters);
             categoryList.get(roundCounter).setCorrect(false);
-            pronunciationUtil.textToSpeechAnnouncer("wrong. please try again", textToSpeech);
+            pronunciationUtil.textToSpeechAnnouncer("please try again", textToSpeech);
         }
 
         wordValidator.setText(validator);
@@ -769,7 +769,7 @@ public class ARHostFragment extends Fragment {
         t.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
         t.setTypeface(ballonTF);
         t.setTextColor(getResources().getColor(R.color.colorWhite));
-        t.setTextSize(80);
+        t.setTextSize(100);
         t.setText(letter);
         t.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
         wordContainer.addView(t);

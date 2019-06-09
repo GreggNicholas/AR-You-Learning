@@ -89,7 +89,7 @@ public class TutorialScreen extends Fragment {
     private void playTutorial() {
         MediaController mediaController = new MediaController(requireContext());
         tutorialVideoView.setMediaController(mediaController);
-        String pathToTutorial = "android.resource://" + Objects.requireNonNull(getActivity()).getPackageName() + "/" + R.raw.tutorial;
+        String pathToTutorial = "android.resource://" + Objects.requireNonNull(getActivity()).getPackageName() + "/" + R.raw.ar_tutorial;
         Uri tutorialUri = Uri.parse(pathToTutorial);
         tutorialVideoView.setVideoURI(tutorialUri);
         playVideoButton.setOnClickListener(v -> {
