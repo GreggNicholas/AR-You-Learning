@@ -10,10 +10,12 @@
       parameters: [
         {
           baseColor: [
-            1,
-            null,
-            0.5,
-            null,
+
+                         6,
+                                   2,
+                                   0,
+                                   1,
+
           ],
         },
         {
