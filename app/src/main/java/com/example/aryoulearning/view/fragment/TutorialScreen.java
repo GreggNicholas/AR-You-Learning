@@ -28,9 +28,11 @@ public class TutorialScreen extends Fragment {
     private NavListener listener;
     private List<Model> modelList;
     private VideoView tutorialVideoView;
+    private boolean buttonClicked = false;
 
     public TutorialScreen() {
     }
+
     public static TutorialScreen newInstance(List<Model> modelList) {
         TutorialScreen tutorialScreen = new TutorialScreen();
         Bundle args = new Bundle();
@@ -38,6 +40,7 @@ public class TutorialScreen extends Fragment {
         tutorialScreen.setArguments(args);
         return tutorialScreen;
     }
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -60,6 +63,7 @@ public class TutorialScreen extends Fragment {
                              Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_tutorial_screen, container, false);
     }
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -90,14 +94,13 @@ public class TutorialScreen extends Fragment {
         Uri tutorialUri = Uri.parse(pathToTutorial);
         tutorialVideoView.setVideoURI(tutorialUri);
         playVideoButton.setOnClickListener(v -> {
-            tutorialVideoView.start();
-            tutorialVideoView.setMediaController(new MediaController(requireContext()) {
-                @Override
-                public void hide() {
-                    mediaController.show(0);
-                }
-            });
-            tutorialVideoView.setMediaController(mediaController);
+            if(tutorialVideoView.isPlaying()){
+                tutorialVideoView.pause();
+                playVideoButton.setBackgroundResource(R.drawable.play_button_paused);
+            } else {
+                tutorialVideoView.start();
+                playVideoButton.setBackgroundResource(R.drawable.play_button_playing);
+            }
         });
     }
 
@@ -107,5 +110,4 @@ public class TutorialScreen extends Fragment {
         startGameButton = view.findViewById(R.id.tutorial_frag_start_game_button);
         playVideoButton = view.findViewById(R.id.tutorial_frag_play_video_button);
     }
-
 }
