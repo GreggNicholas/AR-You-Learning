@@ -8,7 +8,7 @@ import retrofit2.Call;
 import retrofit2.http.GET;
 
 public interface ModelService {
-    String ENDPOINT = "kelveenfabian/75380ae0e467f513762454bbe49a6c2e/raw/8eae5e1b67f7a085aa29594150cebfa4bacc58e3/category.json";
+    String ENDPOINT = "kelveenfabian/75380ae0e467f513762454bbe49a6c2e/raw/94e0e678c0c5eeb0b32b3edc9a35fc090b93935b/category.json";
 
     @GET(ENDPOINT)
     Call<List<ModelResponse>> getModels();
