@@ -180,7 +180,7 @@ public class ARHostFragment extends Fragment {
         }
 
         prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-        playBalloonPop = MediaPlayer.create(getContext(), R.raw.balloon_pop);
+        playBalloonPop = MediaPlayer.create(getContext(), R.raw.pop_effect);
     }
 
     @Override
