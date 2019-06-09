@@ -13,4 +13,6 @@
     <color name="colorCream">#FCFFDA</color>
     <color name="colorWordContainer">#43F5F5F5</color>
     <color name="colorCreamTransparent">#94FCFFDA</color>
+    <color name="colorOkBlue">#3B90D5</color>
+    <color name="colorStartGreen">#9CCC65</color>
 </resources>

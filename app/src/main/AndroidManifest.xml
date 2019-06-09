@@ -20,7 +20,8 @@
             android:value="optional" />
         <activity
             android:name=".view.SplashScreen"
-            android:screenOrientation="landscape">
+            android:screenOrientation="landscape"
+            android:configChanges="keyboardHidden|orientation|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -30,7 +31,8 @@
 
         <activity
             android:name=".view.MainActivity"
-            android:screenOrientation="landscape"></activity>
+            android:screenOrientation="landscape"
+            android:configChanges="keyboardHidden|orientation|screenSize"></activity>
     </application>
 
 </manifest>
