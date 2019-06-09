@@ -28,7 +28,6 @@ public class TutorialScreen extends Fragment {
     private NavListener listener;
     private List<Model> modelList;
     private VideoView tutorialVideoView;
-    private boolean buttonClicked = false;
 
     public TutorialScreen() {
     }
@@ -94,7 +93,7 @@ public class TutorialScreen extends Fragment {
         Uri tutorialUri = Uri.parse(pathToTutorial);
         tutorialVideoView.setVideoURI(tutorialUri);
         playVideoButton.setOnClickListener(v -> {
-            if(tutorialVideoView.isPlaying()){
+            if(isVideoViewPlaying()){
                 tutorialVideoView.pause();
                 playVideoButton.setBackgroundResource(R.drawable.play_button_paused);
             } else {
