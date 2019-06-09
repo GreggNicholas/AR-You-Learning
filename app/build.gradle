@@ -229,16 +229,6 @@ sceneform.asset('sampledata/animal/Bear_01.obj',
         'sampledata/animal/Bear_01.sfa',
         'src/main/assets/bear')
 
-sceneform.asset('sampledata/animal/Horse_01.obj',
-        'default',
-        'sampledata/animal/Horse_01.sfa',
-        'src/main/assets/horse')
-
-sceneform.asset('sampledata/animal/Koala_01.obj',
-        'default',
-        'sampledata/animal/Koala_01.sfa',
-        'src/main/assets/koala')
-
 sceneform.asset('sampledata/animal/Lion.obj',
         'default',
         'sampledata/animal/Lion.sfa',

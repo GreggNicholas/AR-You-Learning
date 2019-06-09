@@ -11,31 +11,31 @@
         android:id="@+id/tutorial_frag_back_to_hint_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
         android:background="?android:selectableItemBackgroundBorderless"
         android:fontFamily="@font/balloon"
         android:text="@string/tutorial_fragment_back_button"
         android:textAlignment="center"
-        android:textSize="48sp"
+        android:textColor="@color/colorWhite"
+        android:textSize="42sp"
         app:layout_constraintBottom_toBottomOf="@+id/tutorial_frag_play_video_button"
-        app:layout_constraintEnd_toStartOf="@+id/tutorial_frag_play_video_button"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/tutorial_videoView"
         app:layout_constraintTop_toTopOf="@+id/tutorial_frag_play_video_button" />
 
     <Button
         android:id="@+id/tutorial_frag_start_game_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="24dp"
         android:background="?android:selectableItemBackgroundBorderless"
         android:fontFamily="@font/balloon"
-        android:text="@string/tutorial_frag_start_button_tablet"
+        android:text="@string/tutorial_frag_start_button"
         android:textAlignment="center"
-        android:textSize="48sp"
+        android:textColor="@color/colorWhite"
+        android:textSize="42sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/tutorial_frag_play_video_button" />
+        app:layout_constraintEnd_toEndOf="@+id/tutorial_videoView" />
 
     <Button
         android:id="@+id/tutorial_frag_play_video_button"
@@ -44,6 +44,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:background="@drawable/play_button_paused"
+        android:layout_marginBottom="24dp"
         app:layout_constraintBottom_toBottomOf="@+id/tutorial_frag_start_game_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -54,10 +55,10 @@
         android:id="@+id/tutorial_videoView"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginStart="64dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="64dp"
-        android:layout_marginBottom="32dp"
+        android:layout_marginStart="190dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="190dp"
+        android:layout_marginBottom="70dp"
         app:layout_constraintBottom_toTopOf="@+id/tutorial_frag_play_video_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -68,7 +69,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="8dp"
         android:fontFamily="@font/balloon"
         android:text="Tutorial"
         android:textAlignment="center"
@@ -77,5 +78,19 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/tv"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+
+        android:src="@drawable/tv2"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tutorial_textView" />
 
 </android.support.constraint.ConstraintLayout>
