@@ -22,7 +22,8 @@
     <string name="results_title_text">Results</string>
     <string name="category_title_text">Choose a category</string>
     <string name="hint_title_text">Let\'s Study!</string>
-    <string name="tutorial_frag_start_button">Start Game</string>
+    <string name="tutorial_frag_start_button">Start\nGame</string>
+    <string name="tutorial_frag_start_button_tablet">Start Game</string>
     <string name="tutorial_fragment_back_button">Back</string>
     <string name="hint_frag_go_to_tutorial_button">Tutorial</string>
     <string name="tutorial_frag_play_button">play</string>
