@@ -3,6 +3,7 @@ package com.example.aryoulearning.view.fragment;
 
 import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
@@ -82,6 +83,7 @@ public class HintFragment extends Fragment {
                              Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_hint, container, false);
     }
+
     @SuppressLint("WrongConstant")
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -94,20 +96,14 @@ public class HintFragment extends Fragment {
         setArSwitch();
         startGameButton.setOnClickListener(v -> listener.moveToGameOrARFragment(modelList, MainActivity.AR_SWITCH_STATUS));
         goToTutorialButton.setOnClickListener(v -> listener.moveToTutorialScreen(modelList));
-//        @SuppressLint("ObjectAnimatorBinding")
-//        ObjectAnimator animator = ObjectAnimator.ofInt(arSwitch, "arswitch", Color.WHITE, Color.RED, Color.WHITE);
-//        animator.setDuration(800);
-//        animator.setEvaluator(new ArgbEvaluator());
-//        animator.setRepeatMode(Animation.REVERSE);
-//        animator.setRepeatCount(Animation.INFINITE);
-//        animator.start();
     }
+
     public void startBlinkText() {
         Animation anim = new AlphaAnimation(0.0f, 1.0f);
-        anim.setDuration(300); //manage the time of the blink with this parameter
+        anim.setDuration(500); //manage the time of the blink with this parameter
         anim.setStartOffset(20);
         anim.setRepeatMode(Animation.REVERSE);
-        anim.setRepeatCount(16);
+        anim.setRepeatCount(12);
         arSwitch.startAnimation(anim);
     }
 
@@ -122,6 +118,11 @@ public class HintFragment extends Fragment {
     private void setArSwitch() {
         arSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
             switchlistener.updateSwitchStatus(isChecked);
+            if (arSwitch.isChecked()) {
+                arSwitch.setTextColor(Color.RED);
+            } else {
+                arSwitch.setTextColor(Color.BLACK);
+            }
             arSwitch.clearAnimation();
         });
     }
@@ -129,6 +130,5 @@ public class HintFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-//        switchlistener.updateSwitchStatus(false);
     }
 }
