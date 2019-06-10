@@ -41,7 +41,7 @@
                 android:layout_marginTop="16dp"
                 android:fontFamily="@font/balloon"
                 android:textAlignment="center"
-                android:textSize="56sp"
+                android:textSize="36sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

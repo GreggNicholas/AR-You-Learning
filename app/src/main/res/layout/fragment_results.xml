@@ -17,14 +17,14 @@
         android:fontFamily="@font/balloon"
         android:text="@string/results_title_text"
         android:textAlignment="center"
-        android:textSize="48sp"
+        android:textSize="36sp"
         app:layout_constraintBottom_toTopOf="@+id/results_category"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="@string/results"
-        tools:textSize="48sp" />
+        tools:textSize="36sp" />
 
     <TextView
         android:id="@+id/results_category"
@@ -34,7 +34,7 @@
         android:layout_marginBottom="8dp"
         android:fontFamily="@font/balloon"
         android:textAlignment="center"
-        android:textSize="36sp"
+        android:textSize="30sp"
         app:layout_constraintBottom_toTopOf="@+id/result_recyclerview"
         app:layout_constraintEnd_toStartOf="@+id/rainbow_correctword_ratingbar"
         app:layout_constraintHorizontal_bias="0.5"
@@ -61,7 +61,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
 
-        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -101,7 +101,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.25" />
+        app:layout_constraintGuide_percent="0.2" />
 
 
 </android.support.constraint.ConstraintLayout>
