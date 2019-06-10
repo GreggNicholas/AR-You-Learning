@@ -2,6 +2,7 @@ package com.example.aryoulearning.view.fragment;
 
 import android.Manifest;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -25,13 +26,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.aryoulearning.R;
 import com.example.aryoulearning.audio.PronunciationUtil;
+import com.example.aryoulearning.controller.NavListener;
 import com.example.aryoulearning.controller.ResultsAdapter;
 import com.example.aryoulearning.model.Model;
 import com.example.aryoulearning.view.MainActivity;
@@ -67,10 +68,12 @@ public class ResultsFragment extends Fragment {
     private TextView categoryTextView;
     private List<Model> categoryList;
 //    WebView congratsWebView;
-    FloatingActionButton floatingActionButton;
+    FloatingActionButton shareButton;
+    FloatingActionButton backButton;
     private RecyclerView resultRV;
     private PronunciationUtil pronunciationUtil;
     private TextToSpeech textToSpeech;
+    private NavListener listener;
 
 
     public static ResultsFragment newInstance(List<Model> modelList) {
@@ -83,6 +86,14 @@ public class ResultsFragment extends Fragment {
     }
 
     public ResultsFragment() {
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof NavListener) {
+            listener = (NavListener) context;
+        }
     }
 
     @Override
@@ -145,8 +156,9 @@ public class ResultsFragment extends Fragment {
         findViewByIds(view);
         displayRatingBarAttempts();
         categoryTextView.setText(MainActivity.currentCategory);
+        backFabClick();
+        shareFabClick();
 
-        fabClick();
         setResultRV();
 
     }
@@ -157,17 +169,29 @@ public class ResultsFragment extends Fragment {
 
     }
 
-    public void fabClick() {
-        floatingActionButton.setOnClickListener(v -> {
-            v = getActivity().getWindow().getDecorView().getRootView();
-            if (ContextCompat.checkSelfPermission(v.getContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
-                    != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(v.getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                    != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(getActivity(),
-                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE);
-                takeScreenshotAndShare(v);
-            } else {
-                takeScreenshotAndShare(v);
+    public void shareFabClick() {
+        shareButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                v = ResultsFragment.this.getActivity().getWindow().getDecorView().getRootView();
+                if (ContextCompat.checkSelfPermission(v.getContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
+                        != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(v.getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(ResultsFragment.this.getActivity(),
+                            new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE);
+                    ResultsFragment.this.takeScreenshotAndShare(v);
+                } else {
+                    ResultsFragment.this.takeScreenshotAndShare(v);
+                }
+            }
+        });
+    }
+
+    public void backFabClick(){
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.moveToReplayFragment(categoryList, true);
             }
         });
     }
@@ -243,7 +267,8 @@ public class ResultsFragment extends Fragment {
 //        userWrongAnswerTextView = view.findViewById(R.id.result_fragment_user_wrong_answer_tv);
 //        correctAnswerTextView = view.findViewById(R.id.result_fragment_correct_answer_tv);
         rainbowRatingBar = view.findViewById(R.id.rainbow_correctword_ratingbar);
-        floatingActionButton = view.findViewById(R.id.share_info);
+        shareButton = view.findViewById(R.id.share_info);
+        backButton = view.findViewById(R.id.back_btn);
         resultRV = view.findViewById(R.id.result_recyclerview);
         categoryTextView = view.findViewById(R.id.results_category);
     }
@@ -254,6 +279,12 @@ public class ResultsFragment extends Fragment {
         rainbowRatingBar.setStepSize(1);
         rainbowRatingBar.setRating(totalSize - correctAnswersStringSet.size());
         rainbowRatingBar.setIsIndicator(true);
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        listener = null;
     }
 
     @Override
