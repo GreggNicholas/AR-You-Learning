@@ -516,7 +516,7 @@ public class ARHostFragment extends Fragment {
             //every wrong answer, until a correct answer will be added here
             wrongAnswerList.add(letters);
             categoryList.get(roundCounter).setCorrect(false);
-            pronunciationUtil.textToSpeechAnnouncer("please try again", textToSpeech);
+            pronunciationUtil.textToSpeechAnnouncer("incorrect, please try again", textToSpeech);
         }
 
         wordValidator.setText(validator);
