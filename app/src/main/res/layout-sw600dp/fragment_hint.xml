@@ -99,7 +99,7 @@
         android:layout_marginBottom="8dp"
         android:fontFamily="@font/balloon"
         android:text="@string/hint_frag_go_to_tutorial_button"
-        android:textSize="36sp"
+        android:textSize="28sp"
         android:background="?android:selectableItemBackgroundBorderless"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/switch_ar"
