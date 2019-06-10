@@ -1,7 +1,12 @@
 package com.example.aryoulearning.view.fragment;
 
 
+import android.animation.ArgbEvaluator;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.speech.tts.TextToSpeech;
@@ -13,6 +18,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.Switch;
 
@@ -77,16 +84,27 @@ public class HintFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_hint, container, false);
     }
 
+    @SuppressLint("WrongConstant")
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         textToSpeech = pronunciationUtil.getTTS(requireContext());
         findViewByIds(view);
+        startBlinkText();
         hintRecyclerView.setAdapter(new HintAdapter(modelList, pronunciationUtil, textToSpeech));
         hintRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false));
         setArSwitch();
         startGameButton.setOnClickListener(v -> listener.moveToGameOrARFragment(modelList, MainActivity.AR_SWITCH_STATUS));
         goToTutorialButton.setOnClickListener(v -> listener.moveToTutorialScreen(modelList));
+    }
+
+    public void startBlinkText() {
+        Animation anim = new AlphaAnimation(0.0f, 1.0f);
+        anim.setDuration(500); //manage the time of the blink with this parameter
+        anim.setStartOffset(20);
+        anim.setRepeatMode(Animation.REVERSE);
+        anim.setRepeatCount(12);
+        arSwitch.startAnimation(anim);
     }
 
     private void findViewByIds(@NonNull View view) {
@@ -96,13 +114,21 @@ public class HintFragment extends Fragment {
         goToTutorialButton = view.findViewById(R.id.hint_frag_tutorial_button);
     }
 
+
     private void setArSwitch() {
-        arSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> switchlistener.updateSwitchStatus(isChecked));
+        arSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            switchlistener.updateSwitchStatus(isChecked);
+            if (arSwitch.isChecked()) {
+                arSwitch.setTextColor(Color.RED);
+            } else {
+                arSwitch.setTextColor(Color.BLACK);
+            }
+            arSwitch.clearAnimation();
+        });
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-//        switchlistener.updateSwitchStatus(false);
     }
 }
