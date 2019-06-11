@@ -1,6 +1,7 @@
 package com.example.aryoulearning.controller;
 
 import android.content.Context;
+import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -79,7 +80,13 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
             categoryCard.setOnClickListener(v -> {
                 MainActivity.currentCategory = category;
                 listener.moveToHintFragment(categoryList);
+                makeVibration();
             });
+        }
+
+        private void makeVibration() {
+            Vibrator categoryVibrate = (Vibrator) itemView.getContext().getSystemService(Context.VIBRATOR_SERVICE);
+            categoryVibrate.vibrate(100);
         }
     }
 }
