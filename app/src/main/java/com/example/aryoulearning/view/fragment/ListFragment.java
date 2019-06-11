@@ -33,6 +33,7 @@ public class ListFragment extends Fragment {
     private List<List<Model>> categoryList = new ArrayList<>();
     private List<String> categoryName;
     private List<String> categoryImages;
+    private RecyclerView rv;
 
 
     public static ListFragment newInstance(final List<List<Model>> categoryList, final List<String> categoryName, final List<String> categoryImages) {
@@ -40,14 +41,16 @@ public class ListFragment extends Fragment {
         Bundle args = new Bundle();
         args.putStringArrayList(CATEGORY_NAME, (ArrayList<String>) categoryName);
         args.putStringArrayList(CATEGORY_IMAGE, (ArrayList<String>) categoryImages);
+        addCategoryListToBundle(categoryList, args);
+        fragment.setArguments(args);
+        return fragment;
+    }
 
+    public static void addCategoryListToBundle(final List<List<Model>> categoryList, final Bundle args){
         for (int i = 0; i < categoryList.size(); i++) {
             args.putParcelableArrayList(CATEGORY_KEY + i, (ArrayList<? extends Parcelable>) categoryList.get(i));
             args.putInt(SIZE, categoryList.size());
         }
-
-        fragment.setArguments(args);
-        return fragment;
     }
 
     @Override
@@ -79,7 +82,16 @@ public class ListFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        RecyclerView rv = view.findViewById(R.id.category_rv);
+        initializeViews(view);
+        setListRV();
+    }
+
+    public void initializeViews(final View view){
+        rv = view.findViewById(R.id.category_rv);
+    }
+
+    public void setListRV(){
+
         rv.setAdapter(new CategoryAdapter(categoryList, categoryName, categoryImages));
         rv.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayout.HORIZONTAL,false));
     }

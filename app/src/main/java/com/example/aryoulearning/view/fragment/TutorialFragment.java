@@ -109,7 +109,7 @@ public class TutorialFragment extends Fragment {
         tutorialVideoView.setVideoURI(tutorialUri);
     }
 
-    private void initializeViews(@NonNull View view) {
+    private void initializeViews(@NonNull final View view) {
         tutorialVideoView = view.findViewById(R.id.tutorial_videoView);
         backButton = view.findViewById(R.id.tutorial_frag_back_to_hint_button);
         startGameButton = view.findViewById(R.id.tutorial_frag_start_game_button);

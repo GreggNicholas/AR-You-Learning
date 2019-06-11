@@ -87,7 +87,7 @@ public class ReplayFragment extends Fragment {
         textToSpeech = pronunciationUtil.getTTS(requireContext());
     }
 
-    private void initializeViews(View view) {
+    private void initializeViews(final View view) {
         playAgainButtonCard = view.findViewById(R.id.cardView_playagain);
         homeButtonCard = view.findViewById(R.id.cardView_home);
         resultsButtonCard = view.findViewById(R.id.cardView_results);

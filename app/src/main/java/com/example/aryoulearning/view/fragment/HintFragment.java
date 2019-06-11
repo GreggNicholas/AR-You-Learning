@@ -114,7 +114,7 @@ public class HintFragment extends Fragment {
         arSwitch.startAnimation(anim);
     }
 
-    private void initializeViews(@NonNull View view) {
+    private void initializeViews(@NonNull final View view) {
         startGameButton = view.findViewById(R.id.hint_fragment_button);
         arSwitch = view.findViewById(R.id.switch_ar);
         hintRecyclerView = view.findViewById(R.id.hint_recycler_view);
