@@ -15,8 +15,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.Switch;
 
@@ -27,6 +29,7 @@ import com.example.aryoulearning.controller.NavListener;
 import com.example.aryoulearning.controller.SwitchListener;
 import com.example.aryoulearning.model.Model;
 import com.example.aryoulearning.view.MainActivity;
+import com.facebook.shimmer.ShimmerFrameLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +46,7 @@ public class HintFragment extends Fragment {
     private RecyclerView hintRecyclerView;
     private PronunciationUtil pronunciationUtil;
     private TextToSpeech textToSpeech;
+    private ShimmerFrameLayout shimmerFrameLayout;
 
     public HintFragment() {
 
@@ -89,10 +93,15 @@ public class HintFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         textToSpeech = pronunciationUtil.getTTS(requireContext());
         initializeViews(view);
+        startGlareEffectOnStartButton();
         startBlinkText();
         setHintRV();
         setArSwitch();
         viewClickListeners();
+    }
+
+    private void startGlareEffectOnStartButton() {
+        shimmerFrameLayout.startShimmerAnimation();
     }
 
     public void setHintRV(){
@@ -116,6 +125,7 @@ public class HintFragment extends Fragment {
 
     private void initializeViews(@NonNull View view) {
         startGameButton = view.findViewById(R.id.hint_fragment_button);
+        shimmerFrameLayout = view.findViewById(R.id.shimmer_effect);
         arSwitch = view.findViewById(R.id.switch_ar);
         hintRecyclerView = view.findViewById(R.id.hint_recycler_view);
         tutorialButton = view.findViewById(R.id.hint_frag_tutorial_button);

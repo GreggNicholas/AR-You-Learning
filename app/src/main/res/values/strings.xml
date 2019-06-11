@@ -27,5 +27,6 @@
     <string name="tutorial_fragment_back_button">Back</string>
     <string name="hint_frag_go_to_tutorial_button">Tutorial</string>
     <string name="tutorial_frag_play_button">play</string>
+    <string name="result_itemview_here_is_how_you_spelled_it">Here is how you spelled it:</string>
 
 </resources>

@@ -146,7 +146,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="8dp"
                         android:fontFamily="@font/balloon"
-                        android:text="Here is how you spelled it:"
+                        android:text="@string/result_itemview_here_is_how_you_spelled_it"
                         app:layout_constraintBottom_toTopOf="@+id/correctmodel_answer"
                         app:layout_constraintEnd_toEndOf="@+id/result_imageView"
                         app:layout_constraintStart_toStartOf="@+id/correctmodel_answer" />

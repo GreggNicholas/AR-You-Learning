@@ -51,6 +51,10 @@ dependencies {
     implementation "com.google.ar.sceneform.ux:sceneform-ux:1.9.0"
     implementation 'com.airbnb.android:lottie:2.7.0'
 
+    //shimmering effect
+    implementation 'com.facebook.shimmer:shimmer:0.1.0@aar'
+
+
 
 }
 

@@ -102,7 +102,7 @@ public class ResultsFragment extends Fragment {
         totalSize = sharedPreferences.getInt(TOTALSIZE, 0);
     }
 
-    private void intializeViews(@NonNull View view) {
+    private void initializeViews(@NonNull View view) {
         rainbowRatingBar = view.findViewById(R.id.rainbow_correctword_ratingbar);
         shareFAB = view.findViewById(R.id.share_info);
         backFAB = view.findViewById(R.id.back_btn);
@@ -119,7 +119,7 @@ public class ResultsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        intializeViews(view);
+        initializeViews(view);
         setViews();
     }
 

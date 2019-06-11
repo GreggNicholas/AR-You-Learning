@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.example.aryoulearning.R;
 import com.example.aryoulearning.audio.PronunciationUtil;
 import com.example.aryoulearning.model.Model;
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -58,6 +59,7 @@ public class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.ResultsV
         private TextView modelAnswer;
         private ImageView resultImage;
         private TextView promptText;
+        private ShimmerFrameLayout shimmerFrameLayout;
 
         ResultsViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -72,9 +74,9 @@ public class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.ResultsV
         void onBind(final Model model, final PronunciationUtil pronunUtil, final TextToSpeech TTS) {
             String correct = "Correct";
 
-            String wrong = "";
+            StringBuilder wrong = new StringBuilder();
             for (String s:model.getWrongAnswerSet()) {
-                wrong += s +", ";
+                wrong.append(s).append(", ");
             }
 
             String name = model.getName().toUpperCase().charAt(0) + model.getName().toLowerCase().substring(1);
