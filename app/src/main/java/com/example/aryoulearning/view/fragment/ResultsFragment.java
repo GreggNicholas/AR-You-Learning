@@ -2,10 +2,10 @@ package com.example.aryoulearning.view.fragment;
 
 import android.Manifest;
 import android.content.ActivityNotFoundException;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -31,7 +31,6 @@ import android.widget.Toast;
 
 import com.example.aryoulearning.R;
 import com.example.aryoulearning.audio.PronunciationUtil;
-import com.example.aryoulearning.controller.NavListener;
 import com.example.aryoulearning.controller.ResultsAdapter;
 import com.example.aryoulearning.model.Model;
 import com.example.aryoulearning.view.MainActivity;
@@ -63,7 +62,6 @@ public class ResultsFragment extends Fragment {
     private RecyclerView resultRV;
     private PronunciationUtil pronunciationUtil;
     private TextToSpeech textToSpeech;
-    private NavListener listener;
 
 
     public static ResultsFragment newInstance(final List<Model> modelList) {
@@ -76,13 +74,6 @@ public class ResultsFragment extends Fragment {
 
     public ResultsFragment() {}
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof NavListener) {
-            listener = (NavListener) context;
-        }
-    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -102,7 +93,7 @@ public class ResultsFragment extends Fragment {
         totalSize = sharedPreferences.getInt(TOTALSIZE, 0);
     }
 
-    private void intializeViews(@NonNull final View view) {
+    private void initializeViews(@NonNull final View view) {
         rainbowRatingBar = view.findViewById(R.id.rainbow_correctword_ratingbar);
         shareFAB = view.findViewById(R.id.share_info);
         backFAB = view.findViewById(R.id.back_btn);
@@ -119,13 +110,14 @@ public class ResultsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        intializeViews(view);
+        initializeViews(view);
         setViews();
     }
 
     public void setViews(){
         displayRatingBarAttempts();
         categoryTextView.setText(MainActivity.currentCategory);
+        shareFAB.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.share_button_color)));
         backFABClick();
         shareFABClick();
         setResultRV();
@@ -150,10 +142,17 @@ public class ResultsFragment extends Fragment {
                 ResultsFragment.this.takeScreenshotAndShare(v);
             }
         });
+
+
     }
 
     public void backFABClick(){
-        backFAB.setOnClickListener(v -> listener.moveToReplayFragment(modelList, true));
+        backFAB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Objects.requireNonNull(getActivity()).onBackPressed();
+            }
+        });
     }
 
     public void allowOnFileUriExposed() {
@@ -224,12 +223,6 @@ public class ResultsFragment extends Fragment {
         rainbowRatingBar.setStepSize(1);
         rainbowRatingBar.setRating(totalSize - correctAnswersStringSet.size());
         rainbowRatingBar.setIsIndicator(true);
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        listener = null;
     }
 
     @Override

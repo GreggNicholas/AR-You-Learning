@@ -9,6 +9,7 @@ import android.os.Parcelable;
 import android.speech.tts.TextToSpeech;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -30,6 +31,7 @@ import com.example.aryoulearning.view.MainActivity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import javax.annotation.Nonnull;
 
@@ -43,6 +45,7 @@ public class HintFragment extends Fragment {
     private RecyclerView hintRecyclerView;
     private PronunciationUtil pronunciationUtil;
     private TextToSpeech textToSpeech;
+    private FloatingActionButton backFAB;
 
     public HintFragment() {
 
@@ -103,6 +106,7 @@ public class HintFragment extends Fragment {
     public void viewClickListeners(){
         startGameButton.setOnClickListener(v -> listener.moveToGameOrARFragment(modelList, MainActivity.AR_SWITCH_STATUS));
         tutorialButton.setOnClickListener(v -> listener.moveToTutorialScreen(modelList));
+        backFAB.setOnClickListener(v -> Objects.requireNonNull(getActivity()).onBackPressed());
     }
 
     public void startBlinkText() {
@@ -119,6 +123,7 @@ public class HintFragment extends Fragment {
         arSwitch = view.findViewById(R.id.switch_ar);
         hintRecyclerView = view.findViewById(R.id.hint_recycler_view);
         tutorialButton = view.findViewById(R.id.hint_frag_tutorial_button);
+        backFAB = view.findViewById(R.id.back_btn);
     }
 
 
