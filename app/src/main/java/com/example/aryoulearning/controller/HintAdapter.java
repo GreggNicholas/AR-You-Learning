@@ -6,6 +6,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -55,8 +57,15 @@ public class HintAdapter extends RecyclerView.Adapter<HintAdapter.HintViewHolder
             TextView textView = itemView.findViewById(R.id.hint_fragment_textview);
             Picasso.get().load(model.getImage()).into(imageView);
             textView.setText(model.getName());
-            itemView.setOnClickListener(v -> pronunciationUtil.textToSpeechAnnouncer(model.getName(), textToSpeech));
-
+            itemView.setOnClickListener(v -> {
+                pronunciationUtil.textToSpeechAnnouncer(model.getName(), textToSpeech);
+                Animation vibrateHintCard = AnimationUtils.loadAnimation(itemView.getContext(), R.anim.vibrate);
+                if(vibrateHintCard.hasStarted()) {
+                    itemView.clearAnimation();
+                }else {
+                    itemView.startAnimation(vibrateHintCard);
+                }
+            });
         }
     }
 }
