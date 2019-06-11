@@ -29,7 +29,7 @@ public class ReplayFragment extends Fragment {
 
     private static final String MODEL_LIST = "MODEL_LIST";
     private static final String PREVIOUS_GAME_STATUS = "GAME_STATUS";
-    private NavListener navListener;
+    private NavListener listener;
 
     private CardView resultsButtonCard, homeButtonCard, playAgainButtonCard;
 
@@ -73,7 +73,7 @@ public class ReplayFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof NavListener) {
-            navListener = (NavListener) context;
+            listener = (NavListener) context;
         }
         pronunciationUtil = new PronunciationUtil();
     }
@@ -96,17 +96,17 @@ public class ReplayFragment extends Fragment {
     public void viewClickListeners(){
         resultsButtonCard.setOnClickListener(v -> {
             pronunciationUtil.textToSpeechAnnouncer("Showing progress", textToSpeech);
-            navListener.moveToResultsFragment(modelList);
+            listener.moveToResultsFragment(modelList);
         });
         homeButtonCard.setOnClickListener(v -> {
             pronunciationUtil.textToSpeechAnnouncer("Lets go home", textToSpeech);
-            navListener.moveToListFragment(MainActivity.getAnimalModelList(),
+            listener.moveToListFragment(MainActivity.getAnimalModelList(),
                     MainActivity.getCategoryList(),
                     MainActivity.getBackgroundList());
         });
         playAgainButtonCard.setOnClickListener(v -> {
             pronunciationUtil.textToSpeechAnnouncer("Lets play again!", textToSpeech);
-            navListener.moveToGameOrARFragment(modelList,previousGameTypeIsAR);
+            listener.moveToGameOrARFragment(modelList,previousGameTypeIsAR);
         });
     }
 
@@ -115,7 +115,7 @@ public class ReplayFragment extends Fragment {
         super.onDetach();
         textToSpeech.shutdown();
         pronunciationUtil = null;
-        navListener = null;
+        listener = null;
     }
 
     @Override

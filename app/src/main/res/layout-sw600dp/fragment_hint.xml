@@ -24,6 +24,16 @@
         tools:text="Preview Screen"
         tools:textSize="45sp" />
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/back_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_margin="16dp"
+        android:src="@drawable/ic_arrow_back_white_24dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent" />
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/hint_recycler_view"
         android:layout_width="match_parent"

@@ -84,7 +84,7 @@ public class GameFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            modelList = getArguments().getParcelableArrayList("model-list-key");
+            modelList = getArguments().getParcelableArrayList(MODEL_LIST);
             Collections.shuffle(modelList);
         }
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
