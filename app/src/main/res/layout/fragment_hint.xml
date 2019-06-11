@@ -41,6 +41,7 @@
         android:layout_gravity="end|bottom"
         android:layout_margin="16dp"
         android:src="@drawable/ic_arrow_back_white_24dp"
+        app:backgroundTint="@color/fabBack"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -66,7 +67,7 @@
             android:background="?android:selectableItemBackgroundBorderless"
             android:fontFamily="@font/balloon"
             android:text="@string/hint_frag_start_button_text"
-            android:textColor="@android:color/background_dark"
+            android:textColor="@color/colorStartGreen"
             android:textSize="48sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

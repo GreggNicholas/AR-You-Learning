@@ -14,6 +14,7 @@
     <color name="colorWordContainer">#43F5F5F5</color>
     <color name="colorCreamTransparent">#94FCFFDA</color>
     <color name="colorOkBlue">#3B90D5</color>
-    <color name="colorStartGreen">#9CCC65</color>
+    <color name="colorStartGreen">#39C206</color>
     <color name="share_button_color">#F44336</color>
+    <color name="fabBack">#868686</color>
 </resources>

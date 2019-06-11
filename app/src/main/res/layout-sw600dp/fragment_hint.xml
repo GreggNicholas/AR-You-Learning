@@ -31,6 +31,7 @@
         android:layout_gravity="end|bottom"
         android:layout_margin="16dp"
         android:src="@drawable/ic_arrow_back_white_24dp"
+        app:backgroundTint="@color/fabBack"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -48,8 +49,11 @@
         android:id="@+id/shimmer_view_container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="24dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/hint_recycler_view"
+        app:layout_constraintTop_toTopOf="@+id/guideline3"
         app:shimmer_duration="1200">
 
         <Button
@@ -112,18 +116,15 @@
         android:id="@+id/hint_frag_tutorial_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="24dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:background="?android:selectableItemBackgroundBorderless"
         android:fontFamily="@font/balloon"
         android:text="@string/hint_frag_go_to_tutorial_button"
         android:textSize="28sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/switch_ar"
-        app:layout_constraintHorizontal_bias="0.198"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/hint_recycler_view"
         app:layout_constraintTop_toTopOf="@+id/guideline3" />
 
 </android.support.constraint.ConstraintLayout>
