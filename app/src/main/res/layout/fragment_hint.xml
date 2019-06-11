@@ -41,27 +41,37 @@
         android:layout_gravity="end|bottom"
         android:layout_margin="16dp"
         android:src="@drawable/ic_arrow_back_white_24dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent" />
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/hint_fragment_button"
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/shimmer_view_container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/hint_recycler_view"
-        android:layout_alignEnd="@+id/hint_recycler_view"
-        android:layout_alignParentBottom="true"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="8dp"
-        android:background="?android:selectableItemBackgroundBorderless"
-        android:fontFamily="@font/balloon"
-        android:text="@string/hint_frag_start_button_text"
-        android:textColor="@color/colorStartGreen"
-        android:textSize="48sp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline3" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:shimmer_duration="1500">
+
+
+        <Button
+            android:id="@+id/hint_fragment_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/hint_recycler_view"
+            android:layout_alignEnd="@+id/hint_recycler_view"
+            android:layout_alignParentBottom="true"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
+            android:background="?android:selectableItemBackgroundBorderless"
+            android:fontFamily="@font/balloon"
+            android:text="@string/hint_frag_start_button_text"
+            android:textColor="@android:color/background_dark"
+            android:textSize="48sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/guideline3" />
+    </com.facebook.shimmer.ShimmerFrameLayout>
 
     <Switch
         android:id="@+id/switch_ar"
@@ -107,10 +117,10 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
+        android:background="?android:selectableItemBackgroundBorderless"
         android:fontFamily="@font/balloon"
         android:text="@string/hint_frag_go_to_tutorial_button"
         android:textSize="28sp"
-        android:background="?android:selectableItemBackgroundBorderless"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/switch_ar"
         app:layout_constraintHorizontal_bias="0.198"

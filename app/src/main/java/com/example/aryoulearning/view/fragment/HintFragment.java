@@ -28,6 +28,7 @@ import com.example.aryoulearning.controller.NavListener;
 import com.example.aryoulearning.controller.SwitchListener;
 import com.example.aryoulearning.model.Model;
 import com.example.aryoulearning.view.MainActivity;
+import com.facebook.shimmer.ShimmerFrameLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +47,7 @@ public class HintFragment extends Fragment {
     private PronunciationUtil pronunciationUtil;
     private TextToSpeech textToSpeech;
     private FloatingActionButton backFAB;
+    private ShimmerFrameLayout shimmerFrameLayout;
 
     public HintFragment() {
 
@@ -96,6 +98,11 @@ public class HintFragment extends Fragment {
         setHintRV();
         setArSwitch();
         viewClickListeners();
+        startButtonShimmering();
+    }
+
+    private void startButtonShimmering() {
+        shimmerFrameLayout.startShimmer();
     }
 
     public void setHintRV(){
@@ -124,6 +131,7 @@ public class HintFragment extends Fragment {
         hintRecyclerView = view.findViewById(R.id.hint_recycler_view);
         tutorialButton = view.findViewById(R.id.hint_frag_tutorial_button);
         backFAB = view.findViewById(R.id.back_btn);
+        shimmerFrameLayout = view.findViewById(R.id.shimmer_view_container);
     }
 
 
