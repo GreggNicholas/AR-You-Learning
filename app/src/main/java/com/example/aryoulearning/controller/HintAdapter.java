@@ -62,7 +62,7 @@ public class HintAdapter extends RecyclerView.Adapter<HintAdapter.HintViewHolder
                 pronunciationUtil.textToSpeechAnnouncer(model.getName(), textToSpeech);
                 Animation vibrateHintCard = AnimationUtils.loadAnimation(itemView.getContext(), R.anim.vibrate);
                 itemView.startAnimation(vibrateHintCard);
-            });
+
                 textView.setTextColor(Color.LTGRAY);
                 CountDownTimer timer = new CountDownTimer(1000,1000) {
                     @Override
@@ -82,7 +82,7 @@ public class HintAdapter extends RecyclerView.Adapter<HintAdapter.HintViewHolder
 //                }else {
 //                    textView.setTextColor(Color.DKGRAY);
 //                }
-
+            });
             }
         }
     }

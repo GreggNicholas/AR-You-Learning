@@ -49,8 +49,10 @@
         android:id="@+id/shimmer_view_container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/hint_recycler_view"
+        app:layout_constraintTop_toTopOf="@+id/guideline3"
         app:shimmer_duration="1500">
 
 
