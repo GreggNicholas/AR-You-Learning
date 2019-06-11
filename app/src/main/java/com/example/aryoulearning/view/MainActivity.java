@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity implements NavListener, Swit
     public static boolean AR_SWITCH_STATUS;
     public static String currentCategory;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

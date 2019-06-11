@@ -1,5 +1,6 @@
 package com.example.aryoulearning.controller;
 
+import android.graphics.Color;
 import android.speech.tts.TextToSpeech;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 import com.example.aryoulearning.R;
 import com.example.aryoulearning.audio.PronunciationUtil;
 import com.example.aryoulearning.model.Model;
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.squareup.picasso.Picasso;
 
 import org.w3c.dom.Text;
@@ -53,9 +55,18 @@ public class HintAdapter extends RecyclerView.Adapter<HintAdapter.HintViewHolder
         public void onBind(Model model, final PronunciationUtil pronunciationUtil, final TextToSpeech textToSpeech) {
             ImageView imageView = itemView.findViewById(R.id.hint_fragment_image_view);
             TextView textView = itemView.findViewById(R.id.hint_fragment_textview);
+            textView.setTextColor(Color.DKGRAY);
             Picasso.get().load(model.getImage()).into(imageView);
             textView.setText(model.getName());
-            itemView.setOnClickListener(v -> pronunciationUtil.textToSpeechAnnouncer(model.getName(), textToSpeech));
+            itemView.setOnClickListener(v -> {
+                pronunciationUtil.textToSpeechAnnouncer(model.getName(), textToSpeech);
+                if(textView.getCurrentTextColor() == Color.DKGRAY){
+                    textView.setTextColor(Color.LTGRAY);
+                }else {
+                    textView.setTextColor(Color.DKGRAY);
+                }
+
+            });
 
         }
     }
