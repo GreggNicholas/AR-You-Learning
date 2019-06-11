@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.aryoulearning.R;
+import com.example.aryoulearning.animation.Animations;
 import com.example.aryoulearning.audio.PronunciationUtil;
 import com.example.aryoulearning.model.Model;
 import com.squareup.picasso.Picasso;
@@ -60,9 +61,7 @@ public class HintAdapter extends RecyclerView.Adapter<HintAdapter.HintViewHolder
             textView.setText(model.getName());
             itemView.setOnClickListener(v -> {
                 pronunciationUtil.textToSpeechAnnouncer(model.getName(), textToSpeech);
-                Animation vibrateHintCard = AnimationUtils.loadAnimation(itemView.getContext(), R.anim.vibrate);
-                itemView.startAnimation(vibrateHintCard);
-
+                itemView.startAnimation(Animations.Normal.getVibrator(itemView));
                 textView.setTextColor(Color.LTGRAY);
                 CountDownTimer timer = new CountDownTimer(1000,1000) {
                     @Override
@@ -77,11 +76,7 @@ public class HintAdapter extends RecyclerView.Adapter<HintAdapter.HintViewHolder
                     }
                 };
                 timer.start();
-//                if(textView.getCurrentTextColor() == Color.DKGRAY){
-//                    textView.setTextColor(Color.LTGRAY);
-//                }else {
-//                    textView.setTextColor(Color.DKGRAY);
-//                }
+
             });
             }
         }

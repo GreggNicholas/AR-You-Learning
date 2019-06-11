@@ -3,8 +3,11 @@ package com.example.aryoulearning.animation;
 import android.animation.ObjectAnimator;
 import android.support.v7.widget.CardView;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.animation.LinearInterpolator;
 
+import com.example.aryoulearning.R;
 import com.google.ar.sceneform.math.Quaternion;
 import com.google.ar.sceneform.math.QuaternionEvaluator;
 import com.google.ar.sceneform.math.Vector3;
@@ -54,6 +57,10 @@ public class Animations {
             ObjectAnimator fadeAnimation = ObjectAnimator.ofFloat(cv,"alpha",1.0f,0f);
             fadeAnimation.setDuration(1000);
             return fadeAnimation;
+        }
+
+        public static Animation getVibrator(View itemView){
+            return AnimationUtils.loadAnimation(itemView.getContext(), R.anim.vibrate);
         }
 
     }
