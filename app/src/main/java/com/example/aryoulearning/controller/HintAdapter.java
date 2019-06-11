@@ -7,16 +7,15 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.aryoulearning.R;
 import com.example.aryoulearning.audio.PronunciationUtil;
 import com.example.aryoulearning.model.Model;
-import com.facebook.shimmer.ShimmerFrameLayout;
 import com.squareup.picasso.Picasso;
-
-import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -60,14 +59,9 @@ public class HintAdapter extends RecyclerView.Adapter<HintAdapter.HintViewHolder
             textView.setText(model.getName());
             itemView.setOnClickListener(v -> {
                 pronunciationUtil.textToSpeechAnnouncer(model.getName(), textToSpeech);
-                if(textView.getCurrentTextColor() == Color.DKGRAY){
-                    textView.setTextColor(Color.LTGRAY);
-                }else {
-                    textView.setTextColor(Color.DKGRAY);
-                }
-
+                Animation vibrateHintCard = AnimationUtils.loadAnimation(itemView.getContext(), R.anim.vibrate);
+                itemView.startAnimation(vibrateHintCard);
             });
-
         }
     }
 }
