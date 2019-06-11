@@ -48,7 +48,7 @@ public class HintFragment extends Fragment {
 
     }
 
-    public static HintFragment newInstance(List<Model> modelList) {
+    public static HintFragment newInstance(final List<Model> modelList) {
         HintFragment fragment = new HintFragment();
         Bundle args = new Bundle();
         args.putParcelableArrayList("model-list-key", (ArrayList<? extends Parcelable>) modelList);
@@ -114,7 +114,7 @@ public class HintFragment extends Fragment {
         arSwitch.startAnimation(anim);
     }
 
-    private void initializeViews(@NonNull View view) {
+    private void initializeViews(@NonNull final View view) {
         startGameButton = view.findViewById(R.id.hint_fragment_button);
         arSwitch = view.findViewById(R.id.switch_ar);
         hintRecyclerView = view.findViewById(R.id.hint_recycler_view);

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/mainBackground"
-    tools:context=".view.fragment.TutorialScreen">
+    tools:context=".view.fragment.TutorialFragment">
 
     <Button
         android:id="@+id/tutorial_frag_back_to_hint_button"

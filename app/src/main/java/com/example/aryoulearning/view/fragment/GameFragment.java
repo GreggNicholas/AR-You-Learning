@@ -41,6 +41,8 @@ import java.util.Objects;
 import java.util.Random;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
+
 public class GameFragment extends Fragment {
     public static final String MODEL_LIST = "MODEL_LIST";
     private NavListener listener;
@@ -50,11 +52,8 @@ public class GameFragment extends Fragment {
     private TextView checker;
     private String answer;
     private int counter;
-    private int limit = 2;
     private int width;
     private int height;
-    private Set<String> rightAnswer = new HashSet<>();
-    private Set<String> wrongAnswer = new HashSet<>();
     private Set<String> correctAnswerSet = new HashSet<>();
     private SharedPreferences sharedPreferences;
     private PronunciationUtil pronunciationUtil;
@@ -64,7 +63,7 @@ public class GameFragment extends Fragment {
     ObjectAnimator fadeIn;
     ObjectAnimator fadeOut;
 
-    public static GameFragment newInstance(List<Model> modelList) {
+    public static GameFragment newInstance(final List<Model> modelList) {
         GameFragment fragment = new GameFragment();
         Bundle args = new Bundle();
         args.putParcelableArrayList(MODEL_LIST, (ArrayList<? extends Parcelable>) modelList);
@@ -97,17 +96,14 @@ public class GameFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_game, container, false);
     }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        textToSpeech = pronunciationUtil.getTTS(view.getContext());
+    public void initializeViews(@Nonnull final View view){
         checker = view.findViewById(R.id.checker);
         imageView = view.findViewById(R.id.imageView);
-        setMaxWidthAndHeight();
-        answer = modelList.get(0).getName();
-        Picasso.get().load(modelList.get(0).getImage()).into(imageView);
         cv = view.findViewById(R.id.static_card);
         cvTextView = view.findViewById(R.id.static_card_text);
+    }
+
+    public void animations(){
         fadeIn = Animations.Normal.setCardFadeInAnimator(cv);
         fadeIn.addListener(new Animator.AnimatorListener() {
             @Override
@@ -152,6 +148,17 @@ public class GameFragment extends Fragment {
 
             }
         });
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        textToSpeech = pronunciationUtil.getTTS(view.getContext());
+        initializeViews(view);
+        setMaxWidthAndHeight();
+        answer = modelList.get(0).getName();
+        Picasso.get().load(modelList.get(0).getImage()).into(imageView);
+        animations();
         Handler handler = new Handler();
         handler.post(() -> setWordsOnScreen(answer));
 
@@ -177,7 +184,7 @@ public class GameFragment extends Fragment {
     public void drawLetters(String l, HashMap<String, Integer> map) {
         final TextView letter = new TextView(getContext());
         letter.setTextSize(80);
-        letter.setTypeface(ResourcesCompat.getFont(getActivity(),R.font.balloon));
+        letter.setTypeface(ResourcesCompat.getFont(Objects.requireNonNull(getActivity()),R.font.balloon));
         letter.setText(l);
         letter.setTextColor(getResources().getColor(R.color.colorBlack));
 
@@ -209,18 +216,14 @@ public class GameFragment extends Fragment {
                         validator = "You are correct";
 
                         wrongAnswerList.removeAll(wrongAnswerList);
-                        rightAnswer.add(checker.getText().toString());
                         pronunciationUtil.textToSpeechAnnouncer(validator, textToSpeech);
 
                     } else {
-                        validator = "Wrong. Please try again";
-                        wrongAnswer.add(checker.getText().toString());
+                        validator = "You are incorrect. Please try again";
                         correctAnswerSet.add(answer);
                         pronunciationUtil.textToSpeechAnnouncer(validator, textToSpeech);
-
                         //every wrong answer, until a correct answer will be added here
                         wrongAnswerList.add(checker.getText().toString());
-
                         modelList.get(counter).setCorrect(false);
                     }
                     cvTextView.setText(validator);
@@ -231,19 +234,6 @@ public class GameFragment extends Fragment {
         });
         layout.addView(letter);
     }
-//
-//    private void repeatTheSameWordUntilCorrectlySpelled(String mistakenWord) {
-//        setWordsOnScreen(mistakenWord);
-//        if (checker.getText().length() == answer.length()) {
-//            if (checker.getText().toString().equals(answer)) {
-//                pronunciationUtil.textToSpeechAnnouncer("Correct!", textToSpeech);
-//                loadNext();
-//            } else {
-//                pronunciationUtil.textToSpeechAnnouncer("try again!", textToSpeech);
-//                checker.setText("");
-//            }
-//        }
-//    }
 
     private HashMap<String, Integer> getCoordinates() {
         HashMap<String, Integer> map = new HashMap<>();
@@ -256,9 +246,6 @@ public class GameFragment extends Fragment {
             && ((ranY > (height / 2) - 350 && ranY < (height / 2) + 350)) )  {
             ranX = r.nextInt(width);
         }
-//        while ((ranY > (height / 2) - 240 && ranY < (height / 2) + 240)) {
-//            ranY = r.nextInt(height);
-//        }
         map.put("x", ranX);
         map.put("y", ranY);
 
@@ -281,10 +268,6 @@ public class GameFragment extends Fragment {
                     testMap.get("y") < mapList.get(i).get("y")+ 300) ){
                 return true;
             }
-//            if (mapList.get(i).get("y") > testMap.get("y") - 100 &&
-//                    mapList.get(i).get("y") < testMap.get("y") + 100) {
-//                return true;
-//            }
         }
         return false;
     }
@@ -302,6 +285,7 @@ public class GameFragment extends Fragment {
 
     private void loadNext(int counter) {
 
+        int limit = 2;
         if (counter < modelList.size() && counter < limit) {
             checker.setText("");
             answer = modelList.get(counter).getName();

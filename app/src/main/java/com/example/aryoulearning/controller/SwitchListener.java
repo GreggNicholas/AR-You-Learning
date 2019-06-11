@@ -1,5 +1,5 @@
 package com.example.aryoulearning.controller;
 
 public interface SwitchListener {
-    void updateSwitchStatus(boolean isOn);
+    void updateSwitchStatus(final boolean isOn);
 }

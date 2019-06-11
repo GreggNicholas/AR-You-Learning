@@ -44,7 +44,7 @@ public class ReplayFragment extends Fragment {
     public ReplayFragment() {
     }
 
-    public static ReplayFragment newInstance(List<Model> modelList, boolean wasPreviousGameTypeAR) {
+    public static ReplayFragment newInstance(final List<Model> modelList, final boolean wasPreviousGameTypeAR) {
         ReplayFragment fragment = new ReplayFragment();
         Bundle args = new Bundle();
         args.putParcelableArrayList(MODEL_LIST, (ArrayList<? extends Parcelable>) modelList);
@@ -87,7 +87,7 @@ public class ReplayFragment extends Fragment {
         textToSpeech = pronunciationUtil.getTTS(requireContext());
     }
 
-    private void initializeViews(View view) {
+    private void initializeViews(final View view) {
         playAgainButtonCard = view.findViewById(R.id.cardView_playagain);
         homeButtonCard = view.findViewById(R.id.cardView_home);
         resultsButtonCard = view.findViewById(R.id.cardView_results);

@@ -102,7 +102,7 @@ public class ResultsFragment extends Fragment {
         totalSize = sharedPreferences.getInt(TOTALSIZE, 0);
     }
 
-    private void intializeViews(@NonNull View view) {
+    private void intializeViews(@NonNull final View view) {
         rainbowRatingBar = view.findViewById(R.id.rainbow_correctword_ratingbar);
         shareFAB = view.findViewById(R.id.share_info);
         backFAB = view.findViewById(R.id.back_btn);
@@ -173,7 +173,7 @@ public class ResultsFragment extends Fragment {
         }
     }
 
-    public void takeScreenshotAndShare(View view) {
+    public void takeScreenshotAndShare(final View view) {
         allowOnFileUriExposed();
         view.setDrawingCacheEnabled(true);
         view.buildDrawingCache(true);
@@ -182,7 +182,7 @@ public class ResultsFragment extends Fragment {
         saveBitmap(b);
     }
 
-    private void shareIt(File imagePath) {
+    private void shareIt(final File imagePath) {
         Uri uri = Uri.fromFile(imagePath);
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_SEND);
@@ -198,7 +198,7 @@ public class ResultsFragment extends Fragment {
         }
     }
 
-    public void saveBitmap(Bitmap bitmap) {
+    public void saveBitmap(final Bitmap bitmap) {
         Date now = new Date();
         android.text.format.DateFormat.format("yyyy-MM-dd_hh:mm:ss", now);
 
