@@ -64,7 +64,7 @@ public class GameFragment extends Fragment {
     ObjectAnimator fadeIn;
     ObjectAnimator fadeOut;
 
-    public static GameFragment newInstance(List<Model> modelList) {
+    public static GameFragment newInstance(final List<Model> modelList) {
         GameFragment fragment = new GameFragment();
         Bundle args = new Bundle();
         args.putParcelableArrayList(MODEL_LIST, (ArrayList<? extends Parcelable>) modelList);

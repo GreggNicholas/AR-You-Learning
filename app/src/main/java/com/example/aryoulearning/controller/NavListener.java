@@ -5,17 +5,17 @@ import com.example.aryoulearning.model.Model;
 import java.util.List;
 
 public interface NavListener {
-    void moveToListFragment(List<List<Model>> animalResponseList, List<String> categoryName, List<String> categoryImage);
+    void moveToListFragment(final List<List<Model>> animalResponseList, final List<String> categoryName, final List<String> categoryImage);
 
-    void moveToGameOrARFragment(List<Model> animalResponseList, boolean isAR_on);
+    void moveToGameOrARFragment(final List<Model> animalResponseList, final boolean isAR_on);
 
-    void moveToResultsFragment(List<Model> categoryList);
+    void moveToResultsFragment(final List<Model> categoryList);
 
-    void moveToHintFragment(List<Model> animalResponseList);
+    void moveToHintFragment(final List<Model> animalResponseList);
 
-    void moveToReplayFragment(List<Model> modelList, boolean wasPreviousGameTypeAR);
+    void moveToReplayFragment(final List<Model> modelList, final boolean wasPreviousGameTypeAR);
 
-    void backToHintFragment(List<Model> animalResponseList);
+    void backToHintFragment(final List<Model> animalResponseList);
 
-    void moveToTutorialScreen(List<Model> modelList);
+    void moveToTutorialScreen(final List<Model> modelList);
 }

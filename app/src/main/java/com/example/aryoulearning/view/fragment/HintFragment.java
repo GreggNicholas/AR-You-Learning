@@ -48,7 +48,7 @@ public class HintFragment extends Fragment {
 
     }
 
-    public static HintFragment newInstance(List<Model> modelList) {
+    public static HintFragment newInstance(final List<Model> modelList) {
         HintFragment fragment = new HintFragment();
         Bundle args = new Bundle();
         args.putParcelableArrayList("model-list-key", (ArrayList<? extends Parcelable>) modelList);

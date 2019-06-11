@@ -34,7 +34,7 @@ public class TutorialFragment extends Fragment {
 
     public TutorialFragment() {}
 
-    public static TutorialFragment newInstance(List<Model> modelList) {
+    public static TutorialFragment newInstance(final List<Model> modelList) {
         TutorialFragment tutorialFragment = new TutorialFragment();
         Bundle args = new Bundle();
         args.putParcelableArrayList(MODEL_LIST, (ArrayList<? extends Parcelable>) modelList);

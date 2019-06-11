@@ -44,7 +44,7 @@ public class ReplayFragment extends Fragment {
     public ReplayFragment() {
     }
 
-    public static ReplayFragment newInstance(List<Model> modelList, boolean wasPreviousGameTypeAR) {
+    public static ReplayFragment newInstance(final List<Model> modelList, final boolean wasPreviousGameTypeAR) {
         ReplayFragment fragment = new ReplayFragment();
         Bundle args = new Bundle();
         args.putParcelableArrayList(MODEL_LIST, (ArrayList<? extends Parcelable>) modelList);

@@ -35,7 +35,7 @@ public class ListFragment extends Fragment {
     private List<String> categoryImages;
 
 
-    public static ListFragment newInstance(List<List<Model>> categoryList, List<String> categoryName, List<String> categoryImages) {
+    public static ListFragment newInstance(final List<List<Model>> categoryList, final List<String> categoryName, final List<String> categoryImages) {
         ListFragment fragment = new ListFragment();
         Bundle args = new Bundle();
         args.putStringArrayList(CATEGORY_NAME, (ArrayList<String>) categoryName);
