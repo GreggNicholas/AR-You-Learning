@@ -154,11 +154,15 @@ public class GameFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         textToSpeech = pronunciationUtil.getTTS(view.getContext());
+
         initializeViews(view);
+
         setMaxWidthAndHeight();
         answer = modelList.get(0).getName();
         Picasso.get().load(modelList.get(0).getImage()).into(imageView);
+
         animations();
+
         Handler handler = new Handler();
         handler.post(() -> setWordsOnScreen(answer));
 

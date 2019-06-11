@@ -31,6 +31,7 @@ import com.example.aryoulearning.view.MainActivity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import javax.annotation.Nonnull;
 
@@ -105,14 +106,7 @@ public class HintFragment extends Fragment {
     public void viewClickListeners(){
         startGameButton.setOnClickListener(v -> listener.moveToGameOrARFragment(modelList, MainActivity.AR_SWITCH_STATUS));
         tutorialButton.setOnClickListener(v -> listener.moveToTutorialScreen(modelList));
-        backFAB.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                listener.moveToListFragment(MainActivity.getAnimalModelList(),
-                        MainActivity.getCategoryList(),
-                        MainActivity.getBackgroundList());
-            }
-        });
+        backFAB.setOnClickListener(v -> Objects.requireNonNull(getActivity()).onBackPressed());
     }
 
     public void startBlinkText() {

@@ -15,4 +15,5 @@
     <color name="colorCreamTransparent">#94FCFFDA</color>
     <color name="colorOkBlue">#3B90D5</color>
     <color name="colorStartGreen">#9CCC65</color>
+    <color name="share_button_color">#F44336</color>
 </resources>
