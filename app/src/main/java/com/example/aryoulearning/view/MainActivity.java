@@ -54,7 +54,9 @@ public class MainActivity extends AppCompatActivity implements NavListener, Swit
                             categoryList.add(response.body().get(i).getCategory());
                             backgroundList.add(response.body().get(i).getBackground());
                         }
-                        Log.d("TAG", backgroundList.toString());
+                        Log.d("Oncreate,","animalmodellist:"+ animalModelList.toString());
+                        Log.d("Oncreate,","categorylist:"+ categoryList.toString());
+                        Log.d("Oncreate,","backgroundlist:"+ backgroundList.toString());
 
 //                        for (int i = 0; i <animalModelList.get(0).size(); i++) {
 //                            Model animal = animalModelList.get(0).get(i);
