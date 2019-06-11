@@ -73,7 +73,7 @@ import java.util.concurrent.ExecutionException;
 public class ARHostFragment extends Fragment {
 
     private static final int RC_PERMISSIONS = 0x123;
-    public static final String MODEL_LIST_KEY = "model-list-key";
+    public static final String MODEL_LIST = "MODEL_LIST";
     private NavListener listener;
 
     private GestureDetector gestureDetector;
@@ -84,8 +84,6 @@ public class ARHostFragment extends Fragment {
     private boolean hasFinishedLoadingModels = false;
     private boolean hasFinishedLoadingLetters = false;
     private boolean hasPlacedGame = false;
-    private Set<String> rightAnswer = new HashSet<>();
-    private Set<String> wrongAnswer = new HashSet<>();
     private Set<String> correctAnswerSet = new HashSet<>();
     private SharedPreferences prefs;
 
@@ -107,7 +105,6 @@ public class ARHostFragment extends Fragment {
 
     private TextView wordValidator;
     private View wordValidatorLayout;
-    private CardView wordValidatorCv;
     private ImageView validatorImage;
     private ImageView validatorBackgroudImage;
     private TextView validatorWord;
@@ -146,7 +143,7 @@ public class ARHostFragment extends Fragment {
     public static ARHostFragment newInstance(List<Model> modelList) {
         ARHostFragment fragment = new ARHostFragment();
         Bundle args = new Bundle();
-        args.putParcelableArrayList(MODEL_LIST_KEY, (ArrayList<? extends Parcelable>) modelList);
+        args.putParcelableArrayList(MODEL_LIST, (ArrayList<? extends Parcelable>) modelList);
         fragment.setArguments(args);
         return fragment;
     }
@@ -175,7 +172,7 @@ public class ARHostFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            categoryList = getArguments().getParcelableArrayList(MODEL_LIST_KEY);
+            categoryList = getArguments().getParcelableArrayList(MODEL_LIST);
             Collections.shuffle(categoryList);
         }
 
@@ -192,7 +189,7 @@ public class ARHostFragment extends Fragment {
         wordContainer = view.findViewById(R.id.word_container);
 
         wordValidatorLayout = getLayoutInflater().inflate(R.layout.validator_card,f,false);
-        wordValidatorCv = wordValidatorLayout.findViewById(R.id.word_validator_cv);
+        CardView wordValidatorCv = wordValidatorLayout.findViewById(R.id.word_validator_cv);
         wordValidator = wordValidatorLayout.findViewById(R.id.word_validator);
 
         validatorImage = wordValidatorLayout.findViewById(R.id.validator_imageView);
@@ -495,7 +492,6 @@ public class ARHostFragment extends Fragment {
         if (letters.equals(word)) {
             isCorrect = true;
             validator = "correct";
-            rightAnswer.add(letters);
 
             //will run once when correct answer is entered. the method will instantiate, and add all from the current list
             categoryList.get(roundCounter).setWrongAnswerSet((ArrayList<String>) wrongAnswerList);
@@ -510,7 +506,6 @@ public class ARHostFragment extends Fragment {
         } else {
             isCorrect = false;
             validator = "try again!";
-            wrongAnswer.add(letters);
             validatorWrongWord.setText(letters);
             correctAnswerSet.add(word);
             //every wrong answer, until a correct answer will be added here
@@ -776,8 +771,6 @@ public class ARHostFragment extends Fragment {
     }
 
     public void moveToReplayFragment() {
-        prefs.edit().putStringSet(ResultsFragment.RIGHTANSWERS, rightAnswer).apply();
-        prefs.edit().putStringSet(ResultsFragment.WRONGANSWER, wrongAnswer).apply();
         prefs.edit().putStringSet(ResultsFragment.CORRECT_ANSWER_FOR_USER, correctAnswerSet).apply();
         prefs.edit().putInt(ResultsFragment.TOTALSIZE, roundLimit).apply();
 

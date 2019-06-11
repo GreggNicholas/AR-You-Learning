@@ -1,5 +1,6 @@
 package com.example.aryoulearning.view.fragment;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -20,6 +21,7 @@ import com.example.aryoulearning.view.MainActivity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class ListFragment extends Fragment {
 
@@ -27,13 +29,11 @@ public class ListFragment extends Fragment {
     public static final String CATEGORY_IMAGE = "category-image";
     public static final String CATEGORY_KEY = "category-key";
     public static final String SIZE = "SIZE";
-    private RecyclerView rv;
+
     private List<List<Model>> categoryList = new ArrayList<>();
     private List<String> categoryName;
     private List<String> categoryImages;
-    private int size;
 
-    private static final String TAG = "Main";
 
     public static ListFragment newInstance(List<List<Model>> categoryList, List<String> categoryName, List<String> categoryImages) {
         ListFragment fragment = new ListFragment();
@@ -59,10 +59,10 @@ public class ListFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            size = getArguments().getInt("SIZE");
+            int size = getArguments().getInt("SIZE");
 
             for (int i = 0; i < size; i++) {
-                categoryList.add(getArguments().<Model>getParcelableArrayList(CATEGORY_KEY+ i));
+                categoryList.add(getArguments().getParcelableArrayList(CATEGORY_KEY+ i));
             }
             categoryName = getArguments().getStringArrayList(CATEGORY_NAME);
             categoryImages = getArguments().getStringArrayList(CATEGORY_IMAGE);
@@ -79,26 +79,27 @@ public class ListFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        rv = view.findViewById(R.id.category_rv);
+        RecyclerView rv = view.findViewById(R.id.category_rv);
         rv.setAdapter(new CategoryAdapter(categoryList, categoryName, categoryImages));
         rv.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayout.HORIZONTAL,false));
     }
 
+    @SuppressLint("CommitTransaction")
     @Override
     public void onResume() {
         super.onResume();
         MainActivity.AR_SWITCH_STATUS = false;
-        if(getFragmentManager().findFragmentByTag("result_fragment") != null){
-            getFragmentManager().beginTransaction().remove(getFragmentManager().findFragmentByTag("result_fragment")).commit();
+        if(Objects.requireNonNull(getFragmentManager()).findFragmentByTag("result_fragment") != null){
+            getFragmentManager().beginTransaction().remove(Objects.requireNonNull(getFragmentManager().findFragmentByTag("result_fragment"))).commit();
         }
         if(getChildFragmentManager().findFragmentById(R.id.ux_fragment) != null){
-            getChildFragmentManager().beginTransaction().remove(getChildFragmentManager().findFragmentById(R.id.ux_fragment));
+            getChildFragmentManager().beginTransaction().remove(Objects.requireNonNull(getChildFragmentManager().findFragmentById(R.id.ux_fragment)));
         }
         if(getFragmentManager().findFragmentByTag("ar_fragment") != null){
-            getFragmentManager().beginTransaction().remove(getFragmentManager().findFragmentByTag("ar_fragment")).commit();
+            getFragmentManager().beginTransaction().remove(Objects.requireNonNull(getFragmentManager().findFragmentByTag("ar_fragment"))).commit();
         }
         if(getFragmentManager().findFragmentByTag("game_fragment") != null){
-            getFragmentManager().beginTransaction().remove(getFragmentManager().findFragmentByTag("game_fragment")).commit();
+            getFragmentManager().beginTransaction().remove(Objects.requireNonNull(getFragmentManager().findFragmentByTag("game_fragment"))).commit();
         }
 
     }

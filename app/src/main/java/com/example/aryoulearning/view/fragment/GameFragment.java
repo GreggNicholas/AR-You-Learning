@@ -42,6 +42,7 @@ import java.util.Random;
 import java.util.Set;
 
 public class GameFragment extends Fragment {
+    public static final String MODEL_LIST = "MODEL_LIST";
     private NavListener listener;
     private List<Model> modelList;
     private List<String> wrongAnswerList = new ArrayList<>();
@@ -52,8 +53,6 @@ public class GameFragment extends Fragment {
     private int limit = 2;
     private int width;
     private int height;
-    private int answersCorrect;
-    private int answersWrong;
     private Set<String> rightAnswer = new HashSet<>();
     private Set<String> wrongAnswer = new HashSet<>();
     private Set<String> correctAnswerSet = new HashSet<>();
@@ -68,7 +67,7 @@ public class GameFragment extends Fragment {
     public static GameFragment newInstance(List<Model> modelList) {
         GameFragment fragment = new GameFragment();
         Bundle args = new Bundle();
-        args.putParcelableArrayList("model-list-key", (ArrayList<? extends Parcelable>) modelList);
+        args.putParcelableArrayList(MODEL_LIST, (ArrayList<? extends Parcelable>) modelList);
         fragment.setArguments(args);
         return fragment;
     }
@@ -95,8 +94,7 @@ public class GameFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_game, container, false);
-        return rootView;
+        return inflater.inflate(R.layout.fragment_game, container, false);
     }
 
     @Override
@@ -313,9 +311,6 @@ public class GameFragment extends Fragment {
             handler.post(() -> setWordsOnScreen(answer));
 
         } else {
-            sharedPreferences.edit().putInt(ResultsFragment.ANSWERSCORRECT, answersCorrect).apply();
-            sharedPreferences.edit().putStringSet(ResultsFragment.RIGHTANSWERS, rightAnswer).apply();
-            sharedPreferences.edit().putStringSet(ResultsFragment.WRONGANSWER, wrongAnswer).apply();
             sharedPreferences.edit().putStringSet(ResultsFragment.CORRECT_ANSWER_FOR_USER, correctAnswerSet).apply();
             sharedPreferences.edit().putInt(ResultsFragment.TOTALSIZE, limit).apply();
 

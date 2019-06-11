@@ -1,7 +1,6 @@
 package com.example.aryoulearning.view.fragment;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.preference.PreferenceManager;
@@ -23,14 +22,16 @@ import com.example.aryoulearning.view.MainActivity;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
 
 public class ReplayFragment extends Fragment {
 
-    private static final String ARG_Model = "param1";
-    private static final String PREVIOUS_GAME_STATUS = "param2";
+    private static final String MODEL_LIST = "MODEL_LIST";
+    private static final String PREVIOUS_GAME_STATUS = "GAME_STATUS";
     private NavListener navListener;
 
-    private CardView resultsButtonCard, homeButtonCard, playagainButtonCard;
+    private CardView resultsButtonCard, homeButtonCard, playAgainButtonCard;
 
     private List<Model> modelList = new ArrayList<>();
 
@@ -46,7 +47,7 @@ public class ReplayFragment extends Fragment {
     public static ReplayFragment newInstance(List<Model> modelList, boolean wasPreviousGameTypeAR) {
         ReplayFragment fragment = new ReplayFragment();
         Bundle args = new Bundle();
-        args.putParcelableArrayList(ARG_Model, (ArrayList<? extends Parcelable>) modelList);
+        args.putParcelableArrayList(MODEL_LIST, (ArrayList<? extends Parcelable>) modelList);
         args.putBoolean(PREVIOUS_GAME_STATUS,wasPreviousGameTypeAR);
         fragment.setArguments(args);
         return fragment;
@@ -56,13 +57,13 @@ public class ReplayFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            modelList = getArguments().getParcelableArrayList(ARG_Model);
+            modelList = getArguments().getParcelableArrayList(MODEL_LIST);
             previousGameTypeIsAR = getArguments().getBoolean(PREVIOUS_GAME_STATUS);
         }
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@Nonnull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_replay, container, false);
     }
@@ -81,15 +82,18 @@ public class ReplayFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        initViews(view);
+        initializeViews(view);
+        viewClickListeners();
         textToSpeech = pronunciationUtil.getTTS(requireContext());
     }
 
-    private void initViews(View view) {
-        playagainButtonCard = view.findViewById(R.id.cardView_playagain);
+    private void initializeViews(View view) {
+        playAgainButtonCard = view.findViewById(R.id.cardView_playagain);
         homeButtonCard = view.findViewById(R.id.cardView_home);
         resultsButtonCard = view.findViewById(R.id.cardView_results);
+    }
 
+    public void viewClickListeners(){
         resultsButtonCard.setOnClickListener(v -> {
             pronunciationUtil.textToSpeechAnnouncer("Showing progress", textToSpeech);
             navListener.moveToResultsFragment(modelList);
@@ -100,7 +104,7 @@ public class ReplayFragment extends Fragment {
                     MainActivity.getCategoryList(),
                     MainActivity.getBackgroundList());
         });
-        playagainButtonCard.setOnClickListener(v -> {
+        playAgainButtonCard.setOnClickListener(v -> {
             pronunciationUtil.textToSpeechAnnouncer("Lets play again!", textToSpeech);
             navListener.moveToGameOrARFragment(modelList,previousGameTypeIsAR);
         });

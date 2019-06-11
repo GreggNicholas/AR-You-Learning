@@ -1,9 +1,6 @@
 package com.example.aryoulearning.view.fragment;
 
 
-import android.animation.ArgbEvaluator;
-import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
@@ -34,13 +31,15 @@ import com.example.aryoulearning.view.MainActivity;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
 public class HintFragment extends Fragment {
 
     private NavListener listener;
     private Switch arSwitch;
     private SwitchListener switchlistener;
     private List<Model> modelList;
-    private Button startGameButton, goToTutorialButton;
+    private Button startGameButton, tutorialButton;
     private RecyclerView hintRecyclerView;
     private PronunciationUtil pronunciationUtil;
     private TextToSpeech textToSpeech;
@@ -79,7 +78,7 @@ public class HintFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@Nonnull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_hint, container, false);
     }
@@ -89,13 +88,21 @@ public class HintFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         textToSpeech = pronunciationUtil.getTTS(requireContext());
-        findViewByIds(view);
+        initializeViews(view);
         startBlinkText();
+        setHintRV();
+        setArSwitch();
+        viewClickListeners();
+    }
+
+    public void setHintRV(){
         hintRecyclerView.setAdapter(new HintAdapter(modelList, pronunciationUtil, textToSpeech));
         hintRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false));
-        setArSwitch();
+    }
+
+    public void viewClickListeners(){
         startGameButton.setOnClickListener(v -> listener.moveToGameOrARFragment(modelList, MainActivity.AR_SWITCH_STATUS));
-        goToTutorialButton.setOnClickListener(v -> listener.moveToTutorialScreen(modelList));
+        tutorialButton.setOnClickListener(v -> listener.moveToTutorialScreen(modelList));
     }
 
     public void startBlinkText() {
@@ -107,11 +114,11 @@ public class HintFragment extends Fragment {
         arSwitch.startAnimation(anim);
     }
 
-    private void findViewByIds(@NonNull View view) {
+    private void initializeViews(@NonNull View view) {
         startGameButton = view.findViewById(R.id.hint_fragment_button);
         arSwitch = view.findViewById(R.id.switch_ar);
         hintRecyclerView = view.findViewById(R.id.hint_recycler_view);
-        goToTutorialButton = view.findViewById(R.id.hint_frag_tutorial_button);
+        tutorialButton = view.findViewById(R.id.hint_frag_tutorial_button);
     }
 
 
