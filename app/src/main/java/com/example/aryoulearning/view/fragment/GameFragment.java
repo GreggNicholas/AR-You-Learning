@@ -231,19 +231,6 @@ public class GameFragment extends Fragment {
         });
         layout.addView(letter);
     }
-//
-//    private void repeatTheSameWordUntilCorrectlySpelled(String mistakenWord) {
-//        setWordsOnScreen(mistakenWord);
-//        if (checker.getText().length() == answer.length()) {
-//            if (checker.getText().toString().equals(answer)) {
-//                pronunciationUtil.textToSpeechAnnouncer("Correct!", textToSpeech);
-//                loadNext();
-//            } else {
-//                pronunciationUtil.textToSpeechAnnouncer("try again!", textToSpeech);
-//                checker.setText("");
-//            }
-//        }
-//    }
 
     private HashMap<String, Integer> getCoordinates() {
         HashMap<String, Integer> map = new HashMap<>();
