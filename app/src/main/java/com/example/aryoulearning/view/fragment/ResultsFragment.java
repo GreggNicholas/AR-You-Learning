@@ -22,7 +22,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,52 +40,41 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+import java.util.Objects;
+
+import javax.annotation.Nonnull;
 
 
 public class ResultsFragment extends Fragment {
-    public static final String WRONGANSWER = "WRONGANSWER";
-    public static final String ANSWERSCORRECT = "ANSWERSCORRECT";
-    public static final String RIGHTANSWERS = "RIGHTANSWERS";
     public static final String TOTALSIZE = "TOTALSIZE";
     private static final int REQUEST_CODE = 1;
     public static final String CORRECT_ANSWER_FOR_USER = "correct answer for user";
-    public static final String CATEGORY_LIST = "categoryList";
+    public static final String MODEL_LIST = "modelList";
     private SharedPreferences sharedPreferences;
-    private Set<String> rightAnswer = new HashSet<>();
-    private HashMap<String, String> map = new HashMap<>();
-    private Set<String> wrongAnswer = new HashSet();
-    private Set<String> correctAnswersStringSet = new HashSet();
-    private int correctAnswer;
+    private HashSet correctAnswersStringSet = new HashSet();
     private int totalSize;
     private RatingBar rainbowRatingBar;
-//    private String userRightAnswersString, userWrongAnswersString, correctAnswerForUserString;
-    public static final String TAG = "ResultsFragment";
     private TextView categoryTextView;
-    private List<Model> categoryList;
-//    WebView congratsWebView;
-    FloatingActionButton shareButton;
-    FloatingActionButton backButton;
+    private List<Model> modelList;
+    FloatingActionButton shareFAB;
+    FloatingActionButton backFAB;
     private RecyclerView resultRV;
     private PronunciationUtil pronunciationUtil;
     private TextToSpeech textToSpeech;
     private NavListener listener;
 
 
-    public static ResultsFragment newInstance(List<Model> modelList) {
-        Log.d("TAG", "IncomingCategoryListSize: " + modelList.size());
+    public static ResultsFragment newInstance(final List<Model> modelList) {
         ResultsFragment resultsFragment = new ResultsFragment();
         Bundle args = new Bundle();
-        args.putParcelableArrayList(CATEGORY_LIST, (ArrayList<? extends Parcelable>) modelList);
+        args.putParcelableArrayList(MODEL_LIST, (ArrayList<? extends Parcelable>) modelList);
         resultsFragment.setArguments(args);
         return resultsFragment;
     }
 
-    public ResultsFragment() {
-    }
+    public ResultsFragment() {}
 
     @Override
     public void onAttach(Context context) {
@@ -100,7 +88,7 @@ public class ResultsFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if(getArguments() != null){
-            categoryList = getArguments().getParcelableArrayList(CATEGORY_LIST);
+            modelList = getArguments().getParcelableArrayList(MODEL_LIST);
         }
         pronunciationUtil = new PronunciationUtil();
         textToSpeech = pronunciationUtil.getTTS(getContext());
@@ -110,42 +98,20 @@ public class ResultsFragment extends Fragment {
 
 
     public void extractSharedPrefs() {
-//        rightAnswer = sharedPreferences.getStringSet(RIGHTANSWERS, null);
-//        wrongAnswer = sharedPreferences.getStringSet(WRONGANSWER, null);
-//        correctAnswer = sharedPreferences.getInt(ANSWERSCORRECT, 0);
-        correctAnswersStringSet = sharedPreferences.getStringSet(CORRECT_ANSWER_FOR_USER, null);
+        correctAnswersStringSet = (HashSet) sharedPreferences.getStringSet(CORRECT_ANSWER_FOR_USER, null);
         totalSize = sharedPreferences.getInt(TOTALSIZE, 0);
-//        final StringBuilder rightAnswerBuilder = new StringBuilder();
-//        final StringBuilder wrongAnswerBuilder = new StringBuilder();
-//        final StringBuilder correctAnswerBuilder = new StringBuilder();
-//        if (wrongAnswer != null) {
-//            for (String wrong : wrongAnswer) {
-//                map.put(wrong, sharedPreferences.getString(wrong, null));
-//            }
-//        }
-//        if (rightAnswer != null) {
-//            for (String right : rightAnswer) {
-//                rightAnswerBuilder.append(right).append(" ");
-//            }
-//        }
-//
-//        if (wrongAnswer != null) {
-//            for (String wrongChoice : wrongAnswer) {
-//                wrongAnswerBuilder.append(wrongChoice).append(" ");
-//            }
-//        }
-//        if (correctAnswersStringSet != null) {
-//            for (String correctWay : correctAnswersStringSet) {
-//                correctAnswerBuilder.append(correctWay).append(" ");
-//            }
-//        }
-//        userRightAnswersString = " " + getString(R.string.rightanswers) + " " + rightAnswerBuilder.toString();
-//        userWrongAnswersString = " " + getString(R.string.wronganswers) + " " + wrongAnswerBuilder.toString();
-//        correctAnswerForUserString = " " + getString(R.string.correctanswers) + " " + correctAnswerBuilder.toString();
+    }
+
+    private void findViewByIds(@NonNull View view) {
+        rainbowRatingBar = view.findViewById(R.id.rainbow_correctword_ratingbar);
+        shareFAB = view.findViewById(R.id.share_info);
+        backFAB = view.findViewById(R.id.back_btn);
+        resultRV = view.findViewById(R.id.result_recyclerview);
+        categoryTextView = view.findViewById(R.id.results_category);
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@Nonnull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_results, container, false);
     }
@@ -154,46 +120,40 @@ public class ResultsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         findViewByIds(view);
+        setViews();
+    }
+
+    public void setViews(){
         displayRatingBarAttempts();
         categoryTextView.setText(MainActivity.currentCategory);
-        backFabClick();
-        shareFabClick();
-
+        backFABClick();
+        shareFABClick();
         setResultRV();
-
     }
 
     private void setResultRV() {
-        resultRV.setAdapter(new ResultsAdapter(categoryList, pronunciationUtil, textToSpeech, totalSize));
+        resultRV.setAdapter(new ResultsAdapter(modelList, pronunciationUtil, textToSpeech, totalSize));
         resultRV.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false));
 
     }
 
-    public void shareFabClick() {
-        shareButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                v = ResultsFragment.this.getActivity().getWindow().getDecorView().getRootView();
-                if (ContextCompat.checkSelfPermission(v.getContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
-                        != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(v.getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                        != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(ResultsFragment.this.getActivity(),
-                            new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE);
-                    ResultsFragment.this.takeScreenshotAndShare(v);
-                } else {
-                    ResultsFragment.this.takeScreenshotAndShare(v);
-                }
+    public void shareFABClick() {
+        shareFAB.setOnClickListener(v -> {
+            v = Objects.requireNonNull(ResultsFragment.this.getActivity()).getWindow().getDecorView().getRootView();
+            if (ContextCompat.checkSelfPermission(v.getContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
+                    != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(v.getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(ResultsFragment.this.getActivity(),
+                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE);
+                ResultsFragment.this.takeScreenshotAndShare(v);
+            } else {
+                ResultsFragment.this.takeScreenshotAndShare(v);
             }
         });
     }
 
-    public void backFabClick(){
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                listener.moveToReplayFragment(categoryList, true);
-            }
-        });
+    public void backFABClick(){
+        backFAB.setOnClickListener(v -> listener.moveToReplayFragment(modelList, true));
     }
 
     public void allowOnFileUriExposed() {
@@ -205,14 +165,11 @@ public class ResultsFragment extends Fragment {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-        switch (requestCode) {
-            case REQUEST_CODE:
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    break;
-                }
-            default:
-                break;
+        if (requestCode == REQUEST_CODE) {
+            if (grantResults.length > 0
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                return;
+            }
         }
     }
 
@@ -261,18 +218,6 @@ public class ResultsFragment extends Fragment {
             e.printStackTrace();
         }
     }
-
-    private void findViewByIds(@NonNull View view) {
-//        userRightAnswerTextView = view.findViewById(R.id.result_fragment_user_right_answer_tv);
-//        userWrongAnswerTextView = view.findViewById(R.id.result_fragment_user_wrong_answer_tv);
-//        correctAnswerTextView = view.findViewById(R.id.result_fragment_correct_answer_tv);
-        rainbowRatingBar = view.findViewById(R.id.rainbow_correctword_ratingbar);
-        shareButton = view.findViewById(R.id.share_info);
-        backButton = view.findViewById(R.id.back_btn);
-        resultRV = view.findViewById(R.id.result_recyclerview);
-        categoryTextView = view.findViewById(R.id.results_category);
-    }
-
 
     private void displayRatingBarAttempts() {
         rainbowRatingBar.setNumStars(totalSize);
