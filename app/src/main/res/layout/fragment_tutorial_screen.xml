@@ -54,10 +54,11 @@
         android:id="@+id/tutorial_videoView"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginStart="160dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="160dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginStart="240dp"
+        android:layout_marginTop="48dp"
+        android:layout_marginEnd="245dp"
+
+        android:layout_marginBottom="32dp"
         app:layout_constraintBottom_toTopOf="@+id/tutorial_frag_play_video_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -85,11 +86,25 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
-
         android:src="@drawable/tv3"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tutorial_textView" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="415dp"
+        android:layout_height="237dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="20dp"
+        android:background="@color/colorBlack"
+        android:elevation="-1dp"
+        app:layout_constraintBottom_toBottomOf="@+id/tv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/tv"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </android.support.constraint.ConstraintLayout>
