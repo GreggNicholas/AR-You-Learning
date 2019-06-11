@@ -121,7 +121,7 @@ public class HintFragment extends Fragment {
         anim.setDuration(500); //manage the time of the blink with this parameter
         anim.setStartOffset(20);
         anim.setRepeatMode(Animation.REVERSE);
-        anim.setRepeatCount(12);
+        anim.setRepeatCount(3);
         arSwitch.startAnimation(anim);
     }
 
@@ -139,7 +139,7 @@ public class HintFragment extends Fragment {
         arSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
             switchlistener.updateSwitchStatus(isChecked);
             if (arSwitch.isChecked()) {
-                arSwitch.setTextColor(Color.RED);
+                arSwitch.setTextColor(Color.BLUE);
             } else {
                 arSwitch.setTextColor(Color.BLACK);
             }
