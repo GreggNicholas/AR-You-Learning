@@ -2,6 +2,7 @@ package com.example.aryoulearning.view;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.WindowManager;
 
 import com.example.aryoulearning.R;
 import com.example.aryoulearning.augmented.ARHostFragment;

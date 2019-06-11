@@ -122,7 +122,7 @@ public class ARHostFragment extends Fragment {
 
     private Anchor mainAnchor;
     private AnchorNode mainAnchorNode;
-    private List<HitResult> mainHits;
+    private HitResult mainHit;
 
     private ObjectAnimator fadeIn;
     private ObjectAnimator fadeOut;
@@ -542,14 +542,13 @@ public class ARHostFragment extends Fragment {
 
     private boolean tryPlaceGame(MotionEvent tap, Frame frame) {
         if (tap != null && frame.getCamera().getTrackingState() == TrackingState.TRACKING) {
-            mainHits = frame.hitTest(tap);
+            mainHit = frame.hitTest(tap).get(0);
 
-            for (HitResult hit : frame.hitTest(tap)) {
-                Trackable trackable = hit.getTrackable();
-                if (trackable instanceof Plane && ((Plane) trackable).isPoseInPolygon(hit.getHitPose())) {
+                Trackable trackable = mainHit.getTrackable();
+                if (trackable instanceof Plane && ((Plane) trackable).isPoseInPolygon(mainHit.getHitPose())) {
                     // Create the Anchor.
                     if (trackable.getTrackingState() == TrackingState.TRACKING) {
-                        mainAnchor = hit.createAnchor();
+                        mainAnchor = mainHit.createAnchor();
                     }
                     mainAnchorNode = new AnchorNode(mainAnchor);
                     mainAnchorNode.setParent(arFragment.getArSceneView().getScene());
@@ -557,7 +556,6 @@ public class ARHostFragment extends Fragment {
                     mainAnchorNode.addChild(gameSystem);
                     return true;
                 }
-            }
         }
         return false;
     }
@@ -569,19 +567,19 @@ public class ARHostFragment extends Fragment {
         mainAnchor = null;
         mainAnchorNode = null;
 
-        for (HitResult hit : mainHits) {
-            Trackable trackable = hit.getTrackable();
-            if (trackable instanceof Plane && ((Plane) trackable).isPoseInPolygon(hit.getHitPose())) {
+
+            Trackable trackable = mainHit.getTrackable();
+            if (trackable instanceof Plane && ((Plane) trackable).isPoseInPolygon(mainHit.getHitPose())) {
                 // Create the Anchor.
                 if (trackable.getTrackingState() == TrackingState.TRACKING) {
-                    mainAnchor = hit.createAnchor();
+                    mainAnchor = mainHit.createAnchor();
                 }
                 mainAnchorNode = new AnchorNode(mainAnchor);
                 mainAnchorNode.setParent(arFragment.getArSceneView().getScene());
                 Node gameSystem = createGame(modelMap);
                 mainAnchorNode.addChild(gameSystem);
             }
-        }
+
         wordContainer.removeAllViews();
     }
 
