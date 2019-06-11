@@ -148,7 +148,8 @@ public class HintFragment extends Fragment {
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
+    public void onStop() {
+        super.onStop();
+        shimmerFrameLayout = null;
     }
 }

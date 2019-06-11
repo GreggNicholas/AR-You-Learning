@@ -1,7 +1,12 @@
 package com.example.aryoulearning.view.fragment;
 
+import android.animation.AnimatorSet;
+import android.animation.ArgbEvaluator;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
@@ -12,7 +17,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.LinearInterpolator;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.example.aryoulearning.R;
 import com.example.aryoulearning.controller.CategoryAdapter;
@@ -34,6 +41,7 @@ public class ListFragment extends Fragment {
     private List<String> categoryName;
     private List<String> categoryImages;
     private RecyclerView rv;
+    private TextView textView;
 
 
     public static ListFragment newInstance(final List<List<Model>> categoryList, final List<String> categoryName, final List<String> categoryImages) {
@@ -84,9 +92,22 @@ public class ListFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         initializeViews(view);
         setListRV();
+        animateIt();
+    }
+    public void animateIt(){
+        ObjectAnimator textColor = ObjectAnimator.ofInt(textView, "textColor", Color.GREEN, Color.RED);
+        textColor.setInterpolator(new LinearInterpolator());
+        textColor.setEvaluator(new ArgbEvaluator());
+        textColor.setRepeatCount(ValueAnimator.INFINITE);
+        textColor.setRepeatMode(ValueAnimator.REVERSE);
+        textColor.setDuration(4000);
+        AnimatorSet animatorSet = new AnimatorSet();
+        animatorSet.play(textColor);
+        animatorSet.start();
     }
 
     public void initializeViews(final View view){
+        textView = view.findViewById(R.id.category_title);
         rv = view.findViewById(R.id.category_rv);
     }
 
