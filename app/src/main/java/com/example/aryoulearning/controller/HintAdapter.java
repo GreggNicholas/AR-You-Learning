@@ -60,11 +60,7 @@ public class HintAdapter extends RecyclerView.Adapter<HintAdapter.HintViewHolder
             itemView.setOnClickListener(v -> {
                 pronunciationUtil.textToSpeechAnnouncer(model.getName(), textToSpeech);
                 Animation vibrateHintCard = AnimationUtils.loadAnimation(itemView.getContext(), R.anim.vibrate);
-                if(vibrateHintCard.hasStarted()) {
-                    itemView.clearAnimation();
-                }else {
-                    itemView.startAnimation(vibrateHintCard);
-                }
+                itemView.startAnimation(vibrateHintCard);
             });
         }
     }
