@@ -35,5 +35,4 @@
             android:screenOrientation="landscape"
             android:configChanges="keyboardHidden|orientation|screenSize"></activity>
     </application>
-
 </manifest>
