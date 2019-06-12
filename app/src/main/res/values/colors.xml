@@ -15,6 +15,6 @@
     <color name="colorCreamTransparent">#94FCFFDA</color>
     <color name="colorOkBlue">#3B90D5</color>
     <color name="colorStartGreen">#39C206</color>
-    <color name="share_button_color">#F44336</color>
-    <color name="fabBack">#868686</color>
+    <color name="share_button_color">#BE4B42</color>
+    <color name="fabBack">#FF9800</color>
 </resources>
