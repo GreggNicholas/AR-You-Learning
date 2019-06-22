@@ -124,6 +124,7 @@ public class ReplayFragment extends Fragment {
         if(getFragmentManager().findFragmentByTag("result_fragment") != null){
             getFragmentManager().beginTransaction().remove(getFragmentManager().findFragmentByTag("result_fragment")).commit();
         }
+        getActivity().getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
     }
 
     @Override

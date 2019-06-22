@@ -134,6 +134,5 @@ public class ListFragment extends Fragment {
         if(getFragmentManager().findFragmentByTag("game_fragment") != null){
             getFragmentManager().beginTransaction().remove(Objects.requireNonNull(getFragmentManager().findFragmentByTag("game_fragment"))).commit();
         }
-
     }
 }
