@@ -542,7 +542,8 @@ public class ARHostFragment extends Fragment {
 
     private boolean tryPlaceGame(MotionEvent tap, Frame frame) {
         if (tap != null && frame.getCamera().getTrackingState() == TrackingState.TRACKING) {
-            mainHit = frame.hitTest(tap).get(0);
+
+                mainHit = frame.hitTest(tap).get(0);
 
                 Trackable trackable = mainHit.getTrackable();
                 if (trackable instanceof Plane && ((Plane) trackable).isPoseInPolygon(mainHit.getHitPose())) {

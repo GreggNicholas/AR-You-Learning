@@ -54,7 +54,6 @@ public class TutorialFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getActivity().getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
         if (getArguments() != null) {
             modelList = getArguments().getParcelableArrayList(MODEL_LIST);
         }
