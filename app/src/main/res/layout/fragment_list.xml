@@ -76,7 +76,7 @@
         android:layout_marginBottom="16dp"
         android:background="@android:drawable/list_selector_background"
         android:fontFamily="@font/balloon"
-        android:text="privacy policy"
+        android:text="@string/privacy_text_button"
         android:textSize="16sp"
         android:textStyle="italic"
         app:layout_constraintBottom_toBottomOf="parent"

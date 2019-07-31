@@ -6,7 +6,9 @@ import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
@@ -18,6 +20,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -42,6 +45,7 @@ public class ListFragment extends Fragment {
     private List<String> categoryImages;
     private RecyclerView rv;
     private TextView textView;
+    private Button privacyButton;
 
 
     public static ListFragment newInstance(final List<List<Model>> categoryList, final List<String> categoryName, final List<String> categoryImages) {
@@ -54,7 +58,7 @@ public class ListFragment extends Fragment {
         return fragment;
     }
 
-    public static void addCategoryListToBundle(final List<List<Model>> categoryList, final Bundle args){
+    public static void addCategoryListToBundle(final List<List<Model>> categoryList, final Bundle args) {
         for (int i = 0; i < categoryList.size(); i++) {
             args.putParcelableArrayList(CATEGORY_KEY + i, (ArrayList<? extends Parcelable>) categoryList.get(i));
             args.putInt(SIZE, categoryList.size());
@@ -73,7 +77,7 @@ public class ListFragment extends Fragment {
             int size = getArguments().getInt("SIZE");
 
             for (int i = 0; i < size; i++) {
-                categoryList.add(getArguments().getParcelableArrayList(CATEGORY_KEY+ i));
+                categoryList.add(getArguments().getParcelableArrayList(CATEGORY_KEY + i));
             }
             categoryName = getArguments().getStringArrayList(CATEGORY_NAME);
             categoryImages = getArguments().getStringArrayList(CATEGORY_IMAGE);
@@ -93,8 +97,18 @@ public class ListFragment extends Fragment {
         initializeViews(view);
         setListRV();
         animateIt();
+        privacyButtonClick();
     }
-    public void animateIt(){
+
+    private void privacyButtonClick() {
+        privacyButton.setOnClickListener(v -> {
+            Uri uri = Uri.parse("https://www.termsfeed.com/privacy-policy/be6a24e959c28f96b1f94fce7e33e7d1");
+            Intent i = new Intent(Intent.ACTION_VIEW, uri);
+            startActivity(i);
+        });
+    }
+
+    public void animateIt() {
         ObjectAnimator textColor = ObjectAnimator.ofInt(textView, "textColor", Color.GREEN, Color.RED);
         textColor.setInterpolator(new LinearInterpolator());
         textColor.setEvaluator(new ArgbEvaluator());
@@ -106,15 +120,16 @@ public class ListFragment extends Fragment {
         animatorSet.start();
     }
 
-    public void initializeViews(final View view){
+    public void initializeViews(final View view) {
         textView = view.findViewById(R.id.category_title);
         rv = view.findViewById(R.id.category_rv);
+        privacyButton = view.findViewById(R.id.privacy_button);
     }
 
-    public void setListRV(){
+    public void setListRV() {
 
         rv.setAdapter(new CategoryAdapter(categoryList, categoryName, categoryImages));
-        rv.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayout.HORIZONTAL,false));
+        rv.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayout.HORIZONTAL, false));
     }
 
     @SuppressLint("CommitTransaction")
@@ -122,16 +137,16 @@ public class ListFragment extends Fragment {
     public void onResume() {
         super.onResume();
         MainActivity.AR_SWITCH_STATUS = false;
-        if(Objects.requireNonNull(getFragmentManager()).findFragmentByTag("result_fragment") != null){
+        if (Objects.requireNonNull(getFragmentManager()).findFragmentByTag("result_fragment") != null) {
             getFragmentManager().beginTransaction().remove(Objects.requireNonNull(getFragmentManager().findFragmentByTag("result_fragment"))).commit();
         }
-        if(getChildFragmentManager().findFragmentById(R.id.ux_fragment) != null){
+        if (getChildFragmentManager().findFragmentById(R.id.ux_fragment) != null) {
             getChildFragmentManager().beginTransaction().remove(Objects.requireNonNull(getChildFragmentManager().findFragmentById(R.id.ux_fragment)));
         }
-        if(getFragmentManager().findFragmentByTag("ar_fragment") != null){
+        if (getFragmentManager().findFragmentByTag("ar_fragment") != null) {
             getFragmentManager().beginTransaction().remove(Objects.requireNonNull(getFragmentManager().findFragmentByTag("ar_fragment"))).commit();
         }
-        if(getFragmentManager().findFragmentByTag("game_fragment") != null){
+        if (getFragmentManager().findFragmentByTag("game_fragment") != null) {
             getFragmentManager().beginTransaction().remove(Objects.requireNonNull(getFragmentManager().findFragmentByTag("game_fragment"))).commit();
         }
     }
