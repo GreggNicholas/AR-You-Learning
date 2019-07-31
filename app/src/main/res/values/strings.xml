@@ -27,5 +27,7 @@
     <string name="tutorial_fragment_back_button">Back</string>
     <string name="hint_frag_go_to_tutorial_button">Tutorial</string>
     <string name="tutorial_frag_play_button">play</string>
+    <string name="agreement_text">By proceeding you agree<br /> with our</string>
+    <string name="privacy_text_button">privacy policy</string>
 
 </resources>

@@ -53,5 +53,34 @@
         app:layout_constraintGuide_percent="0.9"
         app:layout_constraintTop_toBottomOf="@id/category_title" />
 
+    <TextView
+        android:id="@+id/privacy_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="128dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="16dp"
+        android:fontFamily="@font/balloon"
+        android:gravity="center"
+        android:text="@string/agreement_text"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline2"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <Button
+        android:id="@+id/privacy_button"
+        android:layout_width="122dp"
+        android:layout_height="14dp"
+        android:layout_marginBottom="16dp"
+        android:background="@android:drawable/list_selector_background"
+        android:fontFamily="@font/balloon"
+        android:text="@string/privacy_text_button"
+        android:textSize="16sp"
+        android:textStyle="italic"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/privacy_textview" />
+
 
 </android.support.constraint.ConstraintLayout>
