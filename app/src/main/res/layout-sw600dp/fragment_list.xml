@@ -50,8 +50,38 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@id/category_title"
-        app:layout_constraintGuide_percent="0.85" />
+        app:layout_constraintGuide_percent="0.85"
+        app:layout_constraintTop_toBottomOf="@id/category_title" />
 
+    <TextView
+        android:id="@+id/privacy_textview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/balloon"
+        android:gravity="center"
+        android:text="@string/agreement_text"
+        android:textSize="26sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/guideline2"
+        app:layout_constraintVertical_bias="0.367" />
+
+    <Button
+        android:layout_width="198dp"
+        android:layout_height="22dp"
+        android:layout_marginBottom="8dp"
+        android:background="@android:drawable/list_selector_background"
+        android:fontFamily="@font/balloon"
+        android:text="@string/privacy_button"
+        android:textSize="26sp"
+        android:textStyle="italic"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.501"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/privacy_textview"
+        app:layout_constraintVertical_bias="0.0" />
 
 </android.support.constraint.ConstraintLayout>
