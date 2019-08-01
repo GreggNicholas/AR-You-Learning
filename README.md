@@ -4,8 +4,6 @@
 AR you learning is a children's game app that uses word-picture association and seeks to 
 teach spelling of 3 to 5 letter words. 
 
-You can check the Trello Board link of [AR you learning](https://trello.com/b/xppBmKxP/54-capstone-group-5)
-to check our work in progress.
 
 ## APP features:
 - Augmented Reality (Sceneform)
