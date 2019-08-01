@@ -29,5 +29,8 @@
     <string name="tutorial_frag_play_button">play</string>
     <string name="agreement_text">By proceeding you agree<br /> with our</string>
     <string name="privacy_text_button">privacy policy</string>
+    <string name="ok_text">Ok</string>
+    <string name="parental_text">Parental or guardian supervision required for the use of this app</string>
+    <string name="stay_alert_text">Remember to be alert at all times. Stay alert of your surroundings!</string>
 
 </resources>
