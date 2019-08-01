@@ -32,5 +32,8 @@
     <string name="ok_text">Ok</string>
     <string name="parental_text">Parental or guardian supervision required for the use of this app</string>
     <string name="stay_alert_text">Remember to be alert at all times. Stay alert of your surroundings!</string>
+    <string name="confirmation_text">Are You Sure You Want To Exit?</string>
+    <string name="yes_text">yes</string>
+    <string name="no_text">no</string>
 
 </resources>
