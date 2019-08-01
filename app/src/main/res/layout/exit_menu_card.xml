@@ -23,8 +23,8 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <android.support.constraint.ConstraintLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
             <TextView
                 android:id="@+id/exit_prompt_textView"
@@ -35,7 +35,7 @@
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="24dp"
                 android:fontFamily="@font/balloon"
-                android:text="Are You Sure You Want To Exit?"
+                android:text="@string/confirmation_text"
                 android:textSize="22sp"
                 app:layout_constraintBottom_toTopOf="@+id/exit_button_yes"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -51,7 +51,7 @@
                 android:layout_marginBottom="8dp"
                 android:background="?android:selectableItemBackgroundBorderless"
                 android:fontFamily="@font/balloon"
-                android:text="yes"
+                android:text="@string/yes_text"
                 android:textSize="28sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/exit_button_no"
@@ -67,7 +67,7 @@
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="8dp"
                 android:fontFamily="@font/balloon"
-                android:text="no"
+                android:text="@string/no_text"
                 android:textSize="28sp"
                 android:background="?android:selectableItemBackgroundBorderless"
                 app:layout_constraintBottom_toBottomOf="parent"

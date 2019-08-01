@@ -98,7 +98,7 @@ public class ARHostFragment extends Fragment {
     private String currentWord = "";
 
     private int roundCounter = 0;
-    private int roundLimit = 2;
+    private int roundLimit = 5;
 
     private CardView wordCardView;
     private LinearLayout wordContainer;

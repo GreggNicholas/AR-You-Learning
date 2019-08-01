@@ -289,7 +289,7 @@ public class GameFragment extends Fragment {
 
     private void loadNext(int counter) {
 
-        int limit = 2;
+        int limit = 5;
         if (counter < modelList.size() && counter < limit) {
             checker.setText("");
             answer = modelList.get(counter).getName();
