@@ -9,6 +9,7 @@ import android.os.Parcelable;
 import android.speech.tts.TextToSpeech;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -42,12 +43,15 @@ public class HintFragment extends Fragment {
     private Switch arSwitch;
     private SwitchListener switchlistener;
     private List<Model> modelList;
-    private Button startGameButton, tutorialButton;
+    private Button startGameButton, tutorialButton, okButton1, okButton2;
     private RecyclerView hintRecyclerView;
     private PronunciationUtil pronunciationUtil;
     private TextToSpeech textToSpeech;
     private FloatingActionButton backFAB;
     private ShimmerFrameLayout shimmerFrameLayout;
+    private View parentalSupervision;
+    private View stayAlert;
+    private ConstraintLayout constraintLayout;
 
     public HintFragment() {
 
@@ -111,7 +115,17 @@ public class HintFragment extends Fragment {
     }
 
     public void viewClickListeners(){
-        startGameButton.setOnClickListener(v -> listener.moveToGameOrARFragment(modelList, MainActivity.AR_SWITCH_STATUS));
+        startGameButton.setOnClickListener(v -> {
+            constraintLayout.addView(parentalSupervision);
+            okButton1.setOnClickListener(v1 -> {
+                constraintLayout.removeView(parentalSupervision);
+                constraintLayout.addView(stayAlert);
+                okButton2.setOnClickListener(v11 -> {
+                    constraintLayout.removeView(stayAlert);
+                    listener.moveToGameOrARFragment(modelList, MainActivity.AR_SWITCH_STATUS);
+                });
+            });
+        });
         tutorialButton.setOnClickListener(v -> listener.moveToTutorialScreen(modelList));
         backFAB.setOnClickListener(v -> Objects.requireNonNull(getActivity()).onBackPressed());
     }
@@ -132,6 +146,12 @@ public class HintFragment extends Fragment {
         tutorialButton = view.findViewById(R.id.hint_frag_tutorial_button);
         backFAB = view.findViewById(R.id.back_btn);
         shimmerFrameLayout = view.findViewById(R.id.shimmer_view_container);
+        constraintLayout = view.findViewById(R.id.hint_layout);
+        parentalSupervision = getLayoutInflater().inflate(R.layout.parental_supervision_card, constraintLayout, false);
+        stayAlert = getLayoutInflater().inflate(R.layout.stay_alert_card, constraintLayout, false);
+        okButton1 = parentalSupervision.findViewById(R.id.warning_button_ok_1);
+        okButton2 = stayAlert.findViewById(R.id.warning_button_ok_2);
+
     }
 
 
