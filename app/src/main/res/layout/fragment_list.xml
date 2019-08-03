@@ -73,13 +73,12 @@
         android:id="@+id/privacy_button"
         android:layout_width="122dp"
         android:layout_height="14dp"
-        android:layout_marginBottom="16dp"
         android:background="@android:drawable/list_selector_background"
         android:fontFamily="@font/balloon"
         android:text="@string/privacy_text_button"
         android:textSize="16sp"
         android:textStyle="italic"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBaseline_toBaselineOf="@+id/privacy_textview"
         app:layout_constraintStart_toEndOf="@+id/privacy_textview" />
 
 
