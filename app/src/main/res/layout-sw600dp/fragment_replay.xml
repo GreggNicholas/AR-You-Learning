@@ -93,7 +93,7 @@
                         android:text="@string/game_title"
                         android:textAlignment="center"
                         android:textColor="@color/colorPurple"
-                        android:textSize="48sp"
+                        android:textSize="75sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         tools:layout_editor_absoluteY="414dp" />

@@ -76,9 +76,12 @@ public class ListFragment extends Fragment {
         if (getArguments() != null) {
             int size = getArguments().getInt("SIZE");
 
-            for (int i = 0; i < size; i++) {
-                categoryList.add(getArguments().getParcelableArrayList(CATEGORY_KEY + i));
+            if (categoryList.size() != size) {
+                for (int i = 0; i < size; i++) {
+                    categoryList.add(getArguments().getParcelableArrayList(CATEGORY_KEY + i));
+                }
             }
+
             categoryName = getArguments().getStringArrayList(CATEGORY_NAME);
             categoryImages = getArguments().getStringArrayList(CATEGORY_IMAGE);
         }
