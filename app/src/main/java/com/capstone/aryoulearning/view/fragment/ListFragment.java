@@ -16,6 +16,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,8 +42,8 @@ public class ListFragment extends Fragment {
     public static final String SIZE = "SIZE";
 
     private List<List<Model>> categoryList = new ArrayList<>();
-    private List<String> categoryName;
-    private List<String> categoryImages;
+    private List<String> categoryName = new ArrayList<>();
+    private List<String> categoryImages = new ArrayList<>();
     private RecyclerView rv;
     private TextView textView;
     private Button privacyButton;
@@ -75,13 +76,9 @@ public class ListFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             int size = getArguments().getInt("SIZE");
-
-            if (categoryList.size() != size) {
                 for (int i = 0; i < size; i++) {
                     categoryList.add(getArguments().getParcelableArrayList(CATEGORY_KEY + i));
                 }
-            }
-
             categoryName = getArguments().getStringArrayList(CATEGORY_NAME);
             categoryImages = getArguments().getStringArrayList(CATEGORY_IMAGE);
         }
@@ -130,7 +127,6 @@ public class ListFragment extends Fragment {
     }
 
     public void setListRV() {
-
         rv.setAdapter(new CategoryAdapter(categoryList, categoryName, categoryImages));
         rv.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayout.HORIZONTAL, false));
     }
@@ -152,5 +148,11 @@ public class ListFragment extends Fragment {
         if (getFragmentManager().findFragmentByTag("game_fragment") != null) {
             getFragmentManager().beginTransaction().remove(Objects.requireNonNull(getFragmentManager().findFragmentByTag("game_fragment"))).commit();
         }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
     }
 }
