@@ -14,6 +14,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -69,6 +70,7 @@ public class HintFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        enableViews(constraintLayout);
         if (getArguments() != null) {
             modelList = getArguments().getParcelableArrayList("model-list-key");
         }
@@ -115,7 +117,9 @@ public class HintFragment extends Fragment {
     }
 
     public void viewClickListeners(){
+
         startGameButton.setOnClickListener(v -> {
+            disableViews(constraintLayout);
             constraintLayout.addView(parentalSupervision);
             okButton1.setOnClickListener(v1 -> {
                 constraintLayout.removeView(parentalSupervision);
@@ -172,4 +176,30 @@ public class HintFragment extends Fragment {
         super.onStop();
         shimmerFrameLayout = null;
     }
+
+    private void disableViews(View view){
+        if (view != null) {
+            view.setClickable(false);
+            if (view instanceof ViewGroup) {
+                ViewGroup vg = ((ViewGroup) view);
+                for (int i = 0; i < vg.getChildCount(); i++) {
+                    disableViews(vg.getChildAt(i));
+                }
+            }
+        }
+    }
+
+    private void enableViews(View view){
+        if (view != null) {
+            view.setClickable(true);
+            if (view instanceof ViewGroup) {
+                ViewGroup vg = ((ViewGroup) view);
+                for (int i = 0; i < vg.getChildCount(); i++) {
+                    disableViews(vg.getChildAt(i));
+                }
+            }
+        }
+    }
+
+
 }

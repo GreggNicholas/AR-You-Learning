@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity implements NavListener, Swit
                     @Override
                     public void onResponse(@Nonnull Call<List<ModelResponse>> call, @Nonnull Response<List<ModelResponse>> response) {
                         if (response.body() != null) {
+                            animalModelList = new ArrayList<>();
                             for (int i = 0; i < response.body().size(); i++) {
                                 animalModelList.add(response.body().get(i).getList());
                                 categoryList.add(response.body().get(i).getCategory());
